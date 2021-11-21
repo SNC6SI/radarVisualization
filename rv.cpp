@@ -79,7 +79,7 @@ XLstatus rvInitDriver(XLaccess *pxlChannelMaskTx, unsigned int *pxlChannelIndex)
 DWORD WINAPI RxCanFdThread(LPVOID par)
 {
     XLstatus        xlStatus = XL_SUCCESS;
-    DWORD           rc;
+    // DWORD           rc;
     XLcanRxEvent    xlCanRxEvt;
     
     UNUSED_PARAM(par); 
@@ -130,6 +130,41 @@ XLstatus rvCreateRxThread(void) {
     return xlStatus;
 }
 
+#define w 400
+void MyEllipse(Mat img, double angle)
+{
+    int thickness = 2;
+    int lineType = 8;
+    ellipse(img,
+        Point(w / 2, w / 2),
+        Size(w / 4, w / 16),
+        angle,
+        0,
+        360,
+        Scalar(255, 0, 0),
+        thickness,
+        lineType);
+}
+void MyFilledCircle(Mat img, Point center)
+{
+    circle(img,
+        center,
+        w / 32,
+        Scalar(0, 0, 255),
+        FILLED,
+        LINE_8);
+}
+
+void MyRectangle(Mat img, Point pt1, Point pt2) {
+    rectangle(img,
+        pt1,
+        pt2,
+        Scalar(0, 0, 255),
+        1,
+        LINE_8,
+        0
+    );
+}
 
 
 int main(int argc, char *argv[]) {
@@ -150,15 +185,17 @@ int main(int argc, char *argv[]) {
             activated = 1;
         }
     }
-    Mat src = imread("D:/signal_flow_new.png");
-    circle(src, Point(src.cols / 2, src.rows / 2), 100, Scalar(0, 0, 255), 5);
-    if (src.empty()) {
-        printf("could not load image...\n");
-        return -1;
-    }
-    namedWindow("test opencv setup", CV_WINDOW_AUTOSIZE);
-    imshow("test opencv setup", src);
 
-    waitKey(0);
-    /*while (1) {}*/
+
+    unsigned int i=0;
+    Mat bg(900, 900, CV_8UC3, Scalar(255, 255, 255));
+    imshow("test", bg);
+    while (waitKey(10) != 27) {
+        bg.setTo(cv::Scalar::all(255));
+        MyRectangle(bg, Point(0+i, 0+i), Point(200+i,450+i));
+        i++;
+        imshow("test", bg);
+        
+    }
+
 }
