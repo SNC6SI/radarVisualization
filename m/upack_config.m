@@ -110,6 +110,9 @@ function config = upack_config
         0x179, 'ApaPscLeftSlot1Obj2X';
         0x179, 'ApaPscLeftSlot1Obj2Y';
 
+        0x179, 'ParkLeftslot0ID';
+        0x179, 'ParkLeftslot1ID';
+
         0x17A, 'ApaPscRightSlot0Obj1X';
         0x17A, 'ApaPscRightSlot0Obj1Y';
         0x17A, 'ApaPscRightSlot0Obj2X';
@@ -119,6 +122,12 @@ function config = upack_config
         0x17A, 'ApaPscRightSlot1Obj1Y';
         0x17A, 'ApaPscRightSlot1Obj2X';
         0x17A, 'ApaPscRightSlot1Obj2Y';
+
+        0x17A, 'ParkRightslot0ID';
+        0x17A, 'ParkRightslot1ID';
+
+        0x150, 'ESP_VehicleSpeed';
+        0x152, 'GW_VBU_GearLeverPos';
 
         };
 end

@@ -98,6 +98,13 @@ float ApaPscRightSlot1Obj1Y=0.0F;
 float ApaPscRightSlot1Obj2X=0.0F;
 float ApaPscRightSlot1Obj2Y=0.0F;
 
+unsigned char ParkLeftslot0ID = 0.0F;
+unsigned char ParkLeftslot1ID = 0.0F;
+unsigned char ParkRightslot0ID = 0.0F;
+unsigned char ParkRightslot1ID = 0.0F;
+
+float ESP_VehicleSpeed = 0.0F;
+float GW_VBU_GearLeverPos = 0.0F;
 unsigned int gcanid = 0;
 unsigned char ptr[64];
 
@@ -213,6 +220,10 @@ void update_sig(void) {
         ApaPscLeftSlot1Obj1Y = (((((ptr[19]) & 31) << 6) + (((ptr[20]) & (63 << 2)) >> 2))* (2) + (-3584));
         ApaPscLeftSlot1Obj2X = (((((ptr[20]) & 3) << 9) + ((ptr[21]) << 1) + (((ptr[22]) & (1 << 7)) >> 7))* (2) + (-3584));
         ApaPscLeftSlot1Obj2Y = (((((ptr[22]) & 127) << 4) + (((ptr[23]) & (15 << 4)) >> 4))* (2) + (-3584));
+        ParkLeftslot0ID = (unsigned char)((ptr[1]) * (1) + (0));
+        ParkLeftslot1ID = (unsigned char)((ptr[17]) * (1) + (0));
+        slotid[0] = ParkLeftslot0ID;
+        slotid[1] = ParkLeftslot1ID;
     }
 
 
@@ -225,6 +236,17 @@ void update_sig(void) {
         ApaPscRightSlot1Obj1Y = (((((ptr[19]) & 31) << 6) + (((ptr[20]) & (63 << 2)) >> 2))* (2) + (-3584));
         ApaPscRightSlot1Obj2X = (((((ptr[20]) & 3) << 9) + ((ptr[21]) << 1) + (((ptr[22]) & (1 << 7)) >> 7))* (2) + (-3584));
         ApaPscRightSlot1Obj2Y = (((((ptr[22]) & 127) << 4) + (((ptr[23]) & (15 << 4)) >> 4))* (2) + (-3584));
+        ParkRightslot0ID = (unsigned char)((ptr[1]) * (1) + (0));
+        ParkRightslot1ID = (unsigned char)((ptr[17]) * (1) + (0));
+        slotid[2] = ParkRightslot0ID;
+        slotid[3] = ParkRightslot1ID;
     }
-     
+
+    if (gcanid == 0x150) {
+        ESP_VehicleSpeed = (((((ptr[1]) & 15) << 8) + (ptr[2])) * (0.05625) + (0));
+    }
+
+    if (gcanid == 0x152) {
+        GW_VBU_GearLeverPos = (((ptr[9]) & 7) * (1) + (0));
+    }
 }

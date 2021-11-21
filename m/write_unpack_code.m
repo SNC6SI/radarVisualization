@@ -1,4 +1,4 @@
-function [msg_unpack_s, def_s, del_s] = write_unpack_code
+function [msg_unpack_s, def_s, dcl_s] = write_unpack_code
     % parse dbc
     DBC_O = dbc_unpack_to_c('ME5_APSPA.DBC');
 
@@ -44,7 +44,7 @@ function [msg_unpack_s, def_s, del_s] = write_unpack_code
 
     msg_unpack_s = strjoin(msg_unpack_all, newline);
     def_s = strjoin(def_all, newline);
-    del_s = strjoin(dcl_all, newline);
+    dcl_s = strjoin(dcl_all, newline);
 end
 
 

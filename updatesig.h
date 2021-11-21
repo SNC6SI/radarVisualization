@@ -97,6 +97,13 @@ extern float ApaPscRightSlot1Obj1X;
 extern float ApaPscRightSlot1Obj1Y;
 extern float ApaPscRightSlot1Obj2X;
 extern float ApaPscRightSlot1Obj2Y;
+extern unsigned char ParkLeftslot0ID;
+extern unsigned char ParkLeftslot1ID;
+extern unsigned char ParkRightslot0ID;
+extern unsigned char ParkRightslot1ID;
+
+extern float ESP_VehicleSpeed;
+extern float GW_VBU_GearLeverPos;
 
 extern unsigned int gcanid;
 
