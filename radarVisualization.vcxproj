@@ -370,11 +370,13 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="updateimg.h" />
     <ClInclude Include="updatesig.h" />
     <ClInclude Include="vxlapi.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="rv.cpp" />
+    <ClCompile Include="updateimg.cpp" />
     <ClCompile Include="updatesig.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
