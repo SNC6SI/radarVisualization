@@ -154,8 +154,8 @@ int main(int argc, char *argv[]) {
     }
 
     init_sig();
-    
-    
+    init_axis();
+
     imshow("radar visualization", canvas);
     while (waitKey(40) != 27) {
         canvas.setTo(cv::Scalar::all(255));

@@ -10,6 +10,10 @@
 
 #define XCOL 1600
 #define YROW 1000
+
+#define LINSPACEMAXNUM 100
+
+void init_axis(void);
 void update_img(void);
 
 #endif
