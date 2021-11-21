@@ -157,7 +157,7 @@ int main(int argc, char *argv[]) {
     
     
     imshow("radar visualization", canvas);
-    while (waitKey(10) != 27) {
+    while (waitKey(40) != 27) {
         canvas.setTo(cv::Scalar::all(255));
         gcanid = 0x172;
         update_sig();
