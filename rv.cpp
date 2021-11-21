@@ -9,7 +9,9 @@
 
 #include "vxlapi.h"
 #include "updatesig.h"
+#include "updateimg.h"
 #include<opencv2/opencv.hpp>
+
 using namespace cv;
 
 char            g_AppName[XL_MAX_LENGTH+1]  = "radarVisulization";
@@ -22,6 +24,8 @@ unsigned int    g_BaudRate                  = 500000;
 XLhandle        g_hMsgEvent;
 HANDLE          g_hRXThread; 
 int             g_RXCANThreadRun;
+
+Mat canvas(1000, 1600, CV_8UC3, Scalar(255, 255, 255));
 
 
 
@@ -110,7 +114,6 @@ DWORD WINAPI RxCanFdThread(LPVOID par)
             if(xlStatus==XL_ERR_QUEUE_IS_EMPTY ) {
                 break;
             }
-            //ptr = &(xlCanRxEvt.tagData.canRxOkMsg.data);
             memcpy(ptr, &(xlCanRxEvt.tagData.canRxOkMsg.data), 64);
             gcanid = xlCanRxEvt.tagData.canRxOkMsg.canId;
             update_sig();
@@ -129,43 +132,7 @@ XLstatus rvCreateRxThread(void) {
     }
     return xlStatus;
 }
-
-#define w 400
-void MyEllipse(Mat img, double angle)
-{
-    int thickness = 2;
-    int lineType = 8;
-    ellipse(img,
-        Point(w / 2, w / 2),
-        Size(w / 4, w / 16),
-        angle,
-        0,
-        360,
-        Scalar(255, 0, 0),
-        thickness,
-        lineType);
-}
-void MyFilledCircle(Mat img, Point center)
-{
-    circle(img,
-        center,
-        w / 32,
-        Scalar(0, 0, 255),
-        FILLED,
-        LINE_8);
-}
-
-void MyRectangle(Mat img, Point pt1, Point pt2) {
-    rectangle(img,
-        pt1,
-        pt2,
-        Scalar(0, 0, 255),
-        1,
-        LINE_8,
-        0
-    );
-}
-
+extern void point4pose(float* x, float* y, int iter);
 
 int main(int argc, char *argv[]) {
     XLstatus      xlStatus;
@@ -186,15 +153,16 @@ int main(int argc, char *argv[]) {
         }
     }
 
-
-    unsigned int i=0;
-    Mat bg(900, 900, CV_8UC3, Scalar(255, 255, 255));
-    imshow("test", bg);
+    init_sig();
+    
+    
+    imshow("radar visualization", canvas);
     while (waitKey(10) != 27) {
-        bg.setTo(cv::Scalar::all(255));
-        MyRectangle(bg, Point(0+i, 0+i), Point(200+i,450+i));
-        i++;
-        imshow("test", bg);
+        canvas.setTo(cv::Scalar::all(255));
+        gcanid = 0x172;
+        update_sig();
+        update_img();
+        imshow("radar visualization", canvas);
         
     }
 
