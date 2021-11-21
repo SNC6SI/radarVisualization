@@ -29,6 +29,7 @@ void init_axis(void) {
 static unsigned int alive_count = 0U;
 
 void update_img(void){
+	canvas.setTo(cv::Scalar::all(255));
 	alive_count++;
 	plot_axis();
 	plot_vehicle();

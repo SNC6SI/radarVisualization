@@ -132,7 +132,6 @@ XLstatus rvCreateRxThread(void) {
     }
     return xlStatus;
 }
-extern void point4pose(float* x, float* y, int iter);
 
 int main(int argc, char *argv[]) {
     XLstatus      xlStatus;
@@ -158,10 +157,8 @@ int main(int argc, char *argv[]) {
 
     imshow("radar visualization", canvas);
     while (waitKey(40) != 27) {
-        canvas.setTo(cv::Scalar::all(255));
         update_img();
         imshow("radar visualization", canvas);
-        
     }
 
 }
