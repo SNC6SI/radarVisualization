@@ -25,7 +25,7 @@ XLhandle        g_hMsgEvent;
 HANDLE          g_hRXThread; 
 int             g_RXCANThreadRun;
 
-Mat canvas(1000, 1600, CV_8UC3, Scalar(255, 255, 255));
+Mat canvas(YROW, XCOL, CV_8UC3, Scalar(255, 255, 255));
 
 
 

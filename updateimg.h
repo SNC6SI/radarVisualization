@@ -7,6 +7,8 @@
 #define RED  Scalar(255, 0, 0)
 #define BLACK  Scalar(0, 0, 0)
 
+#define XCOL 1600
+#define YROW 1000
 void update_img(void);
 
 #endif
