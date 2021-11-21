@@ -1,6 +1,7 @@
 #ifndef _UPDATESIG_H_
 #define _UPDATESIG_H_
 
+#if 0
 extern float MapObj01P1X;
 extern float MapObj01P1Y;
 extern float MapObj01P2X;
@@ -97,6 +98,8 @@ extern float ApaPscRightSlot1Obj1X;
 extern float ApaPscRightSlot1Obj1Y;
 extern float ApaPscRightSlot1Obj2X;
 extern float ApaPscRightSlot1Obj2Y;
+#endif
+
 extern unsigned char ParkLeftslot0ID;
 extern unsigned char ParkLeftslot1ID;
 extern unsigned char ParkRightslot0ID;
@@ -109,6 +112,17 @@ extern unsigned int gcanid;
 
 extern unsigned char ptr[64];
 
+extern float objx[40];
+extern float objy[40];
+extern float slotx[8];
+extern float sloty[8];
+extern unsigned char slotid[4];
+
+extern float X0;
+extern float Y0;
+
+void init_sig(void);
 void update_sig(void);
+void point4pose(float* x, float* y, int iter);
 
 #endif
