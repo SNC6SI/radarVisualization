@@ -25,3 +25,6 @@
 - updatesig.h/updatesig.cpp: 接收、解析报文，更新坐标信息
 - updateimg.h/updateimg.cpp: 更新图像
 
+
+# 状态
+- 当前代码仅支持vector设备channel 1，连接PACAN
