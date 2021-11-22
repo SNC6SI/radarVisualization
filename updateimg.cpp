@@ -13,6 +13,7 @@ static void plot_vehicle(void);
 static void plot_objs(void);
 static void plot_slots(void);
 static void plot_misc(void);
+static void plot_info(void);
 
 static void linspace_step(float x1, float x2, int step, float* xo, int* num);
 
@@ -36,6 +37,7 @@ void update_img(void){
 	plot_objs();
 	plot_slots();
 	plot_misc();
+	plot_info();
 }
 
 static void plot_axis(void) {
@@ -106,4 +108,108 @@ static void linspace_step(float x1, float x2, int step, float* xo, int* num) {
 		}
 		*num = i;
 	}
+static void plot_info(void) {
+	char label[256] = { 0 };
+	
+	// obj1
+	sprintf(label, "Obj01: (%4.0f, %4.0f) (%4.0f, %4.0f)", MapObj01P1X, MapObj01P1Y, MapObj01P2X, MapObj01P2Y);
+	putText(canvas, label, Point(20, 30), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+	// obj2
+	sprintf(label, "Obj02: (%4.0f, %4.0f) (%4.0f, %4.0f)", MapObj02P1X, MapObj02P1Y, MapObj02P2X, MapObj02P2Y);
+	putText(canvas, label, Point(20, 40), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+
+	// obj3
+	sprintf(label, "Obj03: (%4.0f, %4.0f) (%4.0f, %4.0f)", MapObj03P1X, MapObj03P1Y, MapObj03P2X, MapObj03P2Y);
+	putText(canvas, label, Point(20, 50), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+
+	// obj4
+	sprintf(label, "Obj04: (%4.0f, %4.0f) (%4.0f, %4.0f)", MapObj04P1X, MapObj04P1Y, MapObj04P2X, MapObj04P2Y);
+	putText(canvas, label, Point(20, 60), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+
+	// obj5
+	sprintf(label, "Obj05: (%4.0f, %4.0f) (%4.0f, %4.0f)", MapObj05P1X, MapObj05P1Y, MapObj05P2X, MapObj05P2Y);
+	putText(canvas, label, Point(20, 70), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+
+	// obj6
+	sprintf(label, "Obj06: (%4.0f, %4.0f) (%4.0f, %4.0f)", MapObj06P1X, MapObj06P1Y, MapObj06P2X, MapObj06P2Y);
+	putText(canvas, label, Point(20, 80), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+
+	// obj7
+	sprintf(label, "Obj07: (%4.0f, %4.0f) (%4.0f, %4.0f)", MapObj07P1X, MapObj07P1Y, MapObj07P2X, MapObj07P2Y);
+	putText(canvas, label, Point(20, 90), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+
+	// obj8
+	sprintf(label, "Obj08: (%4.0f, %4.0f) (%4.0f, %4.0f)", MapObj08P1X, MapObj08P1Y, MapObj08P2X, MapObj08P2Y);
+	putText(canvas, label, Point(20, 100), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+
+	// obj9
+	sprintf(label, "Obj09: (%4.0f, %4.0f) (%4.0f, %4.0f)", MapObj09P1X, MapObj09P1Y, MapObj09P2X, MapObj09P2Y);
+	putText(canvas, label, Point(20, 110), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+
+	// obj10
+	sprintf(label, "Obj10: (%4.0f, %4.0f) (%4.0f, %4.0f)", MapObj10P1X, MapObj10P1Y, MapObj10P2X, MapObj10P2Y);
+	putText(canvas, label, Point(20, 120), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+
+	// obj11
+	sprintf(label, "Obj11: (%4.0f, %4.0f) (%4.0f, %4.0f)", MapObj11P1X, MapObj11P1Y, MapObj11P2X, MapObj11P2Y);
+	putText(canvas, label, Point(20, 130), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+
+	// obj12
+	sprintf(label, "Obj12: (%4.0f, %4.0f) (%4.0f, %4.0f)", MapObj12P1X, MapObj12P1Y, MapObj12P2X, MapObj12P2Y);
+	putText(canvas, label, Point(20, 140), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+
+	// obj13
+	sprintf(label, "Obj13: (%4.0f, %4.0f) (%4.0f, %4.0f)", MapObj13P1X, MapObj13P1Y, MapObj13P2X, MapObj13P2Y);
+	putText(canvas, label, Point(20, 150), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+
+	// obj14
+	sprintf(label, "Obj14: (%4.0f, %4.0f) (%4.0f, %4.0f)", MapObj14P1X, MapObj14P1Y, MapObj14P2X, MapObj14P2Y);
+	putText(canvas, label, Point(20, 160), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+
+	// obj15
+	sprintf(label, "Obj15: (%4.0f, %4.0f) (%4.0f, %4.0f)", MapObj15P1X, MapObj15P1Y, MapObj15P2X, MapObj15P2Y);
+	putText(canvas, label, Point(20, 170), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+
+	// obj16
+	sprintf(label, "Obj16: (%4.0f, %4.0f) (%4.0f, %4.0f)", MapObj16P1X, MapObj16P1Y, MapObj16P2X, MapObj16P2Y);
+	putText(canvas, label, Point(20, 180), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+
+	// obj17
+	sprintf(label, "Obj17: (%4.0f, %4.0f) (%4.0f, %4.0f)", MapObj17P1X, MapObj17P1Y, MapObj17P2X, MapObj17P2Y);
+	putText(canvas, label, Point(20, 190), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+
+	// obj18
+	sprintf(label, "Obj18: (%4.0f, %4.0f) (%4.0f, %4.0f)", MapObj18P1X, MapObj18P1Y, MapObj18P2X, MapObj18P2Y);
+	putText(canvas, label, Point(20, 200), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+
+	// obj19
+	sprintf(label, "Obj19: (%4.0f, %4.0f) (%4.0f, %4.0f)", MapObj19P1X, MapObj19P1Y, MapObj19P2X, MapObj19P2Y);
+	putText(canvas, label, Point(20, 210), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+
+	// obj20
+	sprintf(label, "Obj20: (%4.0f, %4.0f) (%4.0f, %4.0f)", MapObj20P1X, MapObj20P1Y, MapObj20P2X, MapObj20P2Y);
+	putText(canvas, label, Point(20, 220), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+
+
+
+
+	// slot id
+	sprintf(label, "slotid: %d %d %d %d", slotid[0], slotid[1], slotid[2], slotid[3]);
+	putText(canvas, label, Point(20, 500), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+
+	// slot left 1
+	sprintf(label, "slot left 1: (%4.0f, %4.0f) (%4.0f, %4.0f)", ApaPscLeftSlot0Obj1X, ApaPscLeftSlot0Obj1Y, ApaPscLeftSlot0Obj2X, ApaPscLeftSlot0Obj2Y);
+	putText(canvas, label, Point(20, 510), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+	// slot left 2
+	sprintf(label, "slot left 2: (%4.0f, %4.0f) (%4.0f, %4.0f)", ApaPscLeftSlot1Obj1X, ApaPscLeftSlot1Obj1Y, ApaPscLeftSlot1Obj2X, ApaPscLeftSlot1Obj2Y);
+	putText(canvas, label, Point(20, 520), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+
+	// slot right 1
+	sprintf(label, "slot right 1: (%4.0f, %4.0f) (%4.0f, %4.0f)", ApaPscRightSlot0Obj1X, ApaPscRightSlot0Obj1Y, ApaPscRightSlot0Obj2X, ApaPscRightSlot0Obj2Y);
+	putText(canvas, label, Point(20, 530), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+	// slot right 2
+	sprintf(label, "slot right 1: (%4.0f, %4.0f) (%4.0f, %4.0f)", ApaPscRightSlot1Obj1X, ApaPscRightSlot1Obj1Y, ApaPscRightSlot1Obj2X, ApaPscRightSlot1Obj2Y);
+	putText(canvas, label, Point(20, 540), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+
+
 }
