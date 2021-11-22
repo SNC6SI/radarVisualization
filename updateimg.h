@@ -11,6 +11,11 @@
 #define XCOL 1600
 #define YROW 1000
 
+#define RO 88.8
+#define FO 365.9
+#define HW 95.3
+
+#define LINSPACESTEP 50
 #define LINSPACEMAXNUM 100
 
 void init_axis(void);

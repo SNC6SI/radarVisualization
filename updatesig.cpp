@@ -411,8 +411,8 @@ void point4pose(float* x, float* y, int iter) {
     int i;
     float xx, yy;
     for (i = 0; i < iter; i++) {
-        xx = (*(x + i)) * C0 + (-*(y + i)) * S0 + X0;
-        yy = (-*(y + i)) * C0 - (*(x + i)) * S0 + Y0;
+        xx = ((*(x + i)) * C0 + (-*(y + i)) * S0) * SCALE + X0;
+        yy = ((-*(y + i)) * C0 - (*(x + i)) * S0) * SCALE + Y0;
         *(x + i) = xx;
         *(y + i) = yy;
     }

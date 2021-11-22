@@ -121,6 +121,8 @@ extern unsigned char slotid[4];
 extern float X0;
 extern float Y0;
 
+#define SCALE 0.5
+
 void init_sig(void);
 void update_sig(void);
 void point4pose(float* x, float* y, int iter);

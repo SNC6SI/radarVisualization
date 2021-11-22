@@ -23,8 +23,8 @@ static int grid_num_x = 0;
 static int grid_num_y = 0;
 
 void init_axis(void) {
-	linspace_step(0, XCOL, 100, grid_x, &grid_num_x);
-	linspace_step(0, YROW, 100, grid_y, &grid_num_y);
+	linspace_step(0, XCOL, LINSPACESTEP, grid_x, &grid_num_x);
+	linspace_step(0, YROW, LINSPACESTEP, grid_y, &grid_num_y);
 }
 
 static unsigned int alive_count = 0U;
@@ -51,10 +51,10 @@ static void plot_axis(void) {
 }
 
 static void plot_vehicle(void) {
-	float x1 = X0 + 100;
-	float y1 = Y0 + 100;
-	float x2 = X0 - 100;
-	float y2 = Y0 - 350;
+	float x1 = X0 + (HW * SCALE);
+	float y1 = Y0 + (RO * SCALE);
+	float x2 = X0 - (HW * SCALE);
+	float y2 = Y0 - (FO * SCALE);
 	rectangle(canvas, Point(x1, y1), Point(x2, y2), BLACK, 1, LINE_8, 0);
 	circle(canvas, Point(X0, Y0), 2, BLACK, FILLED, 2);
 }
@@ -92,7 +92,7 @@ static void plot_misc(void) {
 	sprintf(label, "speed %3.1f", ESP_VehicleSpeed);
 	sprintf(label_alive_count, "%d", alive_count);
 
-	putText(canvas, label, Point(20, 20), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
+	putText(canvas, label, Point(20, 15), FONT_HERSHEY_SIMPLEX, 0.6, RED, 1, LINE_8, false);
 	putText(canvas, label_alive_count, Point(1550, 950), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
 }
 
@@ -200,21 +200,21 @@ static void plot_info(void) {
 
 	// slot id
 	sprintf(label, "slotid: %d %d %d %d", slotid[0], slotid[1], slotid[2], slotid[3]);
-	putText(canvas, label, Point(20, 500), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+	putText(canvas, label, Point(20, 300), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 
 	// slot left 1
-	sprintf(label, "slot left 1: (%4.0f, %4.0f) (%4.0f, %4.0f)", ApaPscLeftSlot0Obj1X, ApaPscLeftSlot0Obj1Y, ApaPscLeftSlot0Obj2X, ApaPscLeftSlot0Obj2Y);
-	putText(canvas, label, Point(20, 510), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+	sprintf(label, "slot left  1: (%4.0f, %4.0f) (%4.0f, %4.0f)", ApaPscLeftSlot0Obj1X, ApaPscLeftSlot0Obj1Y, ApaPscLeftSlot0Obj2X, ApaPscLeftSlot0Obj2Y);
+	putText(canvas, label, Point(20, 310), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 	// slot left 2
-	sprintf(label, "slot left 2: (%4.0f, %4.0f) (%4.0f, %4.0f)", ApaPscLeftSlot1Obj1X, ApaPscLeftSlot1Obj1Y, ApaPscLeftSlot1Obj2X, ApaPscLeftSlot1Obj2Y);
-	putText(canvas, label, Point(20, 520), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+	sprintf(label, "slot left  2: (%4.0f, %4.0f) (%4.0f, %4.0f)", ApaPscLeftSlot1Obj1X, ApaPscLeftSlot1Obj1Y, ApaPscLeftSlot1Obj2X, ApaPscLeftSlot1Obj2Y);
+	putText(canvas, label, Point(20, 320), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 
 	// slot right 1
 	sprintf(label, "slot right 1: (%4.0f, %4.0f) (%4.0f, %4.0f)", ApaPscRightSlot0Obj1X, ApaPscRightSlot0Obj1Y, ApaPscRightSlot0Obj2X, ApaPscRightSlot0Obj2Y);
-	putText(canvas, label, Point(20, 530), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+	putText(canvas, label, Point(20, 330), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 	// slot right 2
 	sprintf(label, "slot right 1: (%4.0f, %4.0f) (%4.0f, %4.0f)", ApaPscRightSlot1Obj1X, ApaPscRightSlot1Obj1Y, ApaPscRightSlot1Obj2X, ApaPscRightSlot1Obj2Y);
-	putText(canvas, label, Point(20, 540), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+	putText(canvas, label, Point(20, 340), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 
 
 }
