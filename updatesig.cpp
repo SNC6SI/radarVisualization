@@ -325,8 +325,8 @@ void update_sig(void) {
         objy[35] = MapObj18P2Y;
         objy[36] = MapObj19P1Y;
         objy[37] = MapObj19P2Y;
-        objy[37] = MapObj20P1Y;
-        objy[38] = MapObj20P2Y;
+        objy[38] = MapObj20P1Y;
+        objy[39] = MapObj20P2Y;
 
         point4pose(&objx[32], &objy[32], 8);
     }
