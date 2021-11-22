@@ -2,6 +2,7 @@
 #include "string.h"
 #define _USE_MATH_DEFINES
 #include "math.h"
+#include "updateimg.h"
 #include "updatesig.h"
 
 float MapObj01P1X=0.0F;
