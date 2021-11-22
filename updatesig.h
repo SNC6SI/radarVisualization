@@ -1,7 +1,7 @@
 #ifndef _UPDATESIG_H_
 #define _UPDATESIG_H_
 
-#if 0
+#if 1
 extern float MapObj01P1X;
 extern float MapObj01P1Y;
 extern float MapObj01P2X;
