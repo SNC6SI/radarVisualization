@@ -11,6 +11,7 @@
 #include "updatesig.h"
 #include "updateimg.h"
 #include<opencv2/opencv.hpp>
+#include <iostream>
 
 using namespace cv;
 
@@ -122,6 +123,9 @@ DWORD WINAPI RxCanFdThread(LPVOID par)
     return(NO_ERROR); 
 }
 
+VideoCapture cap;
+Mat frame;
+
 XLstatus rvCreateRxThread(void) {
     XLstatus      xlStatus = XL_ERROR;
     DWORD         ThreadId = 0;
@@ -154,11 +158,22 @@ int main(int argc, char *argv[]) {
 
     init_sig();
     init_axis();
+    cap.set(CV_CAP_PROP_FRAME_WIDTH, 1280);
+    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 720);
+    cap.open(0);
+    if (!cap.isOpened()) {
+        std::cerr << "Could't open capture" << std::endl;
+        return -1;
+    }
+    
+
 
     imshow("radar visualization", canvas);
     while (waitKey(40) != 27) {
         update_img();
         imshow("radar visualization", canvas);
+        cap >> frame;
+        imshow("camera", frame);
     }
 
 }
