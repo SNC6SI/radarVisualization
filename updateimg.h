@@ -3,8 +3,8 @@
 
 #include<opencv2/opencv.hpp>
 
-#define BLUE   Scalar(0, 0, 255)
-#define RED    Scalar(255, 0, 0)
+#define RED   Scalar(0, 0, 255)
+#define BLUE    Scalar(255, 0, 0)
 #define BLACK  Scalar(0, 0, 0)
 #define GRAY   Scalar(224,224,224)
 
