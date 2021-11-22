@@ -149,23 +149,23 @@ void update_sig(void) {
         MapObj04P2X = (((((ptr[28]) & 3) << 8) + (ptr[29])) * (4) + (-2044));
         MapObj04P2Y = ((((ptr[30]) << 2) + (((ptr[31]) & (3 << 6)) >> 6))* (4) + (-2044));
 
-        objx[0] = MapObj01P1X / 10;
-        objx[1] = MapObj01P2X / 10;
-        objx[2] = MapObj02P1X / 10;
-        objx[3] = MapObj02P2X / 10;
-        objx[4] = MapObj03P1X / 10;
-        objx[5] = MapObj03P2X / 10;
-        objx[6] = MapObj04P1X / 10;
-        objx[7] = MapObj04P2X / 10;
+        objx[0] = MapObj01P1X;
+        objx[1] = MapObj01P2X;
+        objx[2] = MapObj02P1X;
+        objx[3] = MapObj02P2X;
+        objx[4] = MapObj03P1X;
+        objx[5] = MapObj03P2X;
+        objx[6] = MapObj04P1X;
+        objx[7] = MapObj04P2X;
 
-        objy[0] = MapObj01P1Y / 10;
-        objy[1] = MapObj01P2Y / 10;
-        objy[2] = MapObj02P1Y / 10;
-        objy[3] = MapObj02P2Y / 10;
-        objy[4] = MapObj03P1Y / 10;
-        objy[5] = MapObj03P2Y / 10;
-        objy[6] = MapObj04P1Y / 10;
-        objy[7] = MapObj04P2Y / 10;
+        objy[0] = MapObj01P1Y;
+        objy[1] = MapObj01P2Y;
+        objy[2] = MapObj02P1Y;
+        objy[3] = MapObj02P2Y;
+        objy[4] = MapObj03P1Y;
+        objy[5] = MapObj03P2Y;
+        objy[6] = MapObj04P1Y;
+        objy[7] = MapObj04P2Y;
 
         //printf("MapObj01P1X=%f\n", MapObj01P1X);
         point4pose(&objx[0], &objy[0], 8);
