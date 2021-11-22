@@ -400,8 +400,8 @@ void update_sig(void) {
 
 
 
-float X0 = 800.0;
-float Y0 = 500.0;
+float X0 = XCOL/2;
+float Y0 = YROW/2;
 static float C0 = cos(M_PI/2);
 static float S0 = sin(M_PI/2);
 
