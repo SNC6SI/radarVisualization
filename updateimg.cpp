@@ -66,9 +66,10 @@ static void plot_objs(void) {
 		circle(canvas, Point(objx[2 * i + 1], objy[2 * i + 1]), 2, BLUE, FILLED, 2);
 		line(canvas, Point(objx[2 * i], objy[2 * i]), Point(objx[2 * i + 1], objy[2 * i + 1]), BLUE, 2);
 
-		sprintf(label, "%d", i);
+		sprintf(label, "%d", i+i);
 		putText(canvas, label, Point(objx[2 * i], objy[2 * i]), FONT_HERSHEY_SIMPLEX, 0.4, BLUE, 1, LINE_8, false);
 	}
+		
 }
 
 static void plot_slots(void) {
