@@ -74,12 +74,14 @@ static void plot_objs(void) {
 static void plot_slots(void) {
 	char label[16] = { 0 };
 	for (int i = 0; i < 4; i++) {
-		circle(canvas, Point(slotx[2 * i], sloty[2 * i]), 2, RED, FILLED, 2);
-		circle(canvas, Point(slotx[2 * i + 1], sloty[2 * i + 1]), 2, RED, FILLED, 2);
-		line(canvas, Point(slotx[2 * i], sloty[2 * i]), Point(slotx[2 * i + 1], sloty[2 * i + 1]), RED, 2);
+		if (slotid[i] != 0 && slotid[i] != 255) {
+			circle(canvas, Point(slotx[2 * i], sloty[2 * i]), 2, RED, FILLED, 2);
+			circle(canvas, Point(slotx[2 * i + 1], sloty[2 * i + 1]), 2, RED, FILLED, 2);
+			line(canvas, Point(slotx[2 * i], sloty[2 * i]), Point(slotx[2 * i + 1], sloty[2 * i + 1]), RED, 2);
 
-		sprintf(label, "%d", i);
-		putText(canvas, label, Point(slotx[2 * i], sloty[2 * i]), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
+			sprintf(label, "%d", i);
+			putText(canvas, label, Point(slotx[2 * i], sloty[2 * i]), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
+		}
 	}
 }
 
@@ -108,6 +110,8 @@ static void linspace_step(float x1, float x2, int step, float* xo, int* num) {
 		}
 		*num = i;
 	}
+}
+
 static void plot_info(void) {
 	char label[256] = { 0 };
 	
