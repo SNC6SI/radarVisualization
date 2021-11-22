@@ -80,7 +80,7 @@ static void plot_slots(void) {
 			circle(canvas, Point(slotx[2 * i + 1], sloty[2 * i + 1]), 2, RED, FILLED, 2);
 			line(canvas, Point(slotx[2 * i], sloty[2 * i]), Point(slotx[2 * i + 1], sloty[2 * i + 1]), RED, 2);
 
-			sprintf(label, "%d", i);
+			sprintf(label, "%d", slotid[i]);
 			putText(canvas, label, Point(slotx[2 * i], sloty[2 * i]), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
 		}
 	}
@@ -213,7 +213,7 @@ static void plot_info(void) {
 	sprintf(label, "slot right 1: (%4.0f, %4.0f) (%4.0f, %4.0f)", ApaPscRightSlot0Obj1X, ApaPscRightSlot0Obj1Y, ApaPscRightSlot0Obj2X, ApaPscRightSlot0Obj2Y);
 	putText(canvas, label, Point(20, 330), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 	// slot right 2
-	sprintf(label, "slot right 1: (%4.0f, %4.0f) (%4.0f, %4.0f)", ApaPscRightSlot1Obj1X, ApaPscRightSlot1Obj1Y, ApaPscRightSlot1Obj2X, ApaPscRightSlot1Obj2Y);
+	sprintf(label, "slot right 2: (%4.0f, %4.0f) (%4.0f, %4.0f)", ApaPscRightSlot1Obj1X, ApaPscRightSlot1Obj1Y, ApaPscRightSlot1Obj2X, ApaPscRightSlot1Obj2Y);
 	putText(canvas, label, Point(20, 340), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 
 
