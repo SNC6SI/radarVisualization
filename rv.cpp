@@ -7,10 +7,11 @@
 
 #define UNUSED_PARAM(a) { a=a; }
 
+#include "rv_common.h"
 #include "vxlapi.h"
 #include "updatesig.h"
 #include "updateimg.h"
-#include<opencv2/opencv.hpp>
+#include <opencv2/opencv.hpp>
 #include <iostream>
 
 using namespace cv;
@@ -117,14 +118,24 @@ DWORD WINAPI RxCanFdThread(LPVOID par)
             }
             memcpy(ptr, &(xlCanRxEvt.tagData.canRxOkMsg.data), 64);
             gcanid = xlCanRxEvt.tagData.canRxOkMsg.canId;
+            ts = xlCanRxEvt.timeStampSync;
             update_sig();
         } while(XL_SUCCESS == xlStatus);
     }
     return(NO_ERROR); 
 }
 
-VideoCapture cap;
-Mat frame;
+VideoCapture cap1;
+VideoCapture cap2;
+Mat cap1frame, cap2frame;
+int capOpened;
+
+Mat recframe(YROW, XCOL + CAM1_XCOL, CV_8UC3, Scalar(255, 255, 255));
+Mat r_l, r_r1, r_r2;
+
+int myFourCC = VideoWriter::fourcc('m', 'p', '4', 'v');;
+Size recSize = Size(XCOL + CAM1_XCOL, YROW);
+VideoWriter writer("D:/hello.mp4", myFourCC, 25, recSize, true);
 
 XLstatus rvCreateRxThread(void) {
     XLstatus      xlStatus = XL_ERROR;
@@ -158,22 +169,45 @@ int main(int argc, char *argv[]) {
 
     init_sig();
     init_axis();
-    cap.set(CV_CAP_PROP_FRAME_WIDTH, 1280);
-    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 720);
-    cap.open(0);
-    if (!cap.isOpened()) {
-        std::cerr << "Could't open capture" << std::endl;
-        return -1;
+    /*cap.set(CV_CAP_PROP_FRAME_WIDTH, 1280);
+    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 720);*/
+    cap1.open(0, CAP_DSHOW);
+    cap2.open(2, CAP_DSHOW);
+    if (!cap1.isOpened() || !cap2.isOpened()) {
+        capOpened = 0;
     }
-    
+    else {
+        capOpened = 1;
+    }
 
+    //imshow("radar visualization", canvas);
+    moveWindow("radar visualization", -15, 0);
+    //cap >> capframe;
+    //imshow("camera", capframe);
+    moveWindow("camera", -15 + XCOL, 0);
 
-    imshow("radar visualization", canvas);
     while (waitKey(40) != 27) {
         update_img();
-        imshow("radar visualization", canvas);
-        cap >> frame;
-        imshow("camera", frame);
-    }
+        //imshow("radar visualization", canvas);
+        if (capOpened) {
+            
+            r_l = recframe(Rect(0, 0, XCOL, YROW));
+            canvas.copyTo(r_l);
 
+            cap1 >> cap1frame;
+            //imshow("camera", capframe);
+            r_r1 = recframe(Rect(XCOL, 0, CAM1_XCOL, CAM1_YROW));
+            cap1frame.copyTo(r_r1);
+
+            cap2 >> cap2frame;
+            r_r2 = recframe(Rect(XCOL, CAM1_YROW, CAM1_XCOL, CAM1_YROW));
+            cap2frame.copyTo(r_r2);
+
+            imshow("recframe", recframe);
+            writer.write(recframe);
+        }
+    }
+    cap1.release();
+    cap2.release();
+    writer.release();
 }

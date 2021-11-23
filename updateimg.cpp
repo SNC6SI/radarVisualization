@@ -87,13 +87,16 @@ static void plot_slots(void) {
 }
 
 static void plot_misc(void) {
-	char label[16] = { 0 };
-	char label_alive_count[16] = { 0 };
-	sprintf(label, "speed %3.1f", ESP_VehicleSpeed);
-	sprintf(label_alive_count, "%d", alive_count);
+	char label_long[256] = { 0 };
 
-	putText(canvas, label, Point(20, 15), FONT_HERSHEY_SIMPLEX, 0.6, RED, 1, LINE_8, false);
-	putText(canvas, label_alive_count, Point(1550, 950), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
+	sprintf(label_long, "speed %3.1f", ESP_VehicleSpeed);
+	putText(canvas, label_long, Point(20, 15), FONT_HERSHEY_SIMPLEX, 0.6, RED, 1, LINE_8, false);
+
+	sprintf(label_long, "%d", alive_count);
+	putText(canvas, label_long, Point(XCOL-50, YROW-50), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
+	
+	sprintf(label_long, "%lld", ts);
+	putText(canvas, label_long, Point(50, YROW - 50), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
 }
 
 static void linspace_step(float x1, float x2, int step, float* xo, int* num) {

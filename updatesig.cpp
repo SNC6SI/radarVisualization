@@ -112,6 +112,7 @@ float GW_VBU_GearLeverPos = 0.0F;
 
 unsigned int gcanid = 0;
 unsigned char ptr[64];
+unsigned __int64 ts;
 
 float objx[40];
 float objy[40];

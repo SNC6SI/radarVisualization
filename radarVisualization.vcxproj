@@ -370,6 +370,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="rv_common.h" />
     <ClInclude Include="updateimg.h" />
     <ClInclude Include="updatesig.h" />
     <ClInclude Include="vxlapi.h" />

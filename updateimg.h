@@ -8,8 +8,11 @@
 #define BLACK  Scalar(0, 0, 0)
 #define GRAY   Scalar(224,224,224)
 
-#define XCOL 1600
+#define XCOL 1200
 #define YROW 1000
+
+#define CAM1_XCOL 640
+#define CAM1_YROW 480
 
 #define RO 88.8
 #define FO 365.9

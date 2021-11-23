@@ -109,6 +109,7 @@ extern float ESP_VehicleSpeed;
 extern float GW_VBU_GearLeverPos;
 
 extern unsigned int gcanid;
+extern unsigned __int64 ts;
 
 extern unsigned char ptr[64];
 
