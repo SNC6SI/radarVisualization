@@ -381,7 +381,7 @@
     <ClInclude Include="vxlapi.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="bingloghelper.cpp" />
+    <ClCompile Include="binloghelper.cpp" />
     <ClCompile Include="menuhelper.cpp" />
     <ClCompile Include="rv.cpp" />
     <ClCompile Include="canvashelper.cpp" />
