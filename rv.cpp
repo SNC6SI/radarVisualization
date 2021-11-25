@@ -11,6 +11,10 @@
 
 
 using namespace cv;
+SYSTEMTIME systemTime;
+char video_filename[64];
+char binlog_datetime[64];
+void get_rectime(void);
 
 int main(int argc, char *argv[]) {
     XLstatus      xlStatus;
@@ -40,6 +44,7 @@ int main(int argc, char *argv[]) {
         select_camera();
         init_capture();
     }
+    get_rectime();
     
     moveWindow("radar visualization", -15, 0);
     writer.open(video_filename, VideoWriter::fourcc('m', 'p', '4', 'v'), 25, Size(XCOL + CAM1_XCOL, YROW), true);
@@ -55,5 +60,27 @@ int main(int argc, char *argv[]) {
 }
 
 
+
+void get_rectime(void) {
+    GetSystemTime(&systemTime);
+    sprintf(video_filename, "%s_%d%02d%02d_%02d%02d%02d%s",
+        FILENAMEPRE,
+        systemTime.wYear,
+        systemTime.wMonth,
+        systemTime.wDay,
+        systemTime.wHour + UTC,
+        systemTime.wMinute,
+        systemTime.wSecond,
+        FILENAMEPOSTVIDEO);
+    sprintf(binlog_datetime, "%s_%d%02d%02d_%02d%02d%02d%s",
+        FILENAMEPRE,
+        systemTime.wYear,
+        systemTime.wMonth,
+        systemTime.wDay,
+        systemTime.wHour + UTC,
+        systemTime.wMinute,
+        systemTime.wSecond,
+        FILENAMEPOSTBINLOG);
+}
 
 

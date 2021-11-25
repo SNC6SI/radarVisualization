@@ -66,7 +66,6 @@ void init_capture(void) {
         }
         
     }
-    get_video_rectime();
 }
 
 void deinit_capture(void) {

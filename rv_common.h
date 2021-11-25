@@ -18,4 +18,9 @@ typedef short rv_status;
 
 #define KEY_ESC 27
 
+#define UTC 8
+#define FILENAMEPRE       "D:/rv"
+#define FILENAMEPOSTVIDEO  ".mp4"
+#define FILENAMEPOSTBINLOG ".mp4"
+
 #endif
