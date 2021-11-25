@@ -16,6 +16,7 @@ int main(int argc, char *argv[]) {
     XLstatus      xlStatus;
     int           activated = 0;
     rv_status     rvStatus;
+    
 
     xlStatus = rvInitDriver();
     if (XL_SUCCESS == xlStatus) {
@@ -41,6 +42,7 @@ int main(int argc, char *argv[]) {
     }
     
     moveWindow("radar visualization", -15, 0);
+    writer.open(video_filename, VideoWriter::fourcc('m', 'p', '4', 'v'), 25, Size(XCOL + CAM1_XCOL, YROW), true);
 
     while (waitKey(40) != KEY_ESC) {
         update_img();

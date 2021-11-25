@@ -1,4 +1,5 @@
 #include "capturehelper.h"
+#include "videohelper.h"
 
 using namespace cv;
 VideoCapture capture[2];
@@ -65,6 +66,7 @@ void init_capture(void) {
         }
         
     }
+    get_video_rectime();
 }
 
 void deinit_capture(void) {

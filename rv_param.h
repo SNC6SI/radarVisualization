@@ -23,6 +23,4 @@
 
 #define SCALE 0.5
 
-#define TEST_WRITEFILE "D:/hello.mp4"
-
 #endif

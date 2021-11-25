@@ -1,7 +1,11 @@
+#include <ctime>
 #include <opencv2/opencv.hpp>
 #include "rv_param.h"
 #include "canvashelper.h"
 #include "capturehelper.h"
+
+#define VIDEONAMEPRE  "D:/rv"
+#define VIDEONAMEPOST ".mp4"
 
 using namespace cv;
 
@@ -9,7 +13,22 @@ Mat capframe[2];
 Mat recframe(YROW, XCOL + CAM1_XCOL, CV_8UC3, Scalar(255, 255, 255));
 Mat frames[3];
 
-VideoWriter writer(TEST_WRITEFILE, VideoWriter::fourcc('m', 'p', '4', 'v'), 25, Size(XCOL + CAM1_XCOL, YROW), true);
+char video_filename[64];
+VideoWriter writer;
+
+void get_video_rectime(void) {
+    time_t now = time(0);
+    tm* ltm = localtime(&now);
+    sprintf(video_filename, "%s_%d%02d%02d_%02d%02d%02d%s",
+        VIDEONAMEPRE,
+        ltm->tm_year + 1900,
+        ltm->tm_mon + 1,
+        ltm->tm_mday,
+        ltm->tm_hour,
+        ltm->tm_min,
+        ltm->tm_sec,
+        VIDEONAMEPOST);
+}
 
 void update_video(void) {
     frames[0] = recframe(Rect(0, 0, XCOL, YROW));
