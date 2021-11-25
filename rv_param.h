@@ -1,7 +1,7 @@
-#ifndef _UPDATEIMG_H_
-#define _UPDATEIMG_H_
+#ifndef _RV_PARAM_H_
+#define _RV_PARAM_H_
 
-#include<opencv2/opencv.hpp>
+#include <opencv2/opencv.hpp>
 
 #define RED   Scalar(0, 0, 255)
 #define BLUE    Scalar(255, 0, 0)
@@ -21,7 +21,8 @@
 #define LINSPACESTEP 50
 #define LINSPACEMAXNUM 100
 
-void init_axis(void);
-void update_img(void);
+#define SCALE 0.5
+
+#define TEST_WRITEFILE "D:/hello.mp4"
 
 #endif

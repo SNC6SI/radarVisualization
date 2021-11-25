@@ -21,10 +21,17 @@
 
 
 # 文件
-- rv.cpp: main
-- updatesig.h/updatesig.cpp: 接收、解析报文，更新坐标信息
-- updateimg.h/updateimg.cpp: 更新图像
+- rv: main
+- rv_common: 公用定义
+- rv_param: 参数
+- menuhelper: 菜单
+- vectorhelper: vector设备
+- capturehelper: 摄像头
+- signalhelper: 接收、解析报文，更新坐标信息
+- canvashelper: 更新坐标图像
+- videohelper: 更新图像、录屏
 
 
 # 状态
-- 当前代码仅支持vector设备channel 1，连接PACAN
+- 当前代码仅支持vector can设备
+- 当前代码仅支持usb camera * 2

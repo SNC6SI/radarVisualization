@@ -367,18 +367,24 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
+    <ClInclude Include="menuhelper.h" />
     <ClInclude Include="rv_common.h" />
-    <ClInclude Include="updateimg.h" />
-    <ClInclude Include="updatesig.h" />
+    <ClInclude Include="rv_param.h" />
+    <ClInclude Include="canvashelper.h" />
+    <ClInclude Include="signalhelper.h" />
+    <ClInclude Include="capturehelper.h" />
+    <ClInclude Include="vectorhelper.h" />
+    <ClInclude Include="videohelper.h" />
     <ClInclude Include="vxlapi.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="menuhelper.cpp" />
     <ClCompile Include="rv.cpp" />
-    <ClCompile Include="updateimg.cpp" />
-    <ClCompile Include="updatesig.cpp" />
+    <ClCompile Include="canvashelper.cpp" />
+    <ClCompile Include="signalhelper.cpp" />
+    <ClCompile Include="capturehelper.cpp" />
+    <ClCompile Include="vectorhelper.cpp" />
+    <ClCompile Include="videohelper.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
