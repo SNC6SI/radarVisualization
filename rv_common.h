@@ -21,6 +21,6 @@ typedef short rv_status;
 #define UTC 8
 #define FILENAMEPRE       "D:/rv"
 #define FILENAMEPOSTVIDEO  ".mp4"
-#define FILENAMEPOSTBINLOG ".mp4"
+#define FILENAMEPOSTBINLOG ".blf"
 
 #endif

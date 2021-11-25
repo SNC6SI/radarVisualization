@@ -7,7 +7,7 @@ extern cv::Mat capframe[2];
 extern cv::Mat recframe;
 extern cv::Mat frames[3];
 
-extern cv::VideoWriter writer;
+extern cv::VideoWriter video_writer;
 
 void update_video(void);
 

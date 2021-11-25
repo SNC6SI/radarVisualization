@@ -3,6 +3,7 @@
 #include "menuhelper.h"
 #include "capturehelper.h"
 #include "vectorhelper.h"
+#include "binloghelper.h"
 #include "videohelper.h"
 #include "signalhelper.h"
 #include "canvashelper.h"
@@ -13,7 +14,7 @@
 using namespace cv;
 SYSTEMTIME systemTime;
 char video_filename[64];
-char binlog_datetime[64];
+char binlog_filename[64];
 void get_rectime(void);
 
 int main(int argc, char *argv[]) {
@@ -21,6 +22,7 @@ int main(int argc, char *argv[]) {
     int           activated = 0;
     rv_status     rvStatus;
     
+    get_rectime();
 
     xlStatus = rvInitDriver();
     if (XL_SUCCESS == xlStatus) {
@@ -44,19 +46,19 @@ int main(int argc, char *argv[]) {
         select_camera();
         init_capture();
     }
-    get_rectime();
-    
+ 
     moveWindow("radar visualization", -15, 0);
-    writer.open(video_filename, VideoWriter::fourcc('m', 'p', '4', 'v'), 25, Size(XCOL + CAM1_XCOL, YROW), true);
+    video_writer.open(video_filename, VideoWriter::fourcc('m', 'p', '4', 'v'), 25, Size(XCOL + CAM1_XCOL, YROW), true);
 
     while (waitKey(40) != KEY_ESC) {
         update_img();
         update_video();
         imshow("radar visualization", recframe);
-        writer.write(recframe);
+        video_writer.write(recframe);
     }
+    video_writer.release();
     deinit_capture();
-    writer.release();
+    deinit_binlog();
 }
 
 
@@ -72,7 +74,7 @@ void get_rectime(void) {
         systemTime.wMinute,
         systemTime.wSecond,
         FILENAMEPOSTVIDEO);
-    sprintf(binlog_datetime, "%s_%d%02d%02d_%02d%02d%02d%s",
+    sprintf(binlog_filename, "%s_%d%02d%02d_%02d%02d%02d%s",
         FILENAMEPRE,
         systemTime.wYear,
         systemTime.wMonth,

@@ -1,12 +1,14 @@
 #include "vectorhelper.h"
 #include "rv_common.h"
 #include "signalhelper.h"
+#include "binloghelper.h"
 
 char            g_AppName[XL_MAX_LENGTH + 1] = "radarVisulization";
 XLportHandle    g_xlPortHandle = XL_INVALID_PORTHANDLE;
 XLdriverConfig  g_xlDrvConfig;
 XLaccess        g_xlChannelMask = 0;
 XLaccess        g_xlPermissionMask = 0;
+XLcanRxEvent    g_xlCanRxEvt;
 
 XLhandle        g_hMsgEvent;
 HANDLE          g_hRXThread;
@@ -57,19 +59,19 @@ XLstatus rvOpenDriver() {
 
 static DWORD WINAPI RxCanFdThread(LPVOID par) {
     XLstatus        xlStatus = XL_SUCCESS;
-    XLcanRxEvent    xlCanRxEvt;
     g_RXCANThreadRun = 1;
     while (g_RXCANThreadRun) {
         WaitForSingleObject(g_hMsgEvent, 10);
         do {
-            xlStatus = xlCanReceive(g_xlPortHandle, &xlCanRxEvt);
+            xlStatus = xlCanReceive(g_xlPortHandle, &g_xlCanRxEvt);
             if (xlStatus == XL_ERR_QUEUE_IS_EMPTY) {
                 break;
             }
-            memcpy(ptr, &(xlCanRxEvt.tagData.canRxOkMsg.data), 64);
-            gcanid = xlCanRxEvt.tagData.canRxOkMsg.canId;
-            ts = xlCanRxEvt.timeStampSync;
+            memcpy(ptr, &(g_xlCanRxEvt.tagData.canRxOkMsg.data), 64);
+            gcanid = g_xlCanRxEvt.tagData.canRxOkMsg.canId;
+            ts = g_xlCanRxEvt.timeStampSync;
             update_sig();
+            update_binlog();
         } while (XL_SUCCESS == xlStatus);
     }
     xlClosePort(g_xlPortHandle);
@@ -82,7 +84,12 @@ XLstatus rvCreateRxThread(void) {
     DWORD         ThreadId = 0;
     if (g_xlPortHandle != XL_INVALID_PORTHANDLE) {
         xlStatus = xlSetNotification(g_xlPortHandle, &g_hMsgEvent, 1);
-        g_hRXThread = CreateThread(0, 0x1000, RxCanFdThread, (LPVOID)0, 0, &ThreadId);
+        if (xlStatus == XL_SUCCESS) {
+            xlStatus = init_binlog();
+        }
+        if (xlStatus == XL_SUCCESS) {
+            g_hRXThread = CreateThread(0, 0x1000, RxCanFdThread, (LPVOID)0, 0, &ThreadId);
+        }
     }
     return xlStatus;
 }

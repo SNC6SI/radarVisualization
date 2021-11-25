@@ -79,7 +79,7 @@
     <LinkIncremental>true</LinkIncremental>
     <TargetName>$(ProjectName)_x64</TargetName>
     <IncludePath>D:\opencv\build\include;D:\opencv\build\include\opencv;D:\opencv\build\include\opencv2;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\opencv\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>.\lib\binlog\x64_Debug;D:\opencv\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>..\..\exec\</OutDir>
@@ -92,7 +92,7 @@
     <LinkIncremental>false</LinkIncremental>
     <TargetName>$(ProjectName)_x64</TargetName>
     <IncludePath>D:\opencv\build\include;D:\opencv\build\include\opencv;D:\opencv\build\include\opencv2;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\opencv\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>.\lib\binlog\x64_Release;D:\opencv\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -215,7 +215,7 @@
       <Culture>0x0407</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>./vxlapi64.lib;opencv_world3416d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>./vxlapi64.lib;./lib/binlog/x64_Debug/binlog.lib;opencv_world3416d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -352,7 +352,7 @@
       <Culture>0x0407</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>./vxlapi64.lib;opencv_world3416.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>./vxlapi64.lib;./lib/binlog/x64_Release/binlog.lib;opencv_world3416.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <SubSystem>Console</SubSystem>
@@ -367,6 +367,9 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="binlog.h" />
+    <ClInclude Include="binloghelper.h" />
+    <ClInclude Include="binlog_objects.h" />
     <ClInclude Include="menuhelper.h" />
     <ClInclude Include="rv_common.h" />
     <ClInclude Include="rv_param.h" />
@@ -378,6 +381,7 @@
     <ClInclude Include="vxlapi.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="bingloghelper.cpp" />
     <ClCompile Include="menuhelper.cpp" />
     <ClCompile Include="rv.cpp" />
     <ClCompile Include="canvashelper.cpp" />

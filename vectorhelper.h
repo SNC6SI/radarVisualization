@@ -14,6 +14,7 @@ extern XLportHandle    g_xlPortHandle;
 extern XLdriverConfig  g_xlDrvConfig;
 extern XLaccess        g_xlChannelMask;
 extern XLaccess        g_xlPermissionMask;
+extern XLcanRxEvent    g_xlCanRxEvt;
 
 extern XLhandle        g_hMsgEvent;
 extern HANDLE          g_hRXThread;

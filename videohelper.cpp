@@ -9,7 +9,7 @@ Mat capframe[2];
 Mat recframe(YROW, XCOL + CAM1_XCOL, CV_8UC3, Scalar(255, 255, 255));
 Mat frames[3];
 
-VideoWriter writer;
+VideoWriter video_writer;
 
 void update_video(void) {
     frames[0] = recframe(Rect(0, 0, XCOL, YROW));
