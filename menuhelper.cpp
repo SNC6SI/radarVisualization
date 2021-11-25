@@ -60,7 +60,7 @@ void select_camera(void) {
     else {
         printf("\nPlease select at most two cameras, or press 'ESC' to proceeding without camera...\n");
         selectednum = 0U;
-        while (cameraSelected.size() != 2) {
+        while (cameraSelected.size() < std::min((int)cameraList.size(), 2)) {
             if (cameraSelected.size() == 1) {
                 printf("\nPlease select one more camera, or press 'ESC' to end selection...\n");
             }
