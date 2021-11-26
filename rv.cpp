@@ -25,8 +25,11 @@ int main(int argc, char* argv[]) {
     if (selected_mode == 1) {
         online_mode();
     }
-    else {
+    else if (selected_mode == 2) {
         offline_mode();
+    }
+    else {
+        return 0;
     }
 }
 

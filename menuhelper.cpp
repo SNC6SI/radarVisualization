@@ -3,7 +3,7 @@
 #include "vectorhelper.h"
 #include "capturehelper.h"
 
-int selected_mode = 0U;
+int selected_mode;
 
 static char mode_menu[] = {
     " ========================="
@@ -17,10 +17,15 @@ static char mode_menu[] = {
 void select_mode(void) {
     int ch;
     printf("%s", mode_menu);
+    selected_mode = 0;
     while (!selected_mode) {
         fflush(stdin);
         ch = getch();
         printf("%c\n", ch);
+        if (ch == KEY_ESC) {
+            selected_mode = 0U;
+            break;
+        }
         selected_mode = ch - '0';
         if ((selected_mode != 1) && (selected_mode != 2)) {
             selected_mode = 0U;
