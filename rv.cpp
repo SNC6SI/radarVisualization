@@ -71,7 +71,7 @@ static void online_mode(void) {
     }
     video_writer.release();
     deinit_capture();
-    deinit_binlog();
+    deinit_binlog_write();
 }
 
 

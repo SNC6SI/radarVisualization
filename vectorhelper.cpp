@@ -85,7 +85,7 @@ XLstatus rvCreateRxThread(void) {
     if (g_xlPortHandle != XL_INVALID_PORTHANDLE) {
         xlStatus = xlSetNotification(g_xlPortHandle, &g_hMsgEvent, 1);
         if (xlStatus == XL_SUCCESS) {
-            xlStatus = init_binlog();
+            xlStatus = init_binlog_write();
         }
         if (xlStatus == XL_SUCCESS) {
             g_hRXThread = CreateThread(0, 0x1000, RxCanFdThread, (LPVOID)0, 0, &ThreadId);

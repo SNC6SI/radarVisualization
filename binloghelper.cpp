@@ -13,7 +13,7 @@ extern char binlog_filename[64];
 HANDLE hbinlogFile;
 VBLCANFDMessage64 messageFD;
 
-int init_binlog(void) {
+int init_binlog_write(void) {
     BOOL bSuccess;
     hbinlogFile = BLCreateFile(binlog_filename, GENERIC_WRITE);
     if (INVALID_HANDLE_VALUE == hbinlogFile) {
@@ -53,6 +53,6 @@ void update_binlog(void) {
     BLWriteObject(hbinlogFile, &messageFD.mHeader.mBase);
 }
 
-void deinit_binlog(void) {
+void deinit_binlog_write(void) {
     BLCloseHandle(hbinlogFile);
 }
