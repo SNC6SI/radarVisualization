@@ -7,11 +7,12 @@ using namespace cv;
 
 Mat capframe[2];
 Mat recframe(YROW, XCOL + CAM1_XCOL, CV_8UC3, Scalar(255, 255, 255));
+Mat recframe_offline(YROW, XCOL, CV_8UC3, Scalar(255, 255, 255));
 Mat frames[3];
 
 VideoWriter video_writer;
 
-void update_video(void) {
+void update_video_online(void) {
     frames[0] = recframe(Rect(0, 0, XCOL, YROW));
     canvas.copyTo(frames[0]);
 
@@ -25,4 +26,9 @@ void update_video(void) {
             capframe[1].copyTo(frames[2]);
         }
     }    
+}
+
+void update_video_offline(void) {
+    frames[0] = recframe_offline(Rect(0, 0, XCOL, YROW));
+    canvas.copyTo(frames[0]);
 }

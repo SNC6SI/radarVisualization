@@ -17,10 +17,13 @@ typedef short rv_status;
 #endif
 
 #define KEY_ESC 27
+#define TS_INT 40000000
 
 #define UTC 8
 #define FILENAMEPRE       "D:/rv"
 #define FILENAMEPOSTVIDEO  ".mp4"
 #define FILENAMEPOSTBINLOG ".blf"
+
+const char videoext[] = FILENAMEPOSTVIDEO;
 
 #endif

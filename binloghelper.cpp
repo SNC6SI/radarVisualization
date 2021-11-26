@@ -9,7 +9,7 @@
 #include "dialoghelper.h"
 
 extern SYSTEMTIME systemTime;
-extern char binlog_filename_write[64];
+extern char binlog_filename_write[512];
 extern char binlog_filename_read[512];
 
 HANDLE hbinlogFile;

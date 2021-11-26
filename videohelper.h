@@ -4,11 +4,12 @@
 #include <opencv2/opencv.hpp>
 
 extern cv::Mat capframe[2];
-extern cv::Mat recframe;
+extern cv::Mat recframe, recframe_offline;
 extern cv::Mat frames[3];
 
 extern cv::VideoWriter video_writer;
 
-void update_video(void);
+void update_video_online(void);
+void update_video_offline(void);
 
 #endif
