@@ -12,10 +12,13 @@
 #include <shtypes.h>
 #include <wchar.h>
 #include <new>
+#include <cstdlib>
+#include <locale.h>
 
 #pragma comment(linker, "\"/manifestdependency:type='Win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 
-wchar_t pBlfReadPath[256];
+extern char binlog_filename_read[512];
+extern int binlog_filename_read_len;
 
 const COMDLG_FILTERSPEC c_rgSaveTypes[] = {
     {L"Binary Logging Format (*.blf)",       L"*.blf"},
@@ -127,8 +130,8 @@ HRESULT BasicFileOpen() {
                                                     //wchar_t *pszFilePath = NULL;
                                                     hr = psiResult->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
                                                     if (SUCCEEDED(hr)) {
-                                                        wcsncpy(pBlfReadPath, pszFilePath, 256);
-                                                        //wprintf(L"%ls\n", pBlfReadPath);
+                                                        setlocale(LC_CTYPE, "");
+                                                        binlog_filename_read_len = wcstombs(binlog_filename_read, pszFilePath, 512);
                                                         CoTaskMemFree(pszFilePath);
                                                     }
                                                     psiResult->Release();

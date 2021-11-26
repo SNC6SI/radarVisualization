@@ -16,6 +16,8 @@ using namespace cv;
 SYSTEMTIME systemTime;
 char video_filename[64];
 char binlog_filename_write[64];
+char binlog_filename_read[512];
+int binlog_filename_read_len;
 static void get_rectime(void);
 static void online_mode(void);
 static void offline_mode(void);
