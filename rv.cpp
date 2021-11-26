@@ -6,7 +6,7 @@
 #include "binloghelper.h"
 #include "videohelper.h"
 #include "signalhelper.h"
-#include "canvashelper.h"
+#include "plothelper.h"
 #include <iostream>
 #include <opencv2/opencv.hpp>
 
