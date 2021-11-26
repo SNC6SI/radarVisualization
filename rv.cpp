@@ -15,7 +15,7 @@
 using namespace cv;
 SYSTEMTIME systemTime;
 char video_filename[64];
-char binlog_filename[64];
+char binlog_filename_write[64];
 static void get_rectime(void);
 static void online_mode(void);
 static void offline_mode(void);
@@ -92,7 +92,7 @@ static void get_rectime(void) {
         systemTime.wMinute,
         systemTime.wSecond,
         FILENAMEPOSTVIDEO);
-    sprintf(binlog_filename, "%s_%d%02d%02d_%02d%02d%02d%s",
+    sprintf(binlog_filename_write, "%s_%d%02d%02d_%02d%02d%02d%s",
         FILENAMEPRE,
         systemTime.wYear,
         systemTime.wMonth,

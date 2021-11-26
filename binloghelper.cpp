@@ -8,14 +8,14 @@
 #include "vectorhelper.h"
 
 extern SYSTEMTIME systemTime;
-extern char binlog_filename[64];
+extern char binlog_filename_write[64];
 
 HANDLE hbinlogFile;
 VBLCANFDMessage64 messageFD;
 
 int init_binlog_write(void) {
     BOOL bSuccess;
-    hbinlogFile = BLCreateFile(binlog_filename, GENERIC_WRITE);
+    hbinlogFile = BLCreateFile(binlog_filename_write, GENERIC_WRITE);
     if (INVALID_HANDLE_VALUE == hbinlogFile) {
         return -1;
     }
