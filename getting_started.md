@@ -24,12 +24,14 @@
 - rv: main
 - rv_common: 公用定义
 - rv_param: 参数
-- menuhelper: 菜单
+- menuhelper: console菜单
+- dialoghelper: 图形化dialog
 - vectorhelper: vector设备
 - capturehelper: 摄像头
 - signalhelper: 接收、解析报文，更新坐标信息
-- canvashelper: 更新坐标图像
+- plothelper: 更新坐标图像
 - videohelper: 更新图像、录屏
+- binloghelper: 读写blf
 
 
 # 状态
