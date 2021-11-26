@@ -6,12 +6,17 @@
 #include <windows.h>
 #include "binlog.h"
 #include "vectorhelper.h"
+#include "dialoghelper.h"
 
 extern SYSTEMTIME systemTime;
 extern char binlog_filename_write[64];
+extern char binlog_filename_read[512];
 
 HANDLE hbinlogFile;
+VBLFileStatisticsEx blstatistics;
 VBLCANFDMessage64 messageFD;
+VBLObjectHeaderBase blObjHeaderbase;
+BOOL blSuccess;
 
 int init_binlog_write(void) {
     BOOL bSuccess;
@@ -54,5 +59,40 @@ void update_binlog_write(void) {
 }
 
 void deinit_binlog_write(void) {
+    BLCloseHandle(hbinlogFile);
+}
+
+
+int init_binlog_read(void) {
+    hbinlogFile = BLCreateFile(binlog_filename_read, GENERIC_READ);
+    if (INVALID_HANDLE_VALUE == hbinlogFile) {
+        return -1;
+    }
+    blstatistics = {sizeof(VBLFileStatisticsEx)};
+    BLGetFileStatisticsEx(hbinlogFile, &blstatistics);
+    blSuccess = TRUE;
+    return 0;
+}
+
+
+void update_binlog_read(void) {
+    if (blSuccess && BLPeekObject(hbinlogFile, &blObjHeaderbase)) {
+        switch (blObjHeaderbase.mObjectType) {
+            case BL_OBJ_TYPE_CAN_FD_MESSAGE_64:
+                messageFD.mHeader.mBase = blObjHeaderbase;
+                blSuccess = BLReadObjectSecure(hbinlogFile, &messageFD.mHeader.mBase, sizeof(messageFD));
+                if (blSuccess) {
+                    BLFreeObject(hbinlogFile, &messageFD.mHeader.mBase);
+                }
+                break;
+            default:
+                blSuccess = BLSkipObject(hbinlogFile, &blObjHeaderbase);
+                break;
+        }
+    }
+}
+
+
+void deinit_binlog_read(void) {
     BLCloseHandle(hbinlogFile);
 }

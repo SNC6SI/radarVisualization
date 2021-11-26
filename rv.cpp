@@ -11,6 +11,7 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
 
+#define TS_INT 40000000
 
 using namespace cv;
 SYSTEMTIME systemTime;
@@ -18,11 +19,15 @@ char video_filename[64];
 char binlog_filename_write[64];
 char binlog_filename_read[512];
 int binlog_filename_read_len;
+static unsigned __int64 ts_anchor;
 static void get_rectime(void);
 static void online_mode(void);
 static void offline_mode(void);
+static char backspace[256];
 
 int main(int argc, char* argv[]) {
+    memset(backspace, '\b', 256);
+    backspace[255] = '\0';
     select_mode();
     if (selected_mode == 1) {
         online_mode();
@@ -65,13 +70,13 @@ static void online_mode(void) {
         init_capture();
     }
  
-    moveWindow("radar visualization", -15, 0);
+    moveWindow("radar visualization online", -15, 0);
     video_writer.open(video_filename, VideoWriter::fourcc('m', 'p', '4', 'v'), 25, Size(XCOL + CAM1_XCOL, YROW), true);
 
     while (waitKey(40) != KEY_ESC) {
         update_img();
         update_video();
-        imshow("radar visualization", recframe);
+        imshow("radar visualization online", recframe);
         video_writer.write(recframe);
     }
     video_writer.release();
@@ -81,7 +86,47 @@ static void online_mode(void) {
 
 
 static void offline_mode(void) {
+    unsigned long readcnt;
+    double percent, percent_anchor;
+    capOpened = 0;
     BasicFileOpen();
+    init_sig();
+    init_axis();
+    init_binlog_read();
+    if (blstatistics.mObjectCount != 0) {
+        readcnt = 0;
+        ts_anchor = 0;
+        percent = 0;
+        percent_anchor = 0;
+        moveWindow("radar visualization offline", -15, 0);
+        video_writer.open("D:/ABC.mp4", VideoWriter::fourcc('m', 'p', '4', 'v'), 25, Size(XCOL + CAM1_XCOL, YROW), true);
+        while (1) {
+            if (!(readcnt < blstatistics.mObjectCount)) {
+                break;
+            }
+            update_binlog_read();
+            memcpy(ptr, messageFD.mData, 64);
+            gcanid = messageFD.mID;
+            ts = messageFD.mHeader.mObjectTimeStamp;
+            update_sig();
+            if (ts - ts_anchor > TS_INT) {
+                ts_anchor = ts;
+                update_img();
+                update_video();
+                video_writer.write(recframe);
+            }
+            readcnt++;
+            percent = (double)readcnt / (double)blstatistics.mObjectCount * 100;
+            if (percent - percent_anchor > 1) {
+                percent_anchor = percent;
+                printf("%s  %3d.0%%  %10ld/%ld", backspace, (unsigned char)percent, readcnt, blstatistics.mObjectCount);
+            }
+        }
+        printf("%s  %3d.0%%  %10ld/%ld", backspace, (unsigned char)100, blstatistics.mObjectCount, blstatistics.mObjectCount);
+        printf("\n     done!\n");
+        video_writer.release();
+    }
+    deinit_binlog_read();
 }
 
 
