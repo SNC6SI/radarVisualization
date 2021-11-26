@@ -122,7 +122,7 @@ static void plot_info(void) {
 	int i;
 	// obj
 	for (i = 0; i < 20; i++) {
-		sprintf(label, "Obj%02d: (%4.0f, %4.0f) (%4.0f, %4.0f)", i, objx_rx[2 * i], objy_rx[2 * i], objx_rx[2 * i + 1], objy_rx[2 * i + 1]);
+		sprintf(label, "Obj%02d: (%4.0f, %4.0f) (%4.0f, %4.0f)", i + 1, objx_rx[2 * i], objy_rx[2 * i], objx_rx[2 * i + 1], objy_rx[2 * i + 1]);
 		putText(canvas, label, Point(20, 30 + i * 10), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 	}
 
