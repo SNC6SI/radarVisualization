@@ -3,7 +3,32 @@
 #include "vectorhelper.h"
 #include "capturehelper.h"
 
-//#include <vector>
+int selected_mode = 0U;
+
+static char mode_menu[] = {
+    " ========================="
+    "\n Select a Mode            "
+    "\n ========================="
+    "\n  1. online"
+    "\n  2. offline"
+    "\n"
+};
+
+void select_mode(void) {
+    int ch;
+    printf("%s", mode_menu);
+    while (!selected_mode) {
+        fflush(stdin);
+        ch = getch();
+        printf("%c\n", ch);
+        selected_mode = ch - '0';
+        if ((selected_mode != 1) && (selected_mode != 2)) {
+            selected_mode = 0U;
+            printf(" Invalid selection %c...Try again...\n", ch);
+        }
+    }
+}
+
 
 static char can_menu[] = {
     " ========================="
@@ -19,7 +44,7 @@ void select_can_channel(void) {
     system("cls");
     printf("%s", can_menu);
     for (i = 0; i < g_xlDrvConfig.channelCount; i++) {
-        printf("%3d, %s\n", i + 1, g_xlDrvConfig.channel[i].name);
+        printf("%3d. %s\n", i + 1, g_xlDrvConfig.channel[i].name);
     }
     xlChannelMaskPre = 0U;
     printf("\nPlease select one:\n");
@@ -30,7 +55,7 @@ void select_can_channel(void) {
         xlChannelMaskPre = ch - '0';
         if (!((xlChannelMaskPre > 0) && (xlChannelMaskPre < g_xlDrvConfig.channelCount + 1))) {
             xlChannelMaskPre = 0U;
-            printf("Invalid selection %c. Try again.\n", ch);
+            printf(" Invalid selection %c...Try again...\n", ch);
         }
     }
     xlChannelMaskPre = xlChannelMaskPre - 1;
@@ -52,7 +77,7 @@ void select_camera(void) {
     int selectednum;
     printf("%s", camera_menu);
     for (i = 0; i < cameraList.size(); i++) {
-        printf("%3d, %s\n", i + 1, cameraList[i].c_str());
+        printf("%3d. %s\n", i + 1, cameraList[i].c_str());
     }
     if (i == 0) {
         printf("No camera is available, proceeding without camera...\n");
@@ -73,7 +98,7 @@ void select_camera(void) {
             else {
                 selectednum = ch - '0';
                 if (!((selectednum > 0) && (selectednum < cameraList.size() + 1))) {
-                    printf("Invalid selection %c. Try again.\n", ch);
+                    printf(" Invalid selection %c...Try again...\n", ch);
                 }
                 else {
                     printf("%s is selected.\n", cameraList[selectednum - 1].c_str());

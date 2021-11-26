@@ -215,7 +215,7 @@
       <Culture>0x0407</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>./vxlapi64.lib;./lib/binlog/x64_Debug/binlog.lib;opencv_world3416d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>vxlapi64.lib;binlog.lib;opencv_world3416d.lib;shlwapi.lib;propsys.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -352,7 +352,7 @@
       <Culture>0x0407</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>./vxlapi64.lib;./lib/binlog/x64_Release/binlog.lib;opencv_world3416.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>vxlapi64.lib;binlog.lib;opencv_world3416.lib;shlwapi.lib;propsys.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <SubSystem>Console</SubSystem>
@@ -370,6 +370,7 @@
     <ClInclude Include="binlog.h" />
     <ClInclude Include="binloghelper.h" />
     <ClInclude Include="binlog_objects.h" />
+    <ClInclude Include="dialoghelper.h" />
     <ClInclude Include="menuhelper.h" />
     <ClInclude Include="rv_common.h" />
     <ClInclude Include="rv_param.h" />
@@ -382,6 +383,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="binloghelper.cpp" />
+    <ClCompile Include="dialoghelper.cpp" />
     <ClCompile Include="menuhelper.cpp" />
     <ClCompile Include="rv.cpp" />
     <ClCompile Include="plothelper.cpp" />

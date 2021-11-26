@@ -1,6 +1,7 @@
 #include "rv_common.h"
 #include "rv_param.h"
 #include "menuhelper.h"
+#include "dialoghelper.h"
 #include "capturehelper.h"
 #include "vectorhelper.h"
 #include "binloghelper.h"
@@ -15,9 +16,21 @@ using namespace cv;
 SYSTEMTIME systemTime;
 char video_filename[64];
 char binlog_filename[64];
-void get_rectime(void);
+static void get_rectime(void);
+static void online_mode(void);
+static void offline_mode(void);
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
+    select_mode();
+    if (selected_mode == 1) {
+        online_mode();
+    }
+    else {
+        offline_mode();
+    }
+}
+
+static void online_mode(void) {
     XLstatus      xlStatus;
     int           activated = 0;
     rv_status     rvStatus;
@@ -62,8 +75,13 @@ int main(int argc, char *argv[]) {
 }
 
 
+static void offline_mode(void) {
+    BasicFileOpen();
+}
 
-void get_rectime(void) {
+
+
+static void get_rectime(void) {
     GetSystemTime(&systemTime);
     sprintf(video_filename, "%s_%d%02d%02d_%02d%02d%02d%s",
         FILENAMEPRE,
