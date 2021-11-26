@@ -71,7 +71,7 @@ static DWORD WINAPI RxCanFdThread(LPVOID par) {
             gcanid = g_xlCanRxEvt.tagData.canRxOkMsg.canId;
             ts = g_xlCanRxEvt.timeStampSync;
             update_sig();
-            update_binlog();
+            update_binlog_write();
         } while (XL_SUCCESS == xlStatus);
     }
     xlClosePort(g_xlPortHandle);

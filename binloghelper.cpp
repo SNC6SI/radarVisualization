@@ -27,7 +27,7 @@ int init_binlog_write(void) {
 
 static BYTE dlcMapping[17] = {0,1,2,3,4,5,6,7,8,12,16,20,24,32,48,64};
 
-void update_binlog(void) {
+void update_binlog_write(void) {
     memset(&messageFD, 0, sizeof(VBLCANFDMessage64));
 
     messageFD.mHeader.mBase.mSignature = BL_OBJ_SIGNATURE;
