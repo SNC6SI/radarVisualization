@@ -373,7 +373,7 @@
     <ClInclude Include="menuhelper.h" />
     <ClInclude Include="rv_common.h" />
     <ClInclude Include="rv_param.h" />
-    <ClInclude Include="canvashelper.h" />
+    <ClInclude Include="plothelper.h" />
     <ClInclude Include="signalhelper.h" />
     <ClInclude Include="capturehelper.h" />
     <ClInclude Include="vectorhelper.h" />
@@ -384,7 +384,7 @@
     <ClCompile Include="binloghelper.cpp" />
     <ClCompile Include="menuhelper.cpp" />
     <ClCompile Include="rv.cpp" />
-    <ClCompile Include="canvashelper.cpp" />
+    <ClCompile Include="plothelper.cpp" />
     <ClCompile Include="signalhelper.cpp" />
     <ClCompile Include="capturehelper.cpp" />
     <ClCompile Include="vectorhelper.cpp" />
