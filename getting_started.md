@@ -28,6 +28,7 @@
 - dialoghelper: 图形化dialog
 - vectorhelper: vector设备
 - capturehelper: 摄像头
+- mousehelper: 响应鼠标事件
 - signalhelper: 接收、解析报文，更新坐标信息
 - plothelper: 更新坐标图像
 - videohelper: 更新图像、录屏

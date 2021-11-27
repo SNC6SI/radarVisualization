@@ -9,7 +9,8 @@ __online mode__
 3. draw the detected area with parsed signals using basic drawing apis from opencv
    - for performance reason do not use python/matlab for now
 4. access usb camera and record real scenes
-5. record video and blf simultanously
+5. support scene scaling
+6. record video and blf simultanously
 
 __offline mode__
 1. replay recorded blf to generate visualization video offline
