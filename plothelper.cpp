@@ -52,12 +52,12 @@ static void plot_axis(void) {
 }
 
 static void plot_vehicle(void) {
-	float x1 = X0 + (HW * SCALE);
-	float y1 = Y0 + (RO * SCALE);
-	float x2 = X0 - (HW * SCALE);
-	float y2 = Y0 - (FO * SCALE);
+	float x1 = X0 + HW;
+	float y1 = Y0 + RO;
+	float x2 = X0 - HW;
+	float y2 = Y0 - FO;
 	rectangle(canvas, Point(x1, y1), Point(x2, y2), BLACK, 1, LINE_8, 0);
-	circle(canvas, Point(X0, Y0), 2, BLACK, FILLED, 2);
+	//circle(canvas, Point(X0, Y0), 2, BLACK, FILLED, 2);
 }
 
 static void plot_objs(void) {

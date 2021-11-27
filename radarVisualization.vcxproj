@@ -372,6 +372,7 @@
     <ClInclude Include="binlog_objects.h" />
     <ClInclude Include="dialoghelper.h" />
     <ClInclude Include="menuhelper.h" />
+    <ClInclude Include="mousehelper.h" />
     <ClInclude Include="rv_common.h" />
     <ClInclude Include="rv_param.h" />
     <ClInclude Include="plothelper.h" />
@@ -385,6 +386,7 @@
     <ClCompile Include="binloghelper.cpp" />
     <ClCompile Include="dialoghelper.cpp" />
     <ClCompile Include="menuhelper.cpp" />
+    <ClCompile Include="mousehelper.cpp" />
     <ClCompile Include="rv.cpp" />
     <ClCompile Include="plothelper.cpp" />
     <ClCompile Include="signalhelper.cpp" />

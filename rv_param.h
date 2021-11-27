@@ -2,6 +2,7 @@
 #define _RV_PARAM_H_
 
 #include <opencv2/opencv.hpp>
+extern float gScale;
 
 #define RED   Scalar(0, 0, 255)
 #define BLUE    Scalar(255, 0, 0)
@@ -14,13 +15,14 @@
 #define CAM1_XCOL 640
 #define CAM1_YROW 480
 
-#define RO 88.8
-#define FO 365.9
-#define HW 95.3
+#define DEFAULTSCALE 0.5
+#define SCALESTEP 0.01
+
+#define RO (88.8 * gScale)
+#define FO (365.9 * gScale)
+#define HW (95.3 * gScale)
 
 #define LINSPACESTEP 50
 #define LINSPACEMAXNUM 100
-
-#define SCALE 0.5
 
 #endif

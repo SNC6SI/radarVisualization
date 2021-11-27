@@ -125,8 +125,11 @@ float slotx[8];
 float sloty[8];
 unsigned char slotid[4];
 
+float gScale;
+
 
 void init_sig(void) {
+    gScale = DEFAULTSCALE;
     memset((void*)objx_rx, 0, 40 * sizeof(float));
     memset((void*)objy_rx, 0, 40 * sizeof(float));
     memset((void*)slotx_rx, 0, 8 * sizeof(float));
@@ -434,8 +437,8 @@ void point4pose(float* x, float* y, int iter) {
     int i;
     float xx, yy;
     for (i = 0; i < iter; i++) {
-        xx = ((*(x + i)) * C0 + (-*(y + i)) * S0) * SCALE + X0;
-        yy = ((-*(y + i)) * C0 - (*(x + i)) * S0) * SCALE + Y0;
+        xx = ((*(x + i)) * C0 + (-*(y + i)) * S0) * gScale + X0;
+        yy = ((-*(y + i)) * C0 - (*(x + i)) * S0) * gScale + Y0;
         *(x + i) = xx;
         *(y + i) = yy;
     }

@@ -8,6 +8,7 @@
 #include "videohelper.h"
 #include "signalhelper.h"
 #include "plothelper.h"
+#include "mousehelper.h"
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/utils/logger.hpp>
@@ -73,6 +74,8 @@ static void online_mode(void) {
     }
  
     moveWindow("radar visualization online", -15, 0);
+    imshow("radar visualization online", recframe);
+    setMouseCallback("radar visualization online", mouseCallBackFunc, NULL);
     video_writer.open(video_filename, VideoWriter::fourcc('m', 'p', '4', 'v'), 25, Size(XCOL + CAM1_XCOL, YROW), true);
 
     while (waitKey(40) != KEY_ESC) {
