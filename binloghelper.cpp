@@ -58,10 +58,6 @@ void update_binlog_write(void) {
     BLWriteObject(hbinlogFile, &messageFD.mHeader.mBase);
 }
 
-void deinit_binlog_write(void) {
-    BLCloseHandle(hbinlogFile);
-}
-
 
 int init_binlog_read(void) {
     hbinlogFile = BLCreateFile(binlog_filename_read, GENERIC_READ);
@@ -93,6 +89,6 @@ void update_binlog_read(void) {
 }
 
 
-void deinit_binlog_read(void) {
+void deinit_binlog(void) {
     BLCloseHandle(hbinlogFile);
 }

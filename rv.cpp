@@ -86,7 +86,7 @@ static void online_mode(void) {
     }
     video_writer.release();
     deinit_capture();
-    deinit_binlog_write();
+    deinit_binlog();
 }
 
 
@@ -136,7 +136,7 @@ static void offline_mode(void) {
             printf("\n\n  done!\n");
             video_writer.release();
         }
-        deinit_binlog_read();
+        deinit_binlog();
     }
 }
 
