@@ -65,7 +65,7 @@ static void plot_vehicle(void) {
 static void plot_objs(void) {
 	char label[16] = { 0 };
 	for (int i = 0; i < 20; i++) {
-		if ((objx[2 * i] != 0) && (objy[2 * i] != 0) && (objx[2 * i + 1] != 0) && (objy[2 * i + 1] != 0)){
+		if (((int)objx[2 * i] != (int)X0) && ((int)objy[2 * i] != (int)Y0) && ((int)objx[2 * i + 1] != (int)X0) && ((int)objy[2 * i + 1] != (int)Y0)){
 			circle(canvas, Point(objx[2 * i], objy[2 * i]), 2, BLUE, FILLED, 2);
 			circle(canvas, Point(objx[2 * i + 1], objy[2 * i + 1]), 2, BLUE, FILLED, 2);
 			line(canvas, Point(objx[2 * i], objy[2 * i]), Point(objx[2 * i + 1], objy[2 * i + 1]), BLUE, 2);
@@ -99,7 +99,7 @@ static void plot_misc(void) {
 	sprintf(label_long, "%c", cGEAR[GW_VBU_GearLeverPos]);
 	putText(canvas, label_long, Point(20, 15), FONT_HERSHEY_TRIPLEX, 0.5, RED, 1, LINE_8, false);
 
-	sprintf(label_long, "%3.1f", ESP_VehicleSpeed);
+	sprintf(label_long, "%3.2f", ESP_VehicleSpeed);
 	putText(canvas, label_long, Point(60, 15), FONT_HERSHEY_TRIPLEX, 0.5, RED, 1, LINE_8, false);
 	
 	sprintf(label_long, "%d", alive_count);
