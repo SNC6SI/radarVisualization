@@ -1,11 +1,6 @@
 #ifndef _UPDATESIG_H_
 #define _UPDATESIG_H_
 
-extern unsigned char ParkLeftslot0ID;
-extern unsigned char ParkLeftslot1ID;
-extern unsigned char ParkRightslot0ID;
-extern unsigned char ParkRightslot1ID;
-
 extern float ESP_VehicleSpeed;
 extern unsigned char  GW_VBU_GearLeverPos;
 
@@ -24,6 +19,9 @@ extern float objy[40];
 extern float slotx[8];
 extern float sloty[8];
 extern unsigned char slotid[4];
+
+extern float slot_Depth[4];
+extern float slot_Length[4];
 
 extern float X0;
 extern float Y0;

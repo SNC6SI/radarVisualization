@@ -102,6 +102,15 @@ float ApaPscRightSlot1Obj1Y=0.0F;
 float ApaPscRightSlot1Obj2X=0.0F;
 float ApaPscRightSlot1Obj2Y=0.0F;
 
+float ApaPsc_LeftPSL0_Depth = 0.0F;
+float ApaPsc_LeftPSL0_Length = 0.0F;
+float ApaPsc_LeftPSL1_Depth = 0.0F;
+float ApaPsc_LeftPSL1_Length = 0.0F;
+float ApaPsc_RightPSL0_Depth = 0.0F;
+float ApaPsc_RightPSL0_Length = 0.0F;
+float ApaPsc_RightPSL1_Depth = 0.0F;
+float ApaPsc_RightPSL1_Length = 0.0F;
+
 unsigned char ParkLeftslot0ID = 0.0F;
 unsigned char ParkLeftslot1ID = 0.0F;
 unsigned char ParkRightslot0ID = 0.0F;
@@ -124,6 +133,8 @@ float objy[40];
 float slotx[8];
 float sloty[8];
 unsigned char slotid[4];
+float slot_Depth[4];
+float slot_Length[4];
 
 float gScale;
 
@@ -366,6 +377,11 @@ void update_sig(void) {
         ParkLeftslot0ID = (unsigned char)((ptr[1]) * (1) + (0));
         ParkLeftslot1ID = (unsigned char)((ptr[17]) * (1) + (0));
 
+        ApaPsc_LeftPSL0_Depth = ((ptr[11]) * (4) + (0));
+        ApaPsc_LeftPSL0_Length = ((((ptr[12]) << 1) + (((ptr[13]) & (1 << 7)) >> 7)) * (4) + (0));
+        ApaPsc_LeftPSL1_Depth = ((ptr[27]) * (4) + (0));
+        ApaPsc_LeftPSL1_Length = ((((ptr[28]) << 1) + (((ptr[29]) & (1 << 7)) >> 7)) * (4) + (0));
+
         slotx_rx[0] = ApaPscLeftSlot0Obj1X;
         slotx_rx[1] = ApaPscLeftSlot0Obj2X;
         slotx_rx[2] = ApaPscLeftSlot1Obj1X;
@@ -382,6 +398,11 @@ void update_sig(void) {
 
         slotid[0] = ParkLeftslot0ID;
         slotid[1] = ParkLeftslot1ID;
+
+        slot_Depth[0]  = ApaPsc_LeftPSL0_Depth * gScale;
+        slot_Length[0] = ApaPsc_LeftPSL0_Length * gScale;
+        slot_Depth[1]  = ApaPsc_LeftPSL1_Length * gScale;
+        slot_Length[1] = ApaPsc_LeftPSL1_Length * gScale;
     }
 
 
@@ -396,6 +417,11 @@ void update_sig(void) {
         ApaPscRightSlot1Obj2Y = (((((ptr[22]) & 127) << 4) + (((ptr[23]) & (15 << 4)) >> 4))* (2) + (-3584));
         ParkRightslot0ID = (unsigned char)((ptr[1]) * (1) + (0));
         ParkRightslot1ID = (unsigned char)((ptr[17]) * (1) + (0));
+
+        ApaPsc_RightPSL0_Depth = ((ptr[11]) * (4) + (0));
+        ApaPsc_RightPSL0_Length = ((((ptr[12]) << 1) + (((ptr[13]) & (1 << 7)) >> 7)) * (4) + (0));
+        ApaPsc_RightPSL1_Depth = ((ptr[27]) * (4) + (0));
+        ApaPsc_RightPSL1_Length = ((((ptr[28]) << 1) + (((ptr[29]) & (1 << 7)) >> 7)) * (4) + (0));
 
         slotx_rx[4] = ApaPscRightSlot0Obj1X;
         slotx_rx[5] = ApaPscRightSlot0Obj2X;
@@ -413,6 +439,11 @@ void update_sig(void) {
 
         slotid[2] = ParkRightslot0ID;
         slotid[3] = ParkRightslot1ID;
+
+        slot_Depth[2]  = ApaPsc_RightPSL0_Depth * gScale;
+        slot_Length[2] = ApaPsc_RightPSL0_Length * gScale;
+        slot_Depth[3]  = ApaPsc_RightPSL1_Depth * gScale;
+        slot_Length[3] = ApaPsc_RightPSL1_Length * gScale;
     }
 
     if (gcanid == 0x150) {

@@ -85,6 +85,7 @@ static void plot_slots(void) {
 				circle(canvas, Point(slotx[2 * i], sloty[2 * i]), 2, RED, FILLED, 2);
 				circle(canvas, Point(slotx[2 * i + 1], sloty[2 * i + 1]), 2, RED, FILLED, 2);
 				line(canvas, Point(slotx[2 * i], sloty[2 * i]), Point(slotx[2 * i + 1], sloty[2 * i + 1]), RED, 2);
+				rectangle(canvas, Rect(slotx[2 * i + 1] - slot_Depth[i], sloty[2 * i + 1], slot_Length[i], slot_Depth[i]), BLACK, 1, LINE_4);
 
 				sprintf(label, "%d", slotid[i]);
 				putText(canvas, label, Point(slotx[2 * i], sloty[2 * i]), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
