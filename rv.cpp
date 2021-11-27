@@ -99,7 +99,7 @@ static void offline_mode(void) {
     if (xlStatus == 0) {
         strcpy(video_filename, binlog_filename_read);
         strcpy(video_filename + (binlog_filename_read_len - 4), videoext);
-        printf("%s\n", video_filename);
+        printf("\n  video:  %s\n\n", video_filename);
         if (blstatistics.mObjectCount != 0) {
             readcnt = 0;
             ts_anchor = 0;
@@ -125,11 +125,11 @@ static void offline_mode(void) {
                 percent = (double)readcnt / (double)blstatistics.mObjectCount * 100;
                 if (percent - percent_anchor > 1) {
                     percent_anchor = percent;
-                    printf("%s  %3d.0%%  %10ld/%ld", backspace, (unsigned char)percent, readcnt, blstatistics.mObjectCount);
+                    printf("%s %3d.0%%  %10ld/%ld", backspace, (unsigned char)percent, readcnt, blstatistics.mObjectCount);
                 }
             }
             printf("%s  %3d.0%%  %10ld/%ld", backspace, (unsigned char)100, blstatistics.mObjectCount, blstatistics.mObjectCount);
-            printf("\n     done!\n");
+            printf("\n\n  done!\n");
             video_writer.release();
         }
         deinit_binlog_read();

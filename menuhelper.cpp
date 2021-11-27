@@ -11,7 +11,7 @@ static char mode_menu[] = {
     "\n ========================="
     "\n  1. online"
     "\n  2. offline"
-    "\n"
+    "\n\n"
 };
 
 void select_mode(void) {
@@ -21,7 +21,7 @@ void select_mode(void) {
     while (!selected_mode) {
         fflush(stdin);
         ch = getch();
-        printf("%c\n", ch);
+        printf("  %c\n", ch);
         if (ch == KEY_ESC) {
             selected_mode = 0U;
             break;
@@ -52,11 +52,11 @@ void select_can_channel(void) {
         printf("%3d. %s\n", i + 1, g_xlDrvConfig.channel[i].name);
     }
     xlChannelMaskPre = 0U;
-    printf("\nPlease select one:\n");
+    printf("\nPlease select one:\n\n");
     while (!xlChannelMaskPre) {
         fflush(stdin);
         ch = getch();
-        printf("%c\n", ch);
+        printf("  %c\n", ch);
         xlChannelMaskPre = ch - '0';
         if (!((xlChannelMaskPre > 0) && (xlChannelMaskPre < g_xlDrvConfig.channelCount + 1))) {
             xlChannelMaskPre = 0U;
@@ -92,11 +92,11 @@ void select_camera(void) {
         selectednum = 0U;
         while (cameraSelected.size() < std::min((int)cameraList.size(), 2)) {
             if (cameraSelected.size() == 1) {
-                printf("\nPlease select one more camera, or press 'ESC' to end selection...\n");
+                printf("\nPlease select one more camera, or press 'ESC' to end selection...\n\n");
             }
             fflush(stdin);
             ch = getch();
-            printf("%c\n", ch);
+            printf("  %c\n", ch);
             if (ch == KEY_ESC) {
                 break;
             }
