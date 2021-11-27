@@ -7,7 +7,7 @@ extern unsigned char ParkRightslot0ID;
 extern unsigned char ParkRightslot1ID;
 
 extern float ESP_VehicleSpeed;
-extern float GW_VBU_GearLeverPos;
+extern unsigned char  GW_VBU_GearLeverPos;
 
 extern unsigned int gcanid;
 extern unsigned __int64 ts;

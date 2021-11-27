@@ -108,7 +108,7 @@ unsigned char ParkRightslot0ID = 0.0F;
 unsigned char ParkRightslot1ID = 0.0F;
 
 float ESP_VehicleSpeed = 0.0F;
-float GW_VBU_GearLeverPos = 0.0F;
+unsigned char GW_VBU_GearLeverPos = 0.0F;
 
 unsigned int gcanid = 0;
 unsigned char ptr[64];
@@ -127,7 +127,6 @@ unsigned char slotid[4];
 
 float gScale;
 
-
 void init_sig(void) {
     gScale = DEFAULTSCALE;
     memset((void*)objx_rx, 0, 40 * sizeof(float));
@@ -139,7 +138,7 @@ void init_sig(void) {
     memset((void*)slotx, 0, 8 * sizeof(float));
     memset((void*)sloty, 0, 8 * sizeof(float));
     memset((void*)slotid, 0, 4);
-    GW_VBU_GearLeverPos = 0.0F;
+    GW_VBU_GearLeverPos = 0U;
     ESP_VehicleSpeed = 0.0F;
 }
 
@@ -422,6 +421,9 @@ void update_sig(void) {
 
     if (gcanid == 0x152) {
         GW_VBU_GearLeverPos = (((ptr[9]) & 7) * (1) + (0));
+        if (GW_VBU_GearLeverPos > 3) {
+            GW_VBU_GearLeverPos = 4;
+        }
     }
 }
 

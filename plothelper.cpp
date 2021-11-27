@@ -90,9 +90,12 @@ static void plot_slots(void) {
 static void plot_misc(void) {
 	char label_long[256] = { 0 };
 
-	sprintf(label_long, "speed %3.1f", ESP_VehicleSpeed);
-	putText(canvas, label_long, Point(20, 15), FONT_HERSHEY_SIMPLEX, 0.6, RED, 1, LINE_8, false);
+	sprintf(label_long, "%c", cGEAR[GW_VBU_GearLeverPos]);
+	putText(canvas, label_long, Point(20, 15), FONT_HERSHEY_TRIPLEX, 0.5, RED, 1, LINE_8, false);
 
+	sprintf(label_long, "%3.1f", ESP_VehicleSpeed);
+	putText(canvas, label_long, Point(60, 15), FONT_HERSHEY_TRIPLEX, 0.5, RED, 1, LINE_8, false);
+	
 	sprintf(label_long, "%d", alive_count);
 	putText(canvas, label_long, Point(XCOL-50, YROW-50), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
 	
