@@ -102,6 +102,7 @@ static void offline_mode(void) {
     if (xlStatus == 0) {
         strcpy(video_filename, binlog_filename_read);
         strcpy(video_filename + (binlog_filename_read_len - 4), videoext);
+        printf("\n  blf:    %s", binlog_filename_read);
         printf("\n  video:  %s\n\n", video_filename);
         if (blstatistics.mObjectCount != 0) {
             readcnt = 0;
