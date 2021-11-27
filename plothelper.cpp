@@ -23,6 +23,8 @@ static float grid_y[LINSPACEMAXNUM];
 static int grid_num_x = 0;
 static int grid_num_y = 0;
 
+static const char cGEAR[5] = { 'P','R', 'N', 'D', 'E' };
+
 void init_axis(void) {
 	linspace_step(0, XCOL, LINSPACESTEP, grid_x, &grid_num_x);
 	linspace_step(0, YROW, LINSPACESTEP, grid_y, &grid_num_y);
@@ -30,7 +32,7 @@ void init_axis(void) {
 
 static unsigned int alive_count = 0U;
 
-void update_img(void){
+void update_img(void) {
 	canvas.setTo(cv::Scalar::all(255));
 	alive_count++;
 	plot_axis();
@@ -61,14 +63,16 @@ static void plot_vehicle(void) {
 }
 
 static void plot_objs(void) {
-	char label[16] = {0};
+	char label[16] = { 0 };
 	for (int i = 0; i < 20; i++) {
-		circle(canvas, Point(objx[2 * i], objy[2 * i]), 2, BLUE, FILLED, 2);
-		circle(canvas, Point(objx[2 * i + 1], objy[2 * i + 1]), 2, BLUE, FILLED, 2);
-		line(canvas, Point(objx[2 * i], objy[2 * i]), Point(objx[2 * i + 1], objy[2 * i + 1]), BLUE, 2);
+		if ((objx[2 * i] != 0) && (objy[2 * i] != 0) && (objx[2 * i + 1] != 0) && (objy[2 * i + 1] != 0)){
+			circle(canvas, Point(objx[2 * i], objy[2 * i]), 2, BLUE, FILLED, 2);
+			circle(canvas, Point(objx[2 * i + 1], objy[2 * i + 1]), 2, BLUE, FILLED, 2);
+			line(canvas, Point(objx[2 * i], objy[2 * i]), Point(objx[2 * i + 1], objy[2 * i + 1]), BLUE, 2);
 
-		sprintf(label, "%d", i+1);
-		putText(canvas, label, Point(objx[2 * i], objy[2 * i]), FONT_HERSHEY_SIMPLEX, 0.4, BLUE, 1, LINE_8, false);
+			sprintf(label, "%d", i + 1);
+			putText(canvas, label, Point(objx[2 * i], objy[2 * i]), FONT_HERSHEY_SIMPLEX, 0.4, BLUE, 1, LINE_8, false);
+		}
 	}
 		
 }
@@ -77,12 +81,14 @@ static void plot_slots(void) {
 	char label[16] = { 0 };
 	for (int i = 0; i < 4; i++) {
 		if (slotid[i] != 0 && slotid[i] != 255) {
-			circle(canvas, Point(slotx[2 * i], sloty[2 * i]), 2, RED, FILLED, 2);
-			circle(canvas, Point(slotx[2 * i + 1], sloty[2 * i + 1]), 2, RED, FILLED, 2);
-			line(canvas, Point(slotx[2 * i], sloty[2 * i]), Point(slotx[2 * i + 1], sloty[2 * i + 1]), RED, 2);
+			if ((slotx[2 * i] != 0) && (sloty[2 * i] != 0) && (slotx[2 * i + 1] != 0) && (sloty[2 * i + 1] != 0)) {
+				circle(canvas, Point(slotx[2 * i], sloty[2 * i]), 2, RED, FILLED, 2);
+				circle(canvas, Point(slotx[2 * i + 1], sloty[2 * i + 1]), 2, RED, FILLED, 2);
+				line(canvas, Point(slotx[2 * i], sloty[2 * i]), Point(slotx[2 * i + 1], sloty[2 * i + 1]), RED, 2);
 
-			sprintf(label, "%d", slotid[i]);
-			putText(canvas, label, Point(slotx[2 * i], sloty[2 * i]), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
+				sprintf(label, "%d", slotid[i]);
+				putText(canvas, label, Point(slotx[2 * i], sloty[2 * i]), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
+			}
 		}
 	}
 }
@@ -126,7 +132,7 @@ static void plot_info(void) {
 	// obj
 	for (i = 0; i < 20; i++) {
 		sprintf(label, "Obj%02d: (%4.0f, %4.0f) (%4.0f, %4.0f)", i + 1, objx_rx[2 * i], objy_rx[2 * i], objx_rx[2 * i + 1], objy_rx[2 * i + 1]);
-		putText(canvas, label, Point(20, 30 + i * 10), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+		putText(canvas, label, Point(20, 50 + i * 10), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 	}
 
 	// slot id
