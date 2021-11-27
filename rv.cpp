@@ -10,7 +10,7 @@
 #include "plothelper.h"
 #include <iostream>
 #include <opencv2/opencv.hpp>
-
+#include <opencv2/core/utils/logger.hpp>
 
 using namespace cv;
 static char backspace[256];
@@ -26,6 +26,7 @@ static void offline_mode(void);
 
 
 int main(int argc, char* argv[]) {
+    utils::logging::setLogLevel(utils::logging::LOG_LEVEL_WARNING);
     memset(backspace, '\b', 256);
     backspace[255] = '\0';
     select_mode();
