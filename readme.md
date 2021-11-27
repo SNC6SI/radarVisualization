@@ -1,7 +1,7 @@
 # radar visualization
 
 __online mode__
-1. accese can driver to retrieve raw data(can/canfd)
+1. access can driver to retrieve raw data(can/canfd)
    - only vector driver is supported for now 
      - J2534 is not an option here because of canfd
      - need to support other can devices, but this task has a lower priority because other cheap devices do not support canfd
