@@ -85,6 +85,28 @@ float MapObj20P1X=0.0F;
 float MapObj20P1Y=0.0F;
 float MapObj20P2X=0.0F;
 float MapObj20P2Y=0.0F;
+
+unsigned char MapObj01Height = 0U;
+unsigned char MapObj02Height = 0U;
+unsigned char MapObj03Height = 0U;
+unsigned char MapObj04Height = 0U;
+unsigned char MapObj05Height = 0U;
+unsigned char MapObj06Height = 0U;
+unsigned char MapObj07Height = 0U;
+unsigned char MapObj08Height = 0U;
+unsigned char MapObj09Height = 0U;
+unsigned char MapObj10Height = 0U;
+unsigned char MapObj11Height = 0U;
+unsigned char MapObj12Height = 0U;
+unsigned char MapObj13Height = 0U;
+unsigned char MapObj14Height = 0U;
+unsigned char MapObj15Height = 0U;
+unsigned char MapObj16Height = 0U;
+unsigned char MapObj17Height = 0U;
+unsigned char MapObj18Height = 0U;
+unsigned char MapObj19Height = 0U;
+unsigned char MapObj20Height = 0U;
+
 float ApaPscLeftSlot0Obj1X=0.0F;
 float ApaPscLeftSlot0Obj1Y=0.0F;
 float ApaPscLeftSlot0Obj2X=0.0F;
@@ -137,6 +159,7 @@ float sloty[8];
 float slotxrec[8];
 float slotyrec[8];
 
+unsigned char objH[20];
 unsigned char slotid[4];
 float slot_Depth[4];
 float slot_Length[4];
@@ -177,6 +200,10 @@ void update_sig(void) {
         MapObj04P1Y = ((((ptr[27]) << 2) + (((ptr[28]) & (3 << 6)) >> 6))* (4) + (-2044));
         MapObj04P2X = (((((ptr[28]) & 3) << 8) + (ptr[29])) * (4) + (-2044));
         MapObj04P2Y = ((((ptr[30]) << 2) + (((ptr[31]) & (3 << 6)) >> 6))* (4) + (-2044));
+        MapObj01Height = ((((ptr[7]) & (3 << 4)) >> 4) * (1) + (0));
+        MapObj02Height = ((((ptr[15]) & (3 << 4)) >> 4) * (1) + (0));
+        MapObj03Height = ((((ptr[23]) & (3 << 4)) >> 4) * (1) + (0));
+        MapObj04Height = ((((ptr[31]) & (3 << 4)) >> 4) * (1) + (0));
 
         objx_rx[0] = MapObj01P1X;
         objx_rx[1] = MapObj01P2X;
@@ -195,6 +222,11 @@ void update_sig(void) {
         objy_rx[5] = MapObj03P2Y;
         objy_rx[6] = MapObj04P1Y;
         objy_rx[7] = MapObj04P2Y;
+
+        objH[0] = MapObj01Height;
+        objH[1] = MapObj02Height;
+        objH[2] = MapObj03Height;
+        objH[3] = MapObj04Height;
 
         memcpy(&objx[0], &objx_rx[0], 8 * sizeof(float));
         memcpy(&objy[0], &objy_rx[0], 8 * sizeof(float));
@@ -219,6 +251,10 @@ void update_sig(void) {
         MapObj08P1Y = ((((ptr[27]) << 2) + (((ptr[28]) & (3 << 6)) >> 6))* (4) + (-2044));
         MapObj08P2X = (((((ptr[28]) & 3) << 8) + (ptr[29])) * (4) + (-2044));
         MapObj08P2Y = ((((ptr[30]) << 2) + (((ptr[31]) & (3 << 6)) >> 6))* (4) + (-2044));
+        MapObj05Height = ((((ptr[7]) & (3 << 4)) >> 4) * (1) + (0));
+        MapObj06Height = ((((ptr[15]) & (3 << 4)) >> 4) * (1) + (0));
+        MapObj07Height = ((((ptr[23]) & (3 << 4)) >> 4) * (1) + (0));
+        MapObj08Height = ((((ptr[31]) & (3 << 4)) >> 4) * (1) + (0));
 
         objx_rx[8] = MapObj05P1X;
         objx_rx[9] = MapObj05P2X;
@@ -237,6 +273,11 @@ void update_sig(void) {
         objy_rx[13] = MapObj07P2Y;
         objy_rx[14] = MapObj08P1Y;
         objy_rx[15] = MapObj08P2Y;
+
+        objH[4] = MapObj05Height;
+        objH[5] = MapObj06Height;
+        objH[6] = MapObj07Height;
+        objH[7] = MapObj08Height;
 
         memcpy(&objx[8], &objx_rx[8], 8 * sizeof(float));
         memcpy(&objy[8], &objy_rx[8], 8 * sizeof(float));
@@ -261,6 +302,10 @@ void update_sig(void) {
         MapObj12P1Y = ((((ptr[27]) << 2) + (((ptr[28]) & (3 << 6)) >> 6))* (4) + (-2044));
         MapObj12P2X = (((((ptr[28]) & 3) << 8) + (ptr[29])) * (4) + (-2044));
         MapObj12P2Y = ((((ptr[30]) << 2) + (((ptr[31]) & (3 << 6)) >> 6))* (4) + (-2044));
+        MapObj09Height = ((((ptr[7]) & (3 << 4)) >> 4) * (1) + (0));
+        MapObj10Height = ((((ptr[15]) & (3 << 4)) >> 4) * (1) + (0));
+        MapObj11Height = ((((ptr[23]) & (3 << 4)) >> 4) * (1) + (0));
+        MapObj12Height = ((((ptr[31]) & (3 << 4)) >> 4) * (1) + (0));
 
         objx_rx[16] = MapObj09P1X;
         objx_rx[17] = MapObj09P2X;
@@ -279,6 +324,11 @@ void update_sig(void) {
         objy_rx[21] = MapObj11P2Y;
         objy_rx[22] = MapObj12P1Y;
         objy_rx[23] = MapObj12P2Y;
+
+        objH[8]  = MapObj09Height;
+        objH[9]  = MapObj10Height;
+        objH[10] = MapObj11Height;
+        objH[11] = MapObj12Height;
 
         memcpy(&objx[16], &objx_rx[16], 8 * sizeof(float));
         memcpy(&objy[16], &objy_rx[16], 8 * sizeof(float));
@@ -303,6 +353,10 @@ void update_sig(void) {
         MapObj16P1Y = ((((ptr[27]) << 2) + (((ptr[28]) & (3 << 6)) >> 6))* (4) + (-2044));
         MapObj16P2X = (((((ptr[28]) & 3) << 8) + (ptr[29])) * (4) + (-2044));
         MapObj16P2Y = ((((ptr[30]) << 2) + (((ptr[31]) & (3 << 6)) >> 6))* (4) + (-2044));
+        MapObj13Height = ((((ptr[7]) & (3 << 4)) >> 4) * (1) + (0));
+        MapObj14Height = ((((ptr[15]) & (3 << 4)) >> 4) * (1) + (0));
+        MapObj15Height = ((((ptr[23]) & (3 << 4)) >> 4) * (1) + (0));
+        MapObj16Height = ((((ptr[31]) & (3 << 4)) >> 4) * (1) + (0));
 
         objx_rx[24] = MapObj13P1X;
         objx_rx[25] = MapObj13P2X;
@@ -321,6 +375,11 @@ void update_sig(void) {
         objy_rx[29] = MapObj15P2Y;
         objy_rx[30] = MapObj16P1Y;
         objy_rx[31] = MapObj16P2Y;
+
+        objH[12] = MapObj13Height;
+        objH[13] = MapObj14Height;
+        objH[14] = MapObj15Height;
+        objH[15] = MapObj16Height;
 
         memcpy(&objx[24], &objx_rx[24], 8 * sizeof(float));
         memcpy(&objy[24], &objy_rx[24], 8 * sizeof(float));
@@ -345,6 +404,10 @@ void update_sig(void) {
         MapObj20P1Y = ((((ptr[27]) << 2) + (((ptr[28]) & (3 << 6)) >> 6))* (4) + (-2044));
         MapObj20P2X = (((((ptr[28]) & 3) << 8) + (ptr[29])) * (4) + (-2044));
         MapObj20P2Y = ((((ptr[30]) << 2) + (((ptr[31]) & (3 << 6)) >> 6))* (4) + (-2044));
+        MapObj17Height = ((((ptr[7]) & (3 << 4)) >> 4) * (1) + (0));
+        MapObj18Height = ((((ptr[15]) & (3 << 4)) >> 4) * (1) + (0));
+        MapObj19Height = ((((ptr[23]) & (3 << 4)) >> 4) * (1) + (0));
+        MapObj20Height = ((((ptr[31]) & (3 << 4)) >> 4) * (1) + (0));
 
         objx_rx[32] = MapObj17P1X;
         objx_rx[33] = MapObj17P2X;
@@ -363,6 +426,11 @@ void update_sig(void) {
         objy_rx[37] = MapObj19P2Y;
         objy_rx[38] = MapObj20P1Y;
         objy_rx[39] = MapObj20P2Y;
+
+        objH[16] = MapObj17Height;
+        objH[17] = MapObj18Height;
+        objH[18] = MapObj19Height;
+        objH[19] = MapObj20Height;
 
         memcpy(&objx[32], &objx_rx[32], 8 * sizeof(float));
         memcpy(&objy[32], &objy_rx[32], 8 * sizeof(float));

@@ -4,10 +4,15 @@
 #include <opencv2/opencv.hpp>
 extern float gScale;
 
-#define RED   Scalar(0, 0, 255)
+#define RED     Scalar(0, 0, 255)
 #define BLUE    Scalar(255, 0, 0)
-#define BLACK  Scalar(0, 0, 0)
-#define GRAY   Scalar(224,224,224)
+#define BLACK   Scalar(0, 0, 0)
+#define GRAY    Scalar(224,224,224)
+
+#define BLUEH   BLUE                     // 1
+#define BLUEL   Scalar(255, 144, 30)     // 0
+#define BLUET   Scalar(255, 260, 135)    // 2
+#define BLUEU   Scalar(255, 226, 198)    // 3
 
 #define XCOL 1200
 #define YROW 1000

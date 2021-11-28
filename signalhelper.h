@@ -21,6 +21,7 @@ extern float sloty[8];
 extern float slotxrec[8];
 extern float slotyrec[8];
 
+extern unsigned char objH[20];
 extern unsigned char slotid[4];
 
 

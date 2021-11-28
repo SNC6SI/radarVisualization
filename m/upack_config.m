@@ -137,5 +137,25 @@ function config = upack_config
         0x150, 'ESP_VehicleSpeed';
         0x152, 'GW_VBU_GearLeverPos';
 
+        0x172, 'MapObj01Height';
+        0x172, 'MapObj02Height';
+        0x172, 'MapObj03Height';
+        0x172, 'MapObj04Height';
+        0x173, 'MapObj05Height';
+        0x173, 'MapObj06Height';
+        0x173, 'MapObj07Height';
+        0x173, 'MapObj08Height';
+        0x174, 'MapObj09Height';
+        0x174, 'MapObj10Height';
+        0x174, 'MapObj11Height';
+        0x174, 'MapObj12Height';
+        0x177, 'MapObj13Height';
+        0x177, 'MapObj14Height';
+        0x177, 'MapObj15Height';
+        0x177, 'MapObj16Height';
+        0x178, 'MapObj17Height';
+        0x178, 'MapObj18Height';
+        0x178, 'MapObj19Height';
+        0x178, 'MapObj20Height';
         };
 end

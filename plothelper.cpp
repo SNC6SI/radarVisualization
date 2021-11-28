@@ -24,6 +24,7 @@ static int grid_num_x = 0;
 static int grid_num_y = 0;
 
 static const char cGEAR[5] = { 'P','R', 'N', 'D', 'E' };
+static const Scalar mBLUE_H[4] = { BLUEL, BLUEH , BLUET , BLUEU };
 
 void init_axis(void) {
 	linspace_step(0, XCOL, LINSPACESTEP, grid_x, &grid_num_x);
@@ -33,7 +34,7 @@ void init_axis(void) {
 static unsigned int alive_count = 0U;
 
 void update_img(void) {
-	canvas.setTo(cv::Scalar::all(255));
+	canvas.setTo(Scalar::all(255));
 	alive_count++;
 	plot_axis();
 	plot_vehicle();
@@ -68,7 +69,7 @@ static void plot_objs(void) {
 		if (((int)objx[2 * i] != (int)X0) && ((int)objy[2 * i] != (int)Y0) && ((int)objx[2 * i + 1] != (int)X0) && ((int)objy[2 * i + 1] != (int)Y0)){
 			circle(canvas, Point(objx[2 * i], objy[2 * i]), 2, BLUE, FILLED, 2);
 			circle(canvas, Point(objx[2 * i + 1], objy[2 * i + 1]), 2, BLUE, FILLED, 2);
-			line(canvas, Point(objx[2 * i], objy[2 * i]), Point(objx[2 * i + 1], objy[2 * i + 1]), BLUE, 2);
+			line(canvas, Point(objx[2 * i], objy[2 * i]), Point(objx[2 * i + 1], objy[2 * i + 1]), mBLUE_H[objH[i]], 2);
 
 			sprintf(label, "%d", i + 1);
 			putText(canvas, label, Point(objx[2 * i], objy[2 * i]), FONT_HERSHEY_SIMPLEX, 0.4, BLUE, 1, LINE_8, false);
@@ -97,19 +98,13 @@ static void plot_slots(void) {
 }
 
 static void plot_misc(void) {
-	char label_long[256] = { 0 };
+	char label[256] = { 0 };
 
-	sprintf(label_long, "%c", cGEAR[GW_VBU_GearLeverPos]);
-	putText(canvas, label_long, Point(20, 15), FONT_HERSHEY_TRIPLEX, 0.5, RED, 1, LINE_8, false);
-
-	sprintf(label_long, "%3.2f", ESP_VehicleSpeed);
-	putText(canvas, label_long, Point(60, 15), FONT_HERSHEY_TRIPLEX, 0.5, RED, 1, LINE_8, false);
+	sprintf(label, "%d", alive_count);
+	putText(canvas, label, Point(XCOL-50, YROW-50), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
 	
-	sprintf(label_long, "%d", alive_count);
-	putText(canvas, label_long, Point(XCOL-50, YROW-50), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
-	
-	sprintf(label_long, "can: %6lld.%3lld s", ts / 1000000000U, (ts % 1000000000U) / 1000000U);
-	putText(canvas, label_long, Point(50, YROW - 50), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
+	sprintf(label, "can: %6lld.%3lld s", ts / 1000000000U, (ts % 1000000000U) / 1000000U);
+	putText(canvas, label, Point(50, YROW - 50), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
 }
 
 static void linspace_step(float x1, float x2, int step, float* xo, int* num) {
@@ -132,6 +127,13 @@ static void linspace_step(float x1, float x2, int step, float* xo, int* num) {
 static void plot_info(void) {
 	char label[256] = { 0 };
 	int i;
+
+	sprintf(label, "%c", cGEAR[GW_VBU_GearLeverPos]);
+	putText(canvas, label, Point(20, 15), FONT_HERSHEY_TRIPLEX, 0.5, RED, 1, LINE_8, false);
+
+	sprintf(label, "%3.2f", ESP_VehicleSpeed);
+	putText(canvas, label, Point(60, 15), FONT_HERSHEY_TRIPLEX, 0.5, RED, 1, LINE_8, false);
+
 	// obj
 	for (i = 0; i < 20; i++) {
 		sprintf(label, "Obj%02d: (%4.0f, %4.0f) (%4.0f, %4.0f)", i + 1, objx_rx[2 * i], objy_rx[2 * i], objx_rx[2 * i + 1], objy_rx[2 * i + 1]);
