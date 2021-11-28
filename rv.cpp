@@ -142,7 +142,7 @@ static void offline_mode(void) {
 
 
 static void get_rectime(void) {
-    GetSystemTime(&systemTime);
+    GetLocalTime(&systemTime);
     sprintf(video_filename, "%s_%d%02d%02d_%02d%02d%02d%s",
         FILENAMEPRE,
         systemTime.wYear,
