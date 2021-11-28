@@ -148,7 +148,7 @@ static void get_rectime(void) {
         systemTime.wYear,
         systemTime.wMonth,
         systemTime.wDay,
-        systemTime.wHour + UTC,
+        systemTime.wHour,
         systemTime.wMinute,
         systemTime.wSecond,
         FILENAMEPOSTVIDEO);
@@ -157,7 +157,7 @@ static void get_rectime(void) {
         systemTime.wYear,
         systemTime.wMonth,
         systemTime.wDay,
-        systemTime.wHour + UTC,
+        systemTime.wHour,
         systemTime.wMinute,
         systemTime.wSecond,
         FILENAMEPOSTBINLOG);
