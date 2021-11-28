@@ -68,7 +68,16 @@ static void plot_vehicle(void) {
 	float x2 = X0 - HW;
 	float y2 = Y0 - FO;
 	rectangle(canvas, Point(x1, y1), Point(x2, y2), BLACK, 1, LINE_8, 0);
-	//circle(canvas, Point(X0, Y0), 2, BLACK, FILLED, 2);
+#if 0
+	if (GW_VBU_GearLeverPos == 1) {
+		// R
+		arrowedLine(canvas, Point(X0, Y0), Point(X0, Y0 + RO), BLACK, 1, LINE_8, 0);
+	}
+	else if (GW_VBU_GearLeverPos == 3) {
+		// D
+		arrowedLine(canvas, Point(X0, Y0), Point(X0, Y0 - RO), BLACK, 1, LINE_8, 0);
+	}
+#endif
 }
 
 
