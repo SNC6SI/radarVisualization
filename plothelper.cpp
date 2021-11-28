@@ -5,7 +5,7 @@
 #include "plothelper.h"
 #include <opencv2/opencv.hpp>
 
-
+using namespace std;
 using namespace cv;
 Mat canvas(YROW, XCOL, CV_8UC3, Scalar(255, 255, 255));
 
@@ -23,15 +23,18 @@ static float grid_y[LINSPACEMAXNUM];
 static int grid_num_x = 0;
 static int grid_num_y = 0;
 
+static unsigned int alive_count = 0U;
+
 static const char cGEAR[5] = { 'P','R', 'N', 'D', 'E' };
-static const Scalar mBLUE_H[4] = { BLUEL, BLUEH , BLUET , BLUEU };
+static const Scalar mHeight_blue[4] = { BLUEL, BLUEH , BLUET , BLUEU };
+static const vector<string> mlegend_blue = { "Low", "High" , "Traversable" , "Unknown" };
+
 
 void init_axis(void) {
 	linspace_step(0, XCOL, LINSPACESTEP, grid_x, &grid_num_x);
 	linspace_step(0, YROW, LINSPACESTEP, grid_y, &grid_num_y);
 }
 
-static unsigned int alive_count = 0U;
 
 void update_img(void) {
 	canvas.setTo(Scalar::all(255));
@@ -44,6 +47,7 @@ void update_img(void) {
 	plot_info();
 }
 
+
 static void plot_axis(void) {
 	int i;
 	for (i = 0; i < grid_num_x; i++) {
@@ -54,6 +58,7 @@ static void plot_axis(void) {
 	}
 }
 
+
 static void plot_vehicle(void) {
 	float x1 = X0 + HW;
 	float y1 = Y0 + RO;
@@ -63,13 +68,14 @@ static void plot_vehicle(void) {
 	//circle(canvas, Point(X0, Y0), 2, BLACK, FILLED, 2);
 }
 
+
 static void plot_objs(void) {
 	char label[16] = { 0 };
 	for (int i = 0; i < 20; i++) {
 		if (((int)objx[2 * i] != (int)X0) && ((int)objy[2 * i] != (int)Y0) && ((int)objx[2 * i + 1] != (int)X0) && ((int)objy[2 * i + 1] != (int)Y0)){
-			circle(canvas, Point(objx[2 * i], objy[2 * i]), 2, BLUE, FILLED, 2);
-			circle(canvas, Point(objx[2 * i + 1], objy[2 * i + 1]), 2, BLUE, FILLED, 2);
-			line(canvas, Point(objx[2 * i], objy[2 * i]), Point(objx[2 * i + 1], objy[2 * i + 1]), mBLUE_H[objH[i]], 2);
+			circle(canvas, Point(objx[2 * i], objy[2 * i]), 2, mHeight_blue[objH[i]], FILLED, 2);
+			circle(canvas, Point(objx[2 * i + 1], objy[2 * i + 1]), 2, mHeight_blue[objH[i]], FILLED, 2);
+			line(canvas, Point(objx[2 * i], objy[2 * i]), Point(objx[2 * i + 1], objy[2 * i + 1]), mHeight_blue[objH[i]], 2);
 
 			sprintf(label, "%d", i + 1);
 			putText(canvas, label, Point(objx[2 * i], objy[2 * i]), FONT_HERSHEY_SIMPLEX, 0.4, BLUE, 1, LINE_8, false);
@@ -77,6 +83,7 @@ static void plot_objs(void) {
 	}
 		
 }
+
 
 static void plot_slots(void) {
 	char label[16] = { 0 };
@@ -97,15 +104,23 @@ static void plot_slots(void) {
 	}
 }
 
+
 static void plot_misc(void) {
 	char label[256] = { 0 };
+	int i;
 
 	sprintf(label, "%d", alive_count);
 	putText(canvas, label, Point(XCOL-50, YROW-50), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
 	
 	sprintf(label, "can: %6lld.%3lld s", ts / 1000000000U, (ts % 1000000000U) / 1000000U);
 	putText(canvas, label, Point(50, YROW - 50), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
+
+	for (i = 0; i < 4; i++) {
+		line(canvas, Point(XCOL - 150, 50 + 20 * i), Point(XCOL - 100, 50 + 20 * i), mHeight_blue[i], 2);
+		putText(canvas, mlegend_blue[i], Point(XCOL - 90, 50 + 20 * i), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+	}
 }
+
 
 static void linspace_step(float x1, float x2, int step, float* xo, int* num) {
 	int i;
@@ -123,6 +138,7 @@ static void linspace_step(float x1, float x2, int step, float* xo, int* num) {
 		*num = i;
 	}
 }
+
 
 static void plot_info(void) {
 	char label[256] = { 0 };
