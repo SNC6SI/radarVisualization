@@ -66,6 +66,7 @@ int init_binlog_read(void) {
     }
     blstatistics = {sizeof(VBLFileStatisticsEx)};
     BLGetFileStatisticsEx(hbinlogFile, &blstatistics);
+    SystemTimeToFileTime(&blstatistics.mMeasurementStartTime, &timeInSec);
     blSuccess = TRUE;
     return 0;
 }

@@ -2,10 +2,12 @@
 #include "systimehelper.h"
 #include "rv_common.h"
 
-SYSTEMTIME systemTime;
-
 extern char video_filename[512];
 extern char binlog_filename_write[512];
+
+SYSTEMTIME systemTime, localTime;
+FILETIME   timeInSec;
+TM_u TM;
 
 void get_rectime(void) {
     GetLocalTime(&systemTime);

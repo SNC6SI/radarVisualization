@@ -3,7 +3,15 @@
 
 #include <windows.h>
 
-extern SYSTEMTIME systemTime;
+typedef union TM_t {
+    ULARGE_INTEGER li;
+    FILETIME       ft;
+} TM_u;
+
+extern SYSTEMTIME systemTime, localTime;
+extern FILETIME timeInSec;
+extern TM_u TM;
+
 void get_rectime(void);
 
 #endif

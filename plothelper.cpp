@@ -3,6 +3,9 @@
 #include "rv_param.h"
 #include "signalhelper.h"
 #include "plothelper.h"
+#include "systimehelper.h"
+#include "menuhelper.h"
+#include "binloghelper.h"
 #include <opencv2/opencv.hpp>
 
 using namespace std;
@@ -113,8 +116,17 @@ static void plot_misc(void) {
 	putText(canvas, label, Point(XCOL-50, YROW-50), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
 	
 	sprintf(label, "can: %6lld.%3lld s", ts / 1000000000U, (ts % 1000000000U) / 1000000U);
-	putText(canvas, label, Point(50, YROW - 50), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
+	putText(canvas, label, Point(20, YROW - 50), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 
+	if (selected_mode == 2) {
+		TM.ft = timeInSec;
+		TM.li.QuadPart += ts / 100U;
+		FileTimeToSystemTime(&TM.ft, &localTime);
+	}
+	sprintf(label, "%d/%02d/%02d %02d:%02d:%02d.%03d", localTime.wYear, localTime.wMonth, localTime.wDay, localTime.wHour, localTime.wMinute, localTime.wSecond, localTime.wMilliseconds);
+	putText(canvas, label, Point(20, YROW - 30), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+
+	// legend
 	for (i = 0; i < 4; i++) {
 		line(canvas, Point(XCOL - 150, 50 + 20 * i), Point(XCOL - 100, 50 + 20 * i), mHeight_blue[i], 2);
 		putText(canvas, mlegend_blue[i], Point(XCOL - 90, 50 + 20 * i), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
