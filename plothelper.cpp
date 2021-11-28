@@ -118,6 +118,9 @@ static void plot_misc(void) {
 	sprintf(label, "can: %6lld.%3lld s", ts / 1000000000U, (ts % 1000000000U) / 1000000U);
 	putText(canvas, label, Point(20, YROW - 50), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 
+	if (selected_mode == 1) {
+		GetLocalTime(&localTime);
+	}
 	if (selected_mode == 2) {
 		TM.ft = timeInSec;
 		TM.li.QuadPart += ts / 100U;
