@@ -127,11 +127,16 @@ float objx_rx[40];
 float objy_rx[40];
 float slotx_rx[8];
 float sloty_rx[8];
+float slotxrec_rx[8];
+float slotyrec_rx[8];
 
 float objx[40];
 float objy[40];
 float slotx[8];
 float sloty[8];
+float slotxrec[8];
+float slotyrec[8];
+
 unsigned char slotid[4];
 float slot_Depth[4];
 float slot_Length[4];
@@ -392,6 +397,11 @@ void update_sig(void) {
         sloty_rx[2] = ApaPscLeftSlot1Obj1Y;
         sloty_rx[3] = ApaPscLeftSlot1Obj2Y;
 
+        slot_Depth[0] = ApaPsc_LeftPSL0_Depth;
+        slot_Length[0] = ApaPsc_LeftPSL0_Length;
+        slot_Depth[1] = ApaPsc_LeftPSL1_Length;
+        slot_Length[1] = ApaPsc_LeftPSL1_Length;
+
         memcpy(&slotx[0], &slotx_rx[0], 4 * sizeof(float));
         memcpy(&sloty[0], &sloty_rx[0], 4 * sizeof(float));
         point4pose(&slotx[0], &sloty[0], 4);
@@ -399,10 +409,31 @@ void update_sig(void) {
         slotid[0] = ParkLeftslot0ID;
         slotid[1] = ParkLeftslot1ID;
 
-        slot_Depth[0]  = ApaPsc_LeftPSL0_Depth * gScale;
-        slot_Length[0] = ApaPsc_LeftPSL0_Length * gScale;
-        slot_Depth[1]  = ApaPsc_LeftPSL1_Length * gScale;
-        slot_Length[1] = ApaPsc_LeftPSL1_Length * gScale;
+        if (slotx_rx[0] > slotx_rx[1]) {
+            slotxrec_rx[0] = slotx_rx[0];
+            slotyrec_rx[0] = sloty_rx[0];
+        }
+        else {
+            slotxrec_rx[0] = slotx_rx[1];
+            slotyrec_rx[0] = sloty_rx[1];
+        }
+        slotxrec_rx[1] = slotxrec_rx[0] - slot_Length[0];
+        slotyrec_rx[1] = slotyrec_rx[0] + slot_Depth[0];
+
+        if (slotx_rx[2] > slotx_rx[3]) {
+            slotxrec_rx[2] = slotx_rx[2];
+            slotyrec_rx[2] = sloty_rx[2];
+        }
+        else {
+            slotxrec_rx[2] = slotx_rx[3];
+            slotyrec_rx[2] = sloty_rx[3];
+        }
+        slotxrec_rx[3] = slotxrec_rx[2] - slot_Length[1];
+        slotyrec_rx[3] = slotyrec_rx[2] + slot_Depth[1];
+
+        memcpy(&slotxrec[0], &slotxrec_rx[0], 4 * sizeof(float));
+        memcpy(&slotyrec[0], &slotyrec_rx[0], 4 * sizeof(float));
+        point4pose(&slotxrec[0], &slotyrec[0], 4);
     }
 
 
@@ -433,6 +464,11 @@ void update_sig(void) {
         sloty_rx[6] = ApaPscRightSlot1Obj1Y;
         sloty_rx[7] = ApaPscRightSlot1Obj2Y;
 
+        slot_Depth[2] = ApaPsc_RightPSL0_Depth;
+        slot_Length[2] = ApaPsc_RightPSL0_Length;
+        slot_Depth[3] = ApaPsc_RightPSL1_Depth;
+        slot_Length[3] = ApaPsc_RightPSL1_Length;
+
         memcpy(&slotx[4], &slotx_rx[4], 4 * sizeof(float));
         memcpy(&sloty[4], &sloty_rx[4], 4 * sizeof(float));
         point4pose(&slotx[4], &sloty[4], 4);
@@ -440,10 +476,31 @@ void update_sig(void) {
         slotid[2] = ParkRightslot0ID;
         slotid[3] = ParkRightslot1ID;
 
-        slot_Depth[2]  = ApaPsc_RightPSL0_Depth * gScale;
-        slot_Length[2] = ApaPsc_RightPSL0_Length * gScale;
-        slot_Depth[3]  = ApaPsc_RightPSL1_Depth * gScale;
-        slot_Length[3] = ApaPsc_RightPSL1_Length * gScale;
+        if (slotx_rx[4] > slotx_rx[5]) {
+            slotxrec_rx[4] = slotx_rx[4];
+            slotyrec_rx[4] = sloty_rx[4];
+        }
+        else {
+            slotxrec_rx[4] = slotx_rx[5];
+            slotyrec_rx[4] = sloty_rx[5];
+        }
+        slotxrec_rx[5] = slotxrec_rx[4] - slot_Length[2];
+        slotyrec_rx[5] = slotyrec_rx[4] - slot_Depth[2];
+
+        if (slotx_rx[6] > slotx_rx[7]) {
+            slotxrec_rx[6] = slotx_rx[6];
+            slotyrec_rx[6] = sloty_rx[6];
+        }
+        else {
+            slotxrec_rx[6] = slotx_rx[7];
+            slotyrec_rx[6] = sloty_rx[7];
+        }
+        slotxrec_rx[7] = slotxrec_rx[6] - slot_Length[3];
+        slotyrec_rx[7] = slotyrec_rx[6] - slot_Depth[3];
+
+        memcpy(&slotxrec[4], &slotxrec_rx[4], 4 * sizeof(float));
+        memcpy(&slotyrec[4], &slotyrec_rx[4], 4 * sizeof(float));
+        point4pose(&slotxrec[4], &slotyrec[4], 4);
     }
 
     if (gcanid == 0x150) {

@@ -18,10 +18,11 @@ extern float objx[40];
 extern float objy[40];
 extern float slotx[8];
 extern float sloty[8];
+extern float slotxrec[8];
+extern float slotyrec[8];
+
 extern unsigned char slotid[4];
 
-extern float slot_Depth[4];
-extern float slot_Length[4];
 
 extern float X0;
 extern float Y0;
