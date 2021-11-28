@@ -378,6 +378,7 @@
     <ClInclude Include="plothelper.h" />
     <ClInclude Include="signalhelper.h" />
     <ClInclude Include="capturehelper.h" />
+    <ClInclude Include="systimehelper.h" />
     <ClInclude Include="vectorhelper.h" />
     <ClInclude Include="videohelper.h" />
     <ClInclude Include="vxlapi.h" />
@@ -391,6 +392,7 @@
     <ClCompile Include="plothelper.cpp" />
     <ClCompile Include="signalhelper.cpp" />
     <ClCompile Include="capturehelper.cpp" />
+    <ClCompile Include="systimehelper.cpp" />
     <ClCompile Include="vectorhelper.cpp" />
     <ClCompile Include="videohelper.cpp" />
   </ItemGroup>

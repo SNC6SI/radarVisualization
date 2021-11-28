@@ -9,19 +9,18 @@
 #include "signalhelper.h"
 #include "plothelper.h"
 #include "mousehelper.h"
+#include "systimehelper.h"
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/utils/logger.hpp>
 
 using namespace cv;
 static char backspace[256];
-SYSTEMTIME systemTime;
 char video_filename[512];
 char binlog_filename_write[512];
 char binlog_filename_read[512];
 int binlog_filename_read_len;
 static unsigned __int64 ts_anchor;
-static void get_rectime(void);
 static void online_mode(void);
 static void offline_mode(void);
 
@@ -138,27 +137,4 @@ static void offline_mode(void) {
         }
         deinit_binlog();
     }
-}
-
-
-static void get_rectime(void) {
-    GetLocalTime(&systemTime);
-    sprintf(video_filename, "%s_%d%02d%02d_%02d%02d%02d%s",
-        FILENAMEPRE,
-        systemTime.wYear,
-        systemTime.wMonth,
-        systemTime.wDay,
-        systemTime.wHour,
-        systemTime.wMinute,
-        systemTime.wSecond,
-        FILENAMEPOSTVIDEO);
-    sprintf(binlog_filename_write, "%s_%d%02d%02d_%02d%02d%02d%s",
-        FILENAMEPRE,
-        systemTime.wYear,
-        systemTime.wMonth,
-        systemTime.wDay,
-        systemTime.wHour,
-        systemTime.wMinute,
-        systemTime.wSecond,
-        FILENAMEPOSTBINLOG);
 }

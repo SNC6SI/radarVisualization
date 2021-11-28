@@ -7,8 +7,8 @@
 #include "binlog.h"
 #include "vectorhelper.h"
 #include "dialoghelper.h"
+#include "systimehelper.h"
 
-extern SYSTEMTIME systemTime;
 extern char binlog_filename_write[512];
 extern char binlog_filename_read[512];
 
