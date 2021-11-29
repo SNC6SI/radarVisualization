@@ -20,8 +20,9 @@ extern float gScale;
 #define CAM1_XCOL 640
 #define CAM1_YROW 480
 
-#define DEFAULTSCALE 0.5
-#define SCALESTEP 0.01
+#define DEFAULTSCALE  0.5
+#define SCALESTEP     0.01
+#define ORIGINSTEP    5
 
 #define RO (88.8 * gScale)
 #define FO (365.9 * gScale)

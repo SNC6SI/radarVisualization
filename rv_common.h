@@ -16,7 +16,9 @@ typedef short rv_status;
 #define RV_PRINTF(f_, ...)
 #endif
 
-#define KEY_ESC 27
+#define KEY_ESC   27
+#define KEY_SPACE 32
+
 #define TS_INT 40000000
 
 #define UTC 8

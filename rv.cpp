@@ -20,6 +20,7 @@ char video_filename[512];
 char binlog_filename_write[512];
 char binlog_filename_read[512];
 int binlog_filename_read_len;
+static int KEYPressed = 0xFFFF;
 static unsigned __int64 ts_anchor;
 static void online_mode(void);
 static void offline_mode(void);
@@ -77,7 +78,12 @@ static void online_mode(void) {
     setMouseCallback("radar visualization online", mouseCallBackFunc, NULL);
     video_writer.open(video_filename, VideoWriter::fourcc('m', 'p', '4', 'v'), 25, Size(XCOL + CAM1_XCOL, YROW), true);
 
-    while (waitKey(40) != KEY_ESC) {
+    while ((KEYPressed = waitKey(40)) != KEY_ESC) {
+        if (KEYPressed == KEY_SPACE) {
+            gScale = DEFAULTSCALE;
+            X0 = XCOL / 2;
+            Y0 = YROW / 2;
+        }
         update_img();
         update_video_online();
         imshow("radar visualization online", recframe);
