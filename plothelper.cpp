@@ -39,6 +39,13 @@ void init_axis(void) {
 }
 
 
+void restore_axis(void) {
+	gScale = DEFAULTSCALE;
+	X0 = XCOL / 2;
+	Y0 = YROW / 2;
+}
+
+
 void update_img(void) {
 	canvas.setTo(Scalar::all(255));
 	alive_count++;

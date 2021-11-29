@@ -80,9 +80,7 @@ static void online_mode(void) {
 
     while ((KEYPressed = waitKey(40)) != KEY_ESC) {
         if (KEYPressed == KEY_SPACE) {
-            gScale = DEFAULTSCALE;
-            X0 = XCOL / 2;
-            Y0 = YROW / 2;
+            restore_axis();
         }
         update_img();
         update_video_online();
