@@ -622,11 +622,10 @@ void update_sig(void) {
 }
 
 
-
 float X0 = XCOL/2;
 float Y0 = YROW/2;
-static const float C0 = cos(M_PI/2);
-static const float S0 = sin(M_PI/2);
+const float C0 = cos(M_PI/2);
+const float S0 = sin(M_PI/2);
 
 
 static void point4pose(float* x, float* y, int iter) {

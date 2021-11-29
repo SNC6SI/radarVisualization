@@ -22,6 +22,7 @@ static void plot_info(void);
 static void plot_anno(void);
 
 static void linspace_step(float x1, float x2, int step, float* xo, int* num);
+static void point2pose(float* x, float* y, int iter);
 static void DrawDashedLine(Mat& img, Point pt1, Point pt2, Scalar color, int thickness, string style, int gap);
 
 static float grid_x[LINSPACEMAXNUM];
@@ -210,12 +211,16 @@ static void plot_info(void) {
 
 static void plot_anno(void) {
 	char label[256] = { 0 };
+	float x_anno_local, y_anno_local;
 	if (LBUTTONDOWN_flg == 1) {
 		DrawDashedLine(canvas, Point(X0, Y0), Point(X0, y_anno), DIMGREY, 1, "dotted", 4);
 		DrawDashedLine(canvas, Point(X0, Y0), Point(x_anno, Y0), DIMGREY, 1, "dotted", 4);
 		DrawDashedLine(canvas, Point(X0, y_anno), Point(x_anno, y_anno), DIMGREY, 1, "dotted", 4);
 		DrawDashedLine(canvas, Point(x_anno, Y0), Point(x_anno, y_anno), DIMGREY, 1, "dotted", 4);
-		sprintf(label, "(%4d, %4d)", x_anno, y_anno);
+		x_anno_local = (float)x_anno;
+		y_anno_local = (float)y_anno;
+		point2pose(&x_anno_local, &y_anno_local, 1);
+		sprintf(label, "(%4d, %4d)", (int)x_anno_local, (int)y_anno_local);
 		if (x_anno >= X0 && y_anno <= Y0) { // 1
 			putText(canvas, label, Point(x_anno + 20, y_anno), FONT_HERSHEY_SIMPLEX, 0.35, DIMGREY, 1, LINE_8, false);
 		}
@@ -263,5 +268,17 @@ static void DrawDashedLine(Mat& img, Point pt1, Point pt2, Scalar color, int thi
 				line(img, s, e, color, thickness);
 			}
 		}
+	}
+}
+
+
+static void point2pose(float* x, float* y, int iter) {
+	int i;
+	float xx, yy;
+	for (i = 0; i < iter; i++) {
+		xx = (*x - X0) / gScale;
+		yy = - (*y - Y0) / gScale;
+		*(x + i) = xx * C0 + yy * S0;
+		*(y + i) = yy * C0 - xx * S0;
 	}
 }

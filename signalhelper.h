@@ -31,6 +31,8 @@ extern float slot_theta[4];
 extern float X0;
 extern float Y0;
 
+extern const float C0;
+extern const float S0;
 
 void init_sig(void);
 void update_sig(void);
