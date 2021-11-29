@@ -6,6 +6,7 @@
 #include "systimehelper.h"
 #include "menuhelper.h"
 #include "binloghelper.h"
+#include "mousehelper.h"
 #include <opencv2/opencv.hpp>
 
 using namespace std;
@@ -18,8 +19,10 @@ static void plot_objs(void);
 static void plot_slots(void);
 static void plot_misc(void);
 static void plot_info(void);
+static void plot_anno(void);
 
 static void linspace_step(float x1, float x2, int step, float* xo, int* num);
+static void DrawDashedLine(Mat& img, Point pt1, Point pt2, Scalar color, int thickness, string style, int gap);
 
 static float grid_x[LINSPACEMAXNUM];
 static float grid_y[LINSPACEMAXNUM];
@@ -55,6 +58,7 @@ void update_img(void) {
 	plot_slots();
 	plot_misc();
 	plot_info();
+	plot_anno();
 }
 
 
@@ -200,5 +204,64 @@ static void plot_info(void) {
 	for (i = 0; i < 4; i++) {
 		sprintf(label, "slot : (%4.0f, %4.0f) (%4.0f, %4.0f)", slotx_rx[2 * i], sloty_rx[2 * i], slotx_rx[2 * i + 1], sloty_rx[2 * i + 1]);
 		putText(canvas, label, Point(20, 310 + i * 10), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+	}
+}
+
+
+static void plot_anno(void) {
+	char label[256] = { 0 };
+	if (LBUTTONDOWN_flg == 1) {
+		DrawDashedLine(canvas, Point(X0, Y0), Point(X0, y_anno), DIMGREY, 1, "dotted", 4);
+		DrawDashedLine(canvas, Point(X0, Y0), Point(x_anno, Y0), DIMGREY, 1, "dotted", 4);
+		DrawDashedLine(canvas, Point(X0, y_anno), Point(x_anno, y_anno), DIMGREY, 1, "dotted", 4);
+		DrawDashedLine(canvas, Point(x_anno, Y0), Point(x_anno, y_anno), DIMGREY, 1, "dotted", 4);
+		sprintf(label, "(%4d, %4d)", x_anno, y_anno);
+		if (x_anno >= X0 && y_anno <= Y0) { // 1
+			putText(canvas, label, Point(x_anno + 20, y_anno), FONT_HERSHEY_SIMPLEX, 0.35, DIMGREY, 1, LINE_8, false);
+		}
+		else if (x_anno < X0 && y_anno < Y0) { // 2
+			putText(canvas, label, Point(x_anno - 80, y_anno), FONT_HERSHEY_SIMPLEX, 0.35, DIMGREY, 1, LINE_8, false);
+		}
+		else if (x_anno <= X0 && y_anno >= Y0) { // 3
+			putText(canvas, label, Point(x_anno - 80, y_anno + 20), FONT_HERSHEY_SIMPLEX, 0.35, DIMGREY, 1, LINE_8, false);
+		}
+		else { // 4
+			putText(canvas, label, Point(x_anno, y_anno + 20), FONT_HERSHEY_SIMPLEX, 0.35, DIMGREY, 1, LINE_8, false);
+		}
+	}
+}
+
+
+static void DrawDashedLine(Mat& img, Point pt1, Point pt2, Scalar color, int thickness, string style,int gap) {
+	float dx = pt1.x - pt2.x;
+	float dy = pt1.y - pt2.y;
+	float dist = hypot(dx, dy);
+
+	vector<Point> pts;
+	for (int i = 0; i < dist; i += gap) {
+		float r = static_cast<float>(i / dist);
+		int x = static_cast<int>((pt1.x * (1.0 - r) + pt2.x * r) + .5);
+		int y = static_cast<int>((pt1.y * (1.0 - r) + pt2.y * r) + .5);
+		pts.emplace_back(x, y);
+	}
+
+	int pts_size = pts.size();
+
+	if (style == "dotted") {
+		for (int i = 0; i < pts_size; ++i) {
+			circle(img, pts[i], thickness, color, -1);
+		}
+	}
+	else {
+		Point s = pts[0];
+		Point e = pts[0];
+
+		for (int i = 0; i < pts_size; ++i) {
+			s = e;
+			e = pts[i];
+			if (i % 2 == 1) {
+				line(img, s, e, color, thickness);
+			}
+		}
 	}
 }

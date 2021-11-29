@@ -8,6 +8,7 @@ extern float gScale;
 #define BLUE    Scalar(255, 0, 0)
 #define BLACK   Scalar(0, 0, 0)
 #define GRAY    Scalar(224,224,224)
+#define DIMGREY Scalar(105,105,105)
 
 #define BLUEH   BLUE                     // 1
 #define BLUEL   Scalar(255, 144, 30)     // 0
