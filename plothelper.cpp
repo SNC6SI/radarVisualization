@@ -103,7 +103,6 @@ static void plot_objs(void) {
 		
 }
 
-
 static void plot_slots(void) {
 	char label[16] = { 0 };
 	for (int i = 0; i < 4; i++) {
@@ -112,9 +111,15 @@ static void plot_slots(void) {
 				circle(canvas, Point(slotx[2 * i], sloty[2 * i]), 2, RED, FILLED, 2);
 				circle(canvas, Point(slotx[2 * i + 1], sloty[2 * i + 1]), 2, RED, FILLED, 2);
 				line(canvas, Point(slotx[2 * i], sloty[2 * i]), Point(slotx[2 * i + 1], sloty[2 * i + 1]), RED, 2);
-				//rectangle(canvas, Rect(slotx[2 * i + 1] - slot_Depth[i], sloty[2 * i + 1], slot_Length[i], slot_Depth[i]), BLACK, 1, LINE_4);
-				rectangle(canvas, Point(slotxrec[2 * i], slotyrec[2 * i]), Point(slotxrec[2 * i + 1], slotyrec[2 * i + 1]),
-					BLACK, 1, LINE_4);
+
+				for (int j = 0; j < 4; j++) {
+					if (j != 3) {
+						line(canvas, Point(slotxrec[4 * i + j], slotyrec[4 * i + j]), Point(slotxrec[4 * i + j + 1], slotyrec[4 * i + j + 1]), BLACK, 1, LINE_4);
+					}
+					else {
+						line(canvas, Point(slotxrec[4 * i + j], slotyrec[4 * i + j]), Point(slotxrec[4 * i], slotyrec[4 * i]), BLACK, 1, LINE_4);
+					}
+				}
 
 				sprintf(label, "%d", slotid[i]);
 				putText(canvas, label, Point(slotx[2 * i], sloty[2 * i]), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
