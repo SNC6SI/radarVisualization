@@ -7,6 +7,7 @@ using namespace std;
 using namespace cv;
 
 unsigned char LBUTTONDOWN_flg = 0;
+static unsigned char MBUTTONDOWN_flg = 0;
 int x_anno, y_anno;
 static int x_ud, y_ud;
 
@@ -18,15 +19,21 @@ template <typename T> int sgn(T val) {
 void mouseCallBackFunc(int event, int x, int y, int flags, void* userdata) {
     if (event == EVENT_LBUTTONDOWN) {
         LBUTTONDOWN_flg = 1;
-        x_ud = x;
-        y_ud = y;
         x_anno = x;
         y_anno = y;
     }
     else if (event == EVENT_LBUTTONUP) {
         LBUTTONDOWN_flg = 0;
     }
-    if (LBUTTONDOWN_flg) {
+    if (event == EVENT_MBUTTONDOWN) {
+        MBUTTONDOWN_flg = 1;
+        x_ud = x;
+        y_ud = y;
+    }
+    else if (event == EVENT_MBUTTONUP) {
+        MBUTTONDOWN_flg = 0;
+    }
+    if (MBUTTONDOWN_flg) {
         if (event == EVENT_MOUSEMOVE) {
             X0 += (x - x_ud);
             Y0 += (y - y_ud);
