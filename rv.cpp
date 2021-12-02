@@ -17,7 +17,6 @@
 
 
 using namespace cv;
-static char backspace[256];
 char video_filename[512];
 char binlog_filename_write[512];
 char binlog_filename_read[512];
@@ -29,8 +28,6 @@ static void offline_mode(void);
 
 int main(int argc, char* argv[]) {
     utils::logging::setLogLevel(utils::logging::LOG_LEVEL_WARNING);
-    memset(backspace, '\b', 256);
-    backspace[255] = '\0';
     select_mode();
     if (selected_mode == 1) {
         online_mode();
@@ -95,40 +92,56 @@ static void online_mode(void) {
 
 
 static void offline_mode(void) {
-    double percent = 0;
-    double percent_anchor = 0;
+    int status = -1;;
     gReplayCANThreadRun = 1;
+    select_offline_mode();
+    initProgreassPercent();
     BasicFileOpen();
+    prepareVideoFileName();
     init_sig();
     init_axis();
-    prepareVideoFileName();
     video_writer.open(video_filename, VideoWriter::fourcc('m', 'p', '4', 'v'), 25, Size(XCOL, YROW), true);
-    moveWindow("radar visualization offline", -15, 0);
-    imshow("radar visualization offline", recframe_offline);
-    setMouseCallback("radar visualization offline", mouseCallBackFunc, NULL);
-    ReplayCreateRxThread();
-    while ((KEYPressed = waitKey(40)) != KEY_ESC) {
-        if (KEYPressed == KEY_SPACE) {
-            restore_axis();
-        }
-        update_img();
-        update_video_offline();
+    if (selected_offline_mode == 1) {
+        moveWindow("radar visualization offline", -15, 0);
         imshow("radar visualization offline", recframe_offline);
-        video_writer.write(recframe_offline);
-        percent = (double)greadcnt / (double)blstatistics.mObjectCount * 100;
-        if (percent - percent_anchor > 1) {
-            percent_anchor = percent;
-            printf("%s %3d.0%%  %10ld/%ld", backspace, (unsigned char)percent, greadcnt, blstatistics.mObjectCount);
+        setMouseCallback("radar visualization offline", mouseCallBackFunc, NULL);
+        CreateReplayThread();
+        while ((KEYPressed = waitKey(40)) != KEY_ESC) {
+            if (KEYPressed == KEY_SPACE) {
+                restore_axis();
+            }
+            update_img();
+            update_video_offline();
+            imshow("radar visualization offline", recframe_offline);
+            video_writer.write(recframe_offline);
+            queryProgressPercent();
+            if (gReplayCANThreadRun) {
+                SetEvent(g_hEvent);
+            }
+            else {
+                break;
+            }
         }
-        if (gReplayCANThreadRun) {
-            SetEvent(g_hEvent);
-        }
-        else {
-            break;
+        g_RXCANThreadRun = 0;
+    }
+    else if (selected_offline_mode == 2) {
+        status = init_binlog_read();
+        if (status == 0) {
+            while (1) {
+                status = update_sig_interval_wrapper();
+                if (status == NO_ERROR) {
+                    update_img();
+                    update_video_offline();
+                    video_writer.write(recframe_offline);
+                    queryProgressPercent();
+                }
+                else {
+                    break;
+                }
+            }
         }
     }
-    g_RXCANThreadRun = 0;
     video_writer.release();
-    printf("%s  %3d.0%%  %10ld/%ld\n\n  done!\n", backspace, (unsigned char)100, blstatistics.mObjectCount, blstatistics.mObjectCount);
+    deinit_progressPercent();
     deinit_binlog();
 }

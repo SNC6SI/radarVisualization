@@ -3,7 +3,10 @@
 #include "vectorhelper.h"
 #include "capturehelper.h"
 
+
 int selected_mode;
+int selected_offline_mode;
+
 
 static char mode_menu[] = {
     " ========================="
@@ -29,6 +32,36 @@ void select_mode(void) {
         selected_mode = ch - '0';
         if ((selected_mode != 1) && (selected_mode != 2)) {
             selected_mode = 0U;
+            printf(" Invalid selection %c...Try again...\n", ch);
+        }
+    }
+}
+
+
+static char offline_mode_menu[] = {
+    "\n ========================="
+    "\n Select a Display Mode    "
+    "\n ========================="
+    "\n  1. display"
+    "\n  2. silent"
+    "\n\n"
+};
+
+void select_offline_mode(void) {
+    int ch;
+    printf("%s", offline_mode_menu);
+    selected_offline_mode = 0;
+    while (!selected_offline_mode) {
+        fflush(stdin);
+        ch = getch();
+        printf("  %c\n", ch);
+        if (ch == KEY_ESC) {
+            selected_offline_mode = 0U;
+            break;
+        }
+        selected_offline_mode = ch - '0';
+        if ((selected_offline_mode != 1) && (selected_offline_mode != 2)) {
+            selected_offline_mode = 0U;
             printf(" Invalid selection %c...Try again...\n", ch);
         }
     }
@@ -67,6 +100,7 @@ void select_can_channel(void) {
     printf("%s is selected.\n", g_xlDrvConfig.channel[xlChannelMaskPre].name);
     g_xlChannelMask = g_xlDrvConfig.channel[xlChannelMaskPre].channelMask;
 }
+
 
 static char camera_menu[] = {
     "\n"

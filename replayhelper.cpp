@@ -16,22 +16,29 @@ static HANDLE g_hReplayThread;
 static unsigned __int64 ts_anchor;
 
 
+int update_sig_interval_wrapper(void) {
+    int status = NO_ERROR;
+    while ((status = update_binlog_read()) == NO_ERROR) {
+        greadcnt++;
+        memcpy(ptr, messageFD.mData, 64);
+        gcanid = messageFD.mID;
+        ts = messageFD.mHeader.mObjectTimeStamp;
+        update_sig();
+        if (ts - ts_anchor > TS_INT) {
+            ts_anchor = ts;
+            break;
+        }
+    }
+    return status;
+}
+
+
 static DWORD WINAPI ReplayCanFdThread(LPVOID par) {
     int status = NO_ERROR;
     greadcnt = 0;
     while (gReplayCANThreadRun) {
         WaitForSingleObject(g_hEvent, 40);
-        while ((status = update_binlog_read()) == NO_ERROR) {
-            greadcnt++;
-            memcpy(ptr, messageFD.mData, 64);
-            gcanid = messageFD.mID;
-            ts = messageFD.mHeader.mObjectTimeStamp;
-            update_sig();
-            if (ts - ts_anchor > TS_INT) {
-                ts_anchor = ts;
-                break;
-            }
-        }
+        status = update_sig_interval_wrapper();
         if (status != NO_ERROR) {
             gReplayCANThreadRun = 0;
             break;
@@ -40,7 +47,7 @@ static DWORD WINAPI ReplayCanFdThread(LPVOID par) {
     return(NO_ERROR);
 }
 
-int ReplayCreateRxThread(void) {
+int CreateReplayThread(void) {
     int status = -1;
     DWORD ThreadId = 0;
 
@@ -59,4 +66,28 @@ void prepareVideoFileName(void) {
     strcpy(video_filename + (binlog_filename_read_len - 4), videoext);
     printf("\n  blf:    %s", binlog_filename_read);
     printf("\n  video:  %s\n\n", video_filename);
+}
+
+
+static double percent = 0;
+static double percent_anchor = 0;
+static char backspace[256];
+
+void initProgreassPercent(void) {
+    memset(backspace, '\b', 256);
+    backspace[255] = '\0';
+}
+
+
+void queryProgressPercent(void) {
+    percent = (double)greadcnt / (double)blstatistics.mObjectCount * 100;
+    if (percent - percent_anchor > 1) {
+        percent_anchor = percent;
+        printf("%s %3d.0%%  %10ld/%ld", backspace, (unsigned char)percent, greadcnt, blstatistics.mObjectCount);
+    }
+}
+
+
+void deinit_progressPercent(void) {
+    printf("%s  %3d.0%%  %10ld/%ld\n\n  done!\n", backspace, (unsigned char)100, blstatistics.mObjectCount, blstatistics.mObjectCount);
 }
