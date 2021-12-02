@@ -6,7 +6,7 @@
 #include "signalhelper.h"
 
 static float calcPointDis(float x0, float y0, float x1, float y1);
-static void point4pose(float* x, float* y, int iter);
+static void point4pose(float* x, float* y, float* xo, float* yo, int iter);
 
 float MapObj01P1X=0.0F;
 float MapObj01P1Y=0.0F;
@@ -189,6 +189,21 @@ void init_sig(void) {
 }
 
 
+static void update_sig_internal(void) {
+    //memcpy(objx, objx_rx, sizeof(objx_rx));
+    //memcpy(objy, objy_rx, sizeof(objy_rx));
+    point4pose(&objx_rx[0], &objy_rx[0], &objx[0], &objy[0], sizeof(objy_rx)/ sizeof(objy_rx[0]));
+
+    //memcpy(slotx, slotx_rx, sizeof(slotx_rx));
+    //memcpy(sloty, sloty_rx, sizeof(sloty_rx));
+    point4pose(&slotx_rx[0], &sloty_rx[0], &slotx[0], &sloty[0], sizeof(slotx_rx) / sizeof(slotx_rx[0]));
+
+    //memcpy(slotxrec, slotxrec_rx, sizeof(slotxrec_rx));
+    //memcpy(slotyrec, slotyrec_rx, sizeof(slotyrec_rx));
+    point4pose(&slotxrec_rx[0], &slotyrec_rx[0], &slotxrec[0], &slotyrec[0], sizeof(slotxrec_rx) / sizeof(slotxrec_rx[0]));
+}
+
+
 void update_sig(void) {
     if (gcanid == 0x172) {
         MapObj01P1X = ((((ptr[1]) << 2) + (((ptr[2]) & (3 << 6)) >> 6))* (4) + (-2044));
@@ -234,10 +249,6 @@ void update_sig(void) {
         objH[1] = MapObj02Height;
         objH[2] = MapObj03Height;
         objH[3] = MapObj04Height;
-
-        memcpy(&objx[0], &objx_rx[0], 8 * sizeof(float));
-        memcpy(&objy[0], &objy_rx[0], 8 * sizeof(float));
-        point4pose(&objx[0], &objy[0], 8);
     }
 
 
@@ -285,10 +296,6 @@ void update_sig(void) {
         objH[5] = MapObj06Height;
         objH[6] = MapObj07Height;
         objH[7] = MapObj08Height;
-
-        memcpy(&objx[8], &objx_rx[8], 8 * sizeof(float));
-        memcpy(&objy[8], &objy_rx[8], 8 * sizeof(float));
-        point4pose(&objx[8], &objy[8], 8);
     }
 
 
@@ -336,10 +343,6 @@ void update_sig(void) {
         objH[9]  = MapObj10Height;
         objH[10] = MapObj11Height;
         objH[11] = MapObj12Height;
-
-        memcpy(&objx[16], &objx_rx[16], 8 * sizeof(float));
-        memcpy(&objy[16], &objy_rx[16], 8 * sizeof(float));
-        point4pose(&objx[16], &objy[16], 8);
     }
 
 
@@ -387,10 +390,6 @@ void update_sig(void) {
         objH[13] = MapObj14Height;
         objH[14] = MapObj15Height;
         objH[15] = MapObj16Height;
-
-        memcpy(&objx[24], &objx_rx[24], 8 * sizeof(float));
-        memcpy(&objy[24], &objy_rx[24], 8 * sizeof(float));
-        point4pose(&objx[24], &objy[24], 8);
     }
 
 
@@ -438,10 +437,6 @@ void update_sig(void) {
         objH[17] = MapObj18Height;
         objH[18] = MapObj19Height;
         objH[19] = MapObj20Height;
-
-        memcpy(&objx[32], &objx_rx[32], 8 * sizeof(float));
-        memcpy(&objy[32], &objy_rx[32], 8 * sizeof(float));
-        point4pose(&objx[32], &objy[32], 8);
     }
 
 
@@ -476,10 +471,6 @@ void update_sig(void) {
         slot_Length[0] = ApaPsc_LeftPSL0_Length;
         slot_Depth[1] = ApaPsc_LeftPSL1_Length;
         slot_Length[1] = ApaPsc_LeftPSL1_Length;
-
-        memcpy(&slotx[0], &slotx_rx[0], 4 * sizeof(float));
-        memcpy(&sloty[0], &sloty_rx[0], 4 * sizeof(float));
-        point4pose(&slotx[0], &sloty[0], 4);
 
         slotid[0] = ParkLeftslot0ID;
         slotid[1] = ParkLeftslot1ID;
@@ -521,10 +512,6 @@ void update_sig(void) {
         slotyrec_rx[6] = slotyrec_rx[5] + slot_Depth[1] * cosf(slot_theta[1]);
         slotxrec_rx[7] = slotxrec_rx[4] + slot_Depth[1] * sinf(slot_theta[1]);
         slotyrec_rx[7] = slotyrec_rx[4] + slot_Depth[1] * cosf(slot_theta[1]);
-
-        memcpy(&slotxrec[0], &slotxrec_rx[0], 8 * sizeof(float));
-        memcpy(&slotyrec[0], &slotyrec_rx[0], 8 * sizeof(float));
-        point4pose(&slotxrec[0], &slotyrec[0], 8);
     }
 
 
@@ -560,9 +547,6 @@ void update_sig(void) {
         slot_Depth[3] = ApaPsc_RightPSL1_Depth;
         slot_Length[3] = ApaPsc_RightPSL1_Length;
 
-        memcpy(&slotx[4], &slotx_rx[4], 4 * sizeof(float));
-        memcpy(&sloty[4], &sloty_rx[4], 4 * sizeof(float));
-        point4pose(&slotx[4], &sloty[4], 4);
 
         slotid[2] = ParkRightslot0ID;
         slotid[3] = ParkRightslot1ID;
@@ -604,9 +588,6 @@ void update_sig(void) {
         slotxrec_rx[15] = slotxrec_rx[12] + slot_Depth[3] * sinf(slot_theta[3]);
         slotyrec_rx[15] = slotyrec_rx[12] - slot_Depth[3] * cosf(slot_theta[3]);
 
-        memcpy(&slotxrec[8], &slotxrec_rx[8], 8 * sizeof(float));
-        memcpy(&slotyrec[8], &slotyrec_rx[8], 8 * sizeof(float));
-        point4pose(&slotxrec[8], &slotyrec[8], 8);
     }
 
     if (gcanid == 0x150) {
@@ -619,6 +600,8 @@ void update_sig(void) {
             GW_VBU_GearLeverPos = 4;
         }
     }
+
+    update_sig_internal();
 }
 
 
@@ -628,14 +611,11 @@ const float C0 = cos(M_PI/2);
 const float S0 = sin(M_PI/2);
 
 
-static void point4pose(float* x, float* y, int iter) {
+static void point4pose(float* x, float* y, float* xo, float *yo, int iter) {
     int i;
-    float xx, yy;
     for (i = 0; i < iter; i++) {
-        xx = ((*(x + i)) * C0 + (-*(y + i)) * S0) * gScale + X0;
-        yy = ((-*(y + i)) * C0 - (*(x + i)) * S0) * gScale + Y0;
-        *(x + i) = xx;
-        *(y + i) = yy;
+        *(xo + i) = ((*(x + i)) * C0 + (-*(y + i)) * S0) * gScale + X0;
+        *(yo + i) = ((-*(y + i)) * C0 - (*(x + i)) * S0) * gScale + Y0;
     }
 }
 
