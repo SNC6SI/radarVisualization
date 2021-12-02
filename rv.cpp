@@ -93,6 +93,9 @@ static void online_mode(void) {
 }
 
 
+HANDLE g_hEvent;
+int ReplayCreateRxThread(void);
+int g_ReplayCANThreadRun;
 static void offline_mode(void) {
     XLstatus xlStatus;
     unsigned long readcnt;
@@ -101,44 +104,79 @@ static void offline_mode(void) {
     BasicFileOpen();
     init_sig();
     init_axis();
-    xlStatus = (XLstatus)init_binlog_read();
-    if (xlStatus == 0) {
-        strcpy(video_filename, binlog_filename_read);
-        strcpy(video_filename + (binlog_filename_read_len - 4), videoext);
-        printf("\n  blf:    %s", binlog_filename_read);
-        printf("\n  video:  %s\n\n", video_filename);
-        if (blstatistics.mObjectCount != 0) {
-            readcnt = 0;
-            ts_anchor = 0;
-            percent = 0;
-            percent_anchor = 0;
-            video_writer.open(video_filename, VideoWriter::fourcc('m', 'p', '4', 'v'), 25, Size(XCOL, YROW), true);
-            while (1) {
-                if (!(readcnt < blstatistics.mObjectCount)) {
-                    break;
-                }
-                update_binlog_read();
-                memcpy(ptr, messageFD.mData, 64);
-                gcanid = messageFD.mID;
-                ts = messageFD.mHeader.mObjectTimeStamp;
-                update_sig();
-                if (ts - ts_anchor > TS_INT) {
-                    ts_anchor = ts;
-                    update_img();
-                    update_video_offline();
-                    video_writer.write(recframe_offline);
-                }
-                readcnt++;
-                percent = (double)readcnt / (double)blstatistics.mObjectCount * 100;
-                if (percent - percent_anchor > 1) {
-                    percent_anchor = percent;
-                    printf("%s %3d.0%%  %10ld/%ld", backspace, (unsigned char)percent, readcnt, blstatistics.mObjectCount);
-                }
-            }
-            printf("%s  %3d.0%%  %10ld/%ld", backspace, (unsigned char)100, blstatistics.mObjectCount, blstatistics.mObjectCount);
-            printf("\n\n  done!\n");
-            video_writer.release();
+    
+    strcpy(video_filename, binlog_filename_read);
+    strcpy(video_filename + (binlog_filename_read_len - 4), videoext);
+    printf("\n  blf:    %s", binlog_filename_read);
+    printf("\n  video:  %s\n\n", video_filename);
+    moveWindow("radar visualization offline", -15, 0);
+    imshow("radar visualization offline", recframe_offline);
+    setMouseCallback("radar visualization offline", mouseCallBackFunc, NULL);
+    video_writer.open(video_filename, VideoWriter::fourcc('m', 'p', '4', 'v'), 25, Size(XCOL, YROW), true);
+    ReplayCreateRxThread();
+    while ((KEYPressed = waitKey(40)) != KEY_ESC) {
+        if (KEYPressed == KEY_SPACE) {
+            restore_axis();
         }
-        deinit_binlog();
+        update_img();
+        update_video_offline();
+        imshow("radar visualization offline", recframe_offline);
+        video_writer.write(recframe_offline);
+        if (g_ReplayCANThreadRun) {
+            SetEvent(g_hEvent);
+        }
+        else {
+            break;
+        }
     }
+    g_RXCANThreadRun = 0;
+    video_writer.release();
+    printf("%s  %3d.0%%  %10ld/%ld", backspace, (unsigned char)100, blstatistics.mObjectCount, blstatistics.mObjectCount);
+    printf("\n\n  done!\n");
+    video_writer.release();
+
+    deinit_binlog();
+}
+
+
+
+static unsigned long readcnt_repaly;
+static DWORD WINAPI ReplayCanFdThread(LPVOID par) {
+    int Status = 0;
+    g_ReplayCANThreadRun = 1;
+    double percent, percent_anchor;
+    readcnt_repaly = 0;
+    ts_anchor = 0;
+    percent = 0;
+    percent_anchor = 0;
+    while (g_ReplayCANThreadRun) {
+        WaitForSingleObject(g_hEvent, 40);
+        if (!(readcnt_repaly < blstatistics.mObjectCount)) {
+            g_ReplayCANThreadRun = 0;
+            break;
+        }
+        while ((Status = update_binlog_read()) == 0) {
+            readcnt_repaly++;
+            memcpy(ptr, messageFD.mData, 64);
+            gcanid = messageFD.mID;
+            ts = messageFD.mHeader.mObjectTimeStamp;
+            update_sig();
+            if (ts - ts_anchor > TS_INT) {
+                ts_anchor = ts;
+                break;
+            }
+        }
+    }
+    return(NO_ERROR);
+}
+
+int ReplayCreateRxThread(void) {
+    int status = -1;
+    DWORD ThreadId = 0;
+
+    g_hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
+    status = init_binlog_read();
+    g_hRXThread = CreateThread(0, 0x1000, ReplayCanFdThread, (LPVOID)0, 0, &ThreadId);
+
+    return status;
 }

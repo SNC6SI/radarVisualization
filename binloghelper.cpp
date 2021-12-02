@@ -72,7 +72,7 @@ int init_binlog_read(void) {
 }
 
 
-void update_binlog_read(void) {
+int update_binlog_read(void) {
     if (blSuccess && BLPeekObject(hbinlogFile, &blObjHeaderbase)) {
         switch (blObjHeaderbase.mObjectType) {
             case BL_OBJ_TYPE_CAN_FD_MESSAGE_64:
@@ -86,6 +86,10 @@ void update_binlog_read(void) {
                 blSuccess = BLSkipObject(hbinlogFile, &blObjHeaderbase);
                 break;
         }
+        return 0;
+    }
+    else {
+        return -1;
     }
 }
 
