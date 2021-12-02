@@ -16,11 +16,16 @@
 #include <opencv2/core/utils/logger.hpp>
 
 
+using namespace std;
 using namespace cv;
+
 char video_filename[512];
 char binlog_filename_write[512];
 char binlog_filename_read[512];
+vector<string> binlog_filename_read_list;
 int binlog_filename_read_len;
+vector<int> binlog_filename_read_len_list;
+DWORD num_binlog_files;
 static int KEYPressed = 0xFFFF;
 static void online_mode(void);
 static void offline_mode(void);
@@ -93,15 +98,15 @@ static void online_mode(void) {
 static void offline_mode(void) {
     int status = -1;;
     gReplayCANThreadRun = 1;
-    greadcnt = 0;
     select_offline_mode();
     initProgreassPercent();
-    BasicFileOpen();
-    prepareVideoFileName();
-    init_sig();
-    init_axis();
-    video_writer.open(video_filename, VideoWriter::fourcc('m', 'p', '4', 'v'), 25, Size(XCOL, YROW), true);
     if (selected_offline_mode == 1) {
+        greadcnt = 0;
+        init_sig();
+        init_axis();
+        BasicFileOpenSingle();
+        prepareVideoFileName();
+        video_writer.open(video_filename, VideoWriter::fourcc('m', 'p', '4', 'v'), 25, Size(XCOL, YROW), true);
         moveWindow("radar visualization offline", -15, 0);
         imshow("radar visualization offline", recframe_offline);
         setMouseCallback("radar visualization offline", mouseCallBackFunc, NULL);
@@ -133,23 +138,34 @@ static void offline_mode(void) {
         g_RXCANThreadRun = 0;
     }
     else if (selected_offline_mode == 2) {
-        status = init_binlog_read();
-        if (status == 0) {
-            while (1) {
-                status = update_sig_interval_wrapper();
-                if (status == NO_ERROR) {
-                    update_img();
-                    update_video_offline();
-                    video_writer.write(recframe_offline);
-                    queryProgressPercent();
-                }
-                else {
-                    break;
+        init_sig();
+        init_axis();
+        BasicFileOpenMulti();
+        for (int i = 0; i < num_binlog_files; i++) {
+            greadcnt = 0;
+            memset(binlog_filename_read, 0, sizeof(binlog_filename_read));
+            binlog_filename_read_list[i].copy(binlog_filename_read, binlog_filename_read_list[i].length(), 0);
+            binlog_filename_read_len = binlog_filename_read_len_list[i];
+            prepareVideoFileName();
+            video_writer.open(video_filename, VideoWriter::fourcc('m', 'p', '4', 'v'), 25, Size(XCOL, YROW), true);
+            status = init_binlog_read();
+            if (status == 0) {
+                while (1) {
+                    status = update_sig_interval_wrapper();
+                    if (status == NO_ERROR) {
+                        update_img();
+                        update_video_offline();
+                        video_writer.write(recframe_offline);
+                        queryProgressPercent();
+                    }
+                    else {
+                        deinit_progressPercent();
+                        break;
+                    }
                 }
             }
         }
     }
     video_writer.release();
-    deinit_progressPercent();
     deinit_binlog();
 }

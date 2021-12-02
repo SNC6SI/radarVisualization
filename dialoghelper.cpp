@@ -14,11 +14,23 @@
 #include <new>
 #include <cstdlib>
 #include <locale.h>
+#include "menuhelper.h"
+#include <vector>
+#include <string>
 
 #pragma comment(linker, "\"/manifestdependency:type='Win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 
+
 extern char binlog_filename_read[512];
+extern std::vector<std::string> binlog_filename_read_list;
 extern int binlog_filename_read_len;
+extern std::vector<int> binlog_filename_read_len_list;
+extern DWORD num_binlog_files;
+
+
+static char local_binlog_filename_read[512];
+static int local_binlog_filename_read_len;
+
 
 const COMDLG_FILTERSPEC c_rgSaveTypes[] = {
     {L"Binary Logging Format (*.blf)",       L"*.blf"},
@@ -96,59 +108,70 @@ HRESULT CDialogEventHandler_CreateInstance(REFIID riid, void** ppv) {
 }
 
 
-HRESULT BasicFileOpen() {
+HRESULT BasicFileOpenSingle() {
     IFileDialog* pfd = NULL;
+    IFileDialogEvents* pfde = NULL;
+    DWORD dwCookie;
+    DWORD dwFlags;
+    IShellItem* psiResult;
+    PWSTR pszFilePath = NULL;
     HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+    hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pfd));
+    hr = CDialogEventHandler_CreateInstance(IID_PPV_ARGS(&pfde));         
+    hr = pfd->Advise(pfde, &dwCookie);        
+    hr = pfd->GetOptions(&dwFlags);
+    hr = pfd->SetOptions(dwFlags | FOS_FORCEFILESYSTEM);
+    hr = pfd->SetTitle(L"Select a blf file to visiuaization");
+    hr = pfd->SetFileTypes(ARRAYSIZE(c_rgSaveTypes), c_rgSaveTypes);
+    hr = pfd->SetFileTypeIndex(INDEX_BLF);
+    hr = pfd->SetDefaultExtension(L"blf");
+    hr = pfd->Show(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pfd));
-        if (SUCCEEDED(hr)) {
-            IFileDialogEvents* pfde = NULL;
-            hr = CDialogEventHandler_CreateInstance(IID_PPV_ARGS(&pfde));
-            if (SUCCEEDED(hr)) {
-                DWORD dwCookie;
-                hr = pfd->Advise(pfde, &dwCookie);
-                if (SUCCEEDED(hr)) {
-                    DWORD dwFlags;
-                    hr = pfd->GetOptions(&dwFlags);
-                    if (SUCCEEDED(hr)) {
-                        hr = pfd->SetOptions(dwFlags | FOS_FORCEFILESYSTEM);
-                        if (SUCCEEDED(hr)) {
-                            hr = pfd->SetTitle(L"Select a blf file to visiuaization");
-                            if (SUCCEEDED(hr)) {
-                                hr = pfd->SetFileTypes(ARRAYSIZE(c_rgSaveTypes), c_rgSaveTypes);
-                                if (SUCCEEDED(hr)) {
-                                    hr = pfd->SetFileTypeIndex(INDEX_BLF);
-                                    if (SUCCEEDED(hr)) {
-                                        hr = pfd->SetDefaultExtension(L"blf");
-                                        if (SUCCEEDED(hr)) {
-                                            hr = pfd->Show(NULL);
-                                            if (SUCCEEDED(hr)) {
-                                                IShellItem* psiResult;
-                                                hr = pfd->GetResult(&psiResult);
-                                                if (SUCCEEDED(hr)) {
-                                                    PWSTR pszFilePath = NULL;
-                                                    //wchar_t *pszFilePath = NULL;
-                                                    hr = psiResult->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
-                                                    if (SUCCEEDED(hr)) {
-                                                        setlocale(LC_CTYPE, "");
-                                                        binlog_filename_read_len = wcstombs(binlog_filename_read, pszFilePath, 512);
-                                                        CoTaskMemFree(pszFilePath);
-                                                    }
-                                                    psiResult->Release();
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    pfd->Unadvise(dwCookie);
-                }
-                pfde->Release();
-            }
-            pfd->Release();
-        }
+        hr = pfd->GetResult(&psiResult);
+        hr = psiResult->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+        setlocale(LC_CTYPE, "");
+        binlog_filename_read_len = wcstombs(binlog_filename_read, pszFilePath, 512);
+        CoTaskMemFree(pszFilePath);
+        psiResult->Release();
+        pfd->Unadvise(dwCookie);
+        pfde->Release();
+        pfd->Release();
     }
+    return hr;
+}
+
+
+HRESULT BasicFileOpenMulti() {
+    IFileOpenDialog* pfd = NULL;
+    DWORD dwFlags = 0;
+    IShellItemArray* pShellItem = NULL;
+    PWSTR pszFilePath = NULL;
+    HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+    hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pfd));
+    hr = pfd->GetOptions(&dwFlags);
+    hr = pfd->SetOptions(dwFlags | FOS_FORCEFILESYSTEM | FOS_ALLOWMULTISELECT);
+    hr = pfd->SetTitle(L"Select a blf file to visiuaization");
+    hr = pfd->SetFileTypes(ARRAYSIZE(c_rgSaveTypes), c_rgSaveTypes);
+    hr = pfd->SetFileTypeIndex(INDEX_BLF);
+    hr = pfd->SetDefaultExtension(L"blf");
+    hr = pfd->Show(NULL);
+    setlocale(LC_CTYPE, "");
+    if (hr == S_OK)
+    {
+        hr = pfd->GetResults(&pShellItem);
+        pShellItem->GetCount(&num_binlog_files);
+        for (int i = 0; i < num_binlog_files; ++i)
+        {
+            IShellItem* pItem = NULL;
+            hr = pShellItem->GetItemAt(i, &pItem);
+            pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+            local_binlog_filename_read_len = wcstombs(local_binlog_filename_read, pszFilePath, 512);
+            binlog_filename_read_list.push_back(local_binlog_filename_read);
+            binlog_filename_read_len_list.push_back(local_binlog_filename_read_len);
+            CoTaskMemFree(pszFilePath);
+        }
+        pShellItem->Release();
+    }
+    pfd->Release();
     return hr;
 }

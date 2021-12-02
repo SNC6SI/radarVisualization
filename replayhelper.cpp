@@ -86,13 +86,15 @@ void queryProgressPercent(void) {
     if (percent - percent_anchor > 1) {
         percent_anchor = percent;
         sprintf(greadcnt_fraction, "%3.1f%%  %10ld/%ld", percent, greadcnt, blstatistics.mObjectCount);
-        printf("%s %s", backspace, greadcnt_fraction);
+        printf("%s  %s", backspace, greadcnt_fraction);
     }
 }
 
 
 void deinit_progressPercent(void) {
-    printf("%s  %3d.0%%  %10ld/%ld\n\n  done!\n", backspace, (unsigned char)100, blstatistics.mObjectCount, blstatistics.mObjectCount);
+    printf("%s  %3d.0%%  %10ld/%ld\n\n  done!\n\n", backspace, (unsigned char)100, blstatistics.mObjectCount, blstatistics.mObjectCount);
+    percent_anchor = 0;
+    ts_anchor = 0;
 }
 
 

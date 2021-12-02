@@ -4,7 +4,7 @@
 #include <windows.h> 
 #include <wchar.h>
 
-extern wchar_t pBlfReadPath[256];
-extern HRESULT BasicFileOpen();
+extern HRESULT BasicFileOpenSingle();
+extern HRESULT BasicFileOpenMulti();
 
 #endif
