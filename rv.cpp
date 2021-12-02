@@ -15,6 +15,7 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/utils/logger.hpp>
 
+
 using namespace cv;
 static char backspace[256];
 char video_filename[512];
@@ -100,14 +101,11 @@ static void offline_mode(void) {
     BasicFileOpen();
     init_sig();
     init_axis();
-    strcpy(video_filename, binlog_filename_read);
-    strcpy(video_filename + (binlog_filename_read_len - 4), videoext);
-    printf("\n  blf:    %s", binlog_filename_read);
-    printf("\n  video:  %s\n\n", video_filename);
+    prepareVideoFileName();
+    video_writer.open(video_filename, VideoWriter::fourcc('m', 'p', '4', 'v'), 25, Size(XCOL, YROW), true);
     moveWindow("radar visualization offline", -15, 0);
     imshow("radar visualization offline", recframe_offline);
     setMouseCallback("radar visualization offline", mouseCallBackFunc, NULL);
-    video_writer.open(video_filename, VideoWriter::fourcc('m', 'p', '4', 'v'), 25, Size(XCOL, YROW), true);
     ReplayCreateRxThread();
     while ((KEYPressed = waitKey(40)) != KEY_ESC) {
         if (KEYPressed == KEY_SPACE) {
@@ -131,8 +129,6 @@ static void offline_mode(void) {
     }
     g_RXCANThreadRun = 0;
     video_writer.release();
-    printf("%s  %3d.0%%  %10ld/%ld", backspace, (unsigned char)100, blstatistics.mObjectCount, blstatistics.mObjectCount);
-    printf("\n\n  done!\n");
-    video_writer.release();
+    printf("%s  %3d.0%%  %10ld/%ld\n\n  done!\n", backspace, (unsigned char)100, blstatistics.mObjectCount, blstatistics.mObjectCount);
     deinit_binlog();
 }

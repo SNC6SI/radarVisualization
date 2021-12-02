@@ -4,6 +4,10 @@
 #include "signalhelper.h"
 
 
+extern char video_filename[512];
+extern char binlog_filename_read[512];
+extern int binlog_filename_read_len;
+
 int gReplayCANThreadRun;
 unsigned long greadcnt;
 HANDLE g_hEvent;
@@ -47,4 +51,12 @@ int ReplayCreateRxThread(void) {
     }
 
     return status;
+}
+
+
+void prepareVideoFileName(void) {
+    strcpy(video_filename, binlog_filename_read);
+    strcpy(video_filename + (binlog_filename_read_len - 4), videoext);
+    printf("\n  blf:    %s", binlog_filename_read);
+    printf("\n  video:  %s\n\n", video_filename);
 }
