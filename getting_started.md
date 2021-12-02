@@ -17,7 +17,7 @@
 # 程序流
 - 两个线程
    - main线程：用于更新图像
-   - RxCanFdThread线程：用于读取vector设备接收的can报文，更新obj/slot的坐标信息等
+   - RxCanFdThread线程，用于读取vector设备接收的can报文，或ReplayCanFdThread线程，用于读取blf文件中的报文。更新obj/slot的坐标信息等
 
 
 # 文件
@@ -30,9 +30,10 @@
 - menuhelper: console菜单
 - mousehelper: 响应鼠标事件
 - plothelper: 更新坐标图像
+- replayhelper: 离线读取文件，replay线程
 - signalhelper: 接收、解析报文，更新坐标信息
 - systimehelper: 系统时间
-- vectorhelper: vector设备
+- vectorhelper: vector设备，can接收线程
 - videohelper: 更新图像、录屏
 
 
