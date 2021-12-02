@@ -8,12 +8,17 @@ extern char video_filename[512];
 extern char binlog_filename_read[512];
 extern int binlog_filename_read_len;
 
+int pauseStatus;
 int gReplayCANThreadRun;
 unsigned long greadcnt;
 HANDLE g_hEvent;
 
 static HANDLE g_hReplayThread;
 static unsigned __int64 ts_anchor;
+
+static double percent = 0;
+static double percent_anchor = 0;
+static char backspace[256];
 
 
 int update_sig_interval_wrapper(void) {
@@ -35,9 +40,8 @@ int update_sig_interval_wrapper(void) {
 
 static DWORD WINAPI ReplayCanFdThread(LPVOID par) {
     int status = NO_ERROR;
-    greadcnt = 0;
     while (gReplayCANThreadRun) {
-        WaitForSingleObject(g_hEvent, 40);
+        WaitForSingleObject(g_hEvent, INFINITE);
         status = update_sig_interval_wrapper();
         if (status != NO_ERROR) {
             gReplayCANThreadRun = 0;
@@ -46,6 +50,7 @@ static DWORD WINAPI ReplayCanFdThread(LPVOID par) {
     }
     return(NO_ERROR);
 }
+
 
 int CreateReplayThread(void) {
     int status = -1;
@@ -69,10 +74,6 @@ void prepareVideoFileName(void) {
 }
 
 
-static double percent = 0;
-static double percent_anchor = 0;
-static char backspace[256];
-
 void initProgreassPercent(void) {
     memset(backspace, '\b', 256);
     backspace[255] = '\0';
@@ -90,4 +91,14 @@ void queryProgressPercent(void) {
 
 void deinit_progressPercent(void) {
     printf("%s  %3d.0%%  %10ld/%ld\n\n  done!\n", backspace, (unsigned char)100, blstatistics.mObjectCount, blstatistics.mObjectCount);
+}
+
+
+void toggle_pause_status(void) {
+    pauseStatus = !pauseStatus;
+}
+
+
+int query_pause_status(void) {
+    return pauseStatus;
 }

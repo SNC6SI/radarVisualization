@@ -91,9 +91,12 @@ static void online_mode(void) {
 }
 
 
+/*  1. display
+    2. silent  */
 static void offline_mode(void) {
     int status = -1;;
     gReplayCANThreadRun = 1;
+    greadcnt = 0;
     select_offline_mode();
     initProgreassPercent();
     BasicFileOpen();
@@ -110,13 +113,21 @@ static void offline_mode(void) {
             if (KEYPressed == KEY_SPACE) {
                 restore_axis();
             }
+            if (KEYPressed == KEY_ENTER) {
+                toggle_pause_status();
+            }
             update_img();
             update_video_offline();
             imshow("radar visualization offline", recframe_offline);
             video_writer.write(recframe_offline);
             queryProgressPercent();
             if (gReplayCANThreadRun) {
-                SetEvent(g_hEvent);
+                if (!query_pause_status()) {
+                    SetEvent(g_hEvent);
+                }
+                else {
+                    update_sig();
+                }
             }
             else {
                 break;

@@ -16,6 +16,7 @@ typedef short rv_status;
 #define RV_PRINTF(f_, ...)
 #endif
 
+#define KEY_ENTER 13
 #define KEY_ESC   27
 #define KEY_SPACE 32
 
