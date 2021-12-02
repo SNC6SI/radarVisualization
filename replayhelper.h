@@ -4,6 +4,7 @@
 extern int pauseStatus;
 extern int gReplayCANThreadRun;
 extern unsigned long greadcnt;
+extern char greadcnt_fraction[512];
 extern HANDLE g_hEvent;
 
 

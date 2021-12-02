@@ -62,7 +62,6 @@ static void online_mode(void) {
             activated = 1;
         }
     }
-
     init_sig();
     init_axis();
     rvStatus = query_camera();
@@ -91,8 +90,6 @@ static void online_mode(void) {
 }
 
 
-/*  1. display
-    2. silent  */
 static void offline_mode(void) {
     int status = -1;;
     gReplayCANThreadRun = 1;

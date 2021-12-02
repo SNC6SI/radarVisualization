@@ -11,6 +11,7 @@ extern int binlog_filename_read_len;
 int pauseStatus;
 int gReplayCANThreadRun;
 unsigned long greadcnt;
+char greadcnt_fraction[512] = {0};
 HANDLE g_hEvent;
 
 static HANDLE g_hReplayThread;
@@ -84,7 +85,8 @@ void queryProgressPercent(void) {
     percent = (double)greadcnt / (double)blstatistics.mObjectCount * 100;
     if (percent - percent_anchor > 1) {
         percent_anchor = percent;
-        printf("%s %3d.0%%  %10ld/%ld", backspace, (unsigned char)percent, greadcnt, blstatistics.mObjectCount);
+        sprintf(greadcnt_fraction, "%3.1f%%  %10ld/%ld", percent, greadcnt, blstatistics.mObjectCount);
+        printf("%s %s", backspace, greadcnt_fraction);
     }
 }
 

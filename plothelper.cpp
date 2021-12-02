@@ -7,6 +7,7 @@
 #include "menuhelper.h"
 #include "binloghelper.h"
 #include "mousehelper.h"
+#include "replayhelper.h"
 #include <opencv2/opencv.hpp>
 
 using namespace std;
@@ -138,8 +139,14 @@ static void plot_misc(void) {
 	char label[256] = { 0 };
 	int i;
 
-	sprintf(label, "%d", alive_count);
-	putText(canvas, label, Point(XCOL-50, YROW-50), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
+	if (selected_mode == 2) {
+		sprintf(label, "%s", greadcnt_fraction);
+		putText(canvas, label, Point(XCOL - 200, YROW - 50), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
+	}
+	else {
+		sprintf(label, "%d", alive_count);
+		putText(canvas, label, Point(XCOL - 50, YROW - 50), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
+	}
 	
 	sprintf(label, "can: %6lld.%3lld s", ts / 1000000000U, (ts % 1000000000U) / 1000000U);
 	putText(canvas, label, Point(20, YROW - 50), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
