@@ -5,6 +5,7 @@
 #include "capturehelper.h"
 #include "vectorhelper.h"
 #include "binloghelper.h"
+#include "replayhelper.h"
 #include "videohelper.h"
 #include "signalhelper.h"
 #include "plothelper.h"
@@ -21,7 +22,6 @@ char binlog_filename_write[512];
 char binlog_filename_read[512];
 int binlog_filename_read_len;
 static int KEYPressed = 0xFFFF;
-static unsigned __int64 ts_anchor;
 static void online_mode(void);
 static void offline_mode(void);
 
@@ -93,11 +93,6 @@ static void online_mode(void) {
 }
 
 
-HANDLE g_hEvent;
-HANDLE g_hReplayThread;
-static int ReplayCreateRxThread(void);
-static int gReplayCANThreadRun;
-static unsigned long greadcnt;
 static void offline_mode(void) {
     double percent = 0;
     double percent_anchor = 0;
@@ -140,40 +135,4 @@ static void offline_mode(void) {
     printf("\n\n  done!\n");
     video_writer.release();
     deinit_binlog();
-}
-
-
-static DWORD WINAPI ReplayCanFdThread(LPVOID par) {
-    int status = NO_ERROR;
-    greadcnt = 0;
-    while (gReplayCANThreadRun) {
-        WaitForSingleObject(g_hEvent, 40);
-        while ((status = update_binlog_read()) == NO_ERROR) {
-            greadcnt++;
-            memcpy(ptr, messageFD.mData, 64);
-            gcanid = messageFD.mID;
-            ts = messageFD.mHeader.mObjectTimeStamp;
-            update_sig();
-            if (ts - ts_anchor > TS_INT) {
-                ts_anchor = ts;
-                break;
-            }
-        }
-        if (status != NO_ERROR) {
-            gReplayCANThreadRun = 0;
-            break;
-        }
-    }
-    return(NO_ERROR);
-}
-
-int ReplayCreateRxThread(void) {
-    int status = -1;
-    DWORD ThreadId = 0;
-
-    g_hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
-    status = init_binlog_read();
-    g_hRXThread = CreateThread(0, 0x1000, ReplayCanFdThread, (LPVOID)0, 0, &ThreadId);
-
-    return status;
 }
