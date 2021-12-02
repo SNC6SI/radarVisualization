@@ -25,6 +25,14 @@ void mouseCallBackFunc(int event, int x, int y, int flags, void* userdata) {
     else if (event == EVENT_LBUTTONUP) {
         LBUTTONDOWN_flg = 0;
     }
+    if (LBUTTONDOWN_flg) {
+        if (event == EVENT_MOUSEMOVE) {
+            x_anno = x;
+            y_anno = y;
+        }
+    }
+
+
     if (event == EVENT_MBUTTONDOWN) {
         MBUTTONDOWN_flg = 1;
         x_ud = x;
@@ -41,6 +49,8 @@ void mouseCallBackFunc(int event, int x, int y, int flags, void* userdata) {
             y_ud = y;
         }
     }
+
+
     if (event == EVENT_MOUSEWHEEL) {
         if (sgn(flags) < 0) {      // zoom out
             gScale -= SCALESTEP;

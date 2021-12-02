@@ -72,7 +72,7 @@ static void online_mode(void) {
         select_camera();
         init_capture();
     }
- 
+
     moveWindow("radar visualization online", -15, 0);
     imshow("radar visualization online", recframe);
     setMouseCallback("radar visualization online", mouseCallBackFunc, NULL);
