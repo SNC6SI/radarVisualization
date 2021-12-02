@@ -94,17 +94,17 @@ static void online_mode(void) {
 
 
 HANDLE g_hEvent;
-int ReplayCreateRxThread(void);
-int g_ReplayCANThreadRun;
+HANDLE g_hReplayThread;
+static int ReplayCreateRxThread(void);
+static int gReplayCANThreadRun;
+static unsigned long greadcnt;
 static void offline_mode(void) {
-    XLstatus xlStatus;
-    unsigned long readcnt;
-    double percent, percent_anchor;
-    capOpened = 0;
+    double percent = 0;
+    double percent_anchor = 0;
+    gReplayCANThreadRun = 1;
     BasicFileOpen();
     init_sig();
     init_axis();
-    
     strcpy(video_filename, binlog_filename_read);
     strcpy(video_filename + (binlog_filename_read_len - 4), videoext);
     printf("\n  blf:    %s", binlog_filename_read);
@@ -122,7 +122,12 @@ static void offline_mode(void) {
         update_video_offline();
         imshow("radar visualization offline", recframe_offline);
         video_writer.write(recframe_offline);
-        if (g_ReplayCANThreadRun) {
+        percent = (double)greadcnt / (double)blstatistics.mObjectCount * 100;
+        if (percent - percent_anchor > 1) {
+            percent_anchor = percent;
+            printf("%s %3d.0%%  %10ld/%ld", backspace, (unsigned char)percent, greadcnt, blstatistics.mObjectCount);
+        }
+        if (gReplayCANThreadRun) {
             SetEvent(g_hEvent);
         }
         else {
@@ -134,29 +139,17 @@ static void offline_mode(void) {
     printf("%s  %3d.0%%  %10ld/%ld", backspace, (unsigned char)100, blstatistics.mObjectCount, blstatistics.mObjectCount);
     printf("\n\n  done!\n");
     video_writer.release();
-
     deinit_binlog();
 }
 
 
-
-static unsigned long readcnt_repaly;
 static DWORD WINAPI ReplayCanFdThread(LPVOID par) {
-    int Status = 0;
-    g_ReplayCANThreadRun = 1;
-    double percent, percent_anchor;
-    readcnt_repaly = 0;
-    ts_anchor = 0;
-    percent = 0;
-    percent_anchor = 0;
-    while (g_ReplayCANThreadRun) {
+    int status = NO_ERROR;
+    greadcnt = 0;
+    while (gReplayCANThreadRun) {
         WaitForSingleObject(g_hEvent, 40);
-        if (!(readcnt_repaly < blstatistics.mObjectCount)) {
-            g_ReplayCANThreadRun = 0;
-            break;
-        }
-        while ((Status = update_binlog_read()) == 0) {
-            readcnt_repaly++;
+        while ((status = update_binlog_read()) == NO_ERROR) {
+            greadcnt++;
             memcpy(ptr, messageFD.mData, 64);
             gcanid = messageFD.mID;
             ts = messageFD.mHeader.mObjectTimeStamp;
@@ -165,6 +158,10 @@ static DWORD WINAPI ReplayCanFdThread(LPVOID par) {
                 ts_anchor = ts;
                 break;
             }
+        }
+        if (status != NO_ERROR) {
+            gReplayCANThreadRun = 0;
+            break;
         }
     }
     return(NO_ERROR);
