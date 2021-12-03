@@ -3,7 +3,8 @@ function [msg_unpack_s, def_s, dcl_s] = write_unpack_code
     DBC_O = dbc_unpack_to_c('APSPA.DBC');
 
     % read config: canid, signal_name
-    config = upack_config;
+%     config = upack_config;
+    config = upack_config_2;
 
     % 
     unique_canids = unique(cell2mat(config(:,1)));
