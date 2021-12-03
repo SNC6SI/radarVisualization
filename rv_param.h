@@ -19,6 +19,10 @@ extern float gScale;
 #define GREENDIM  Scalar(50, 205, 50)
 #define GREENPALE Scalar(152, 251, 152)
 
+#define SlateGray1 Scalar(255, 226, 198)
+#define LightBlue1 Scalar(255, 239, 191)
+#define LightYellow2 Scalar(209, 238, 238)
+
 #define XCOL 1200
 #define YROW 1000
 

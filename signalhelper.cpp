@@ -219,12 +219,6 @@ float de_cc_y_raw[12];
 float de_cc_x[12];
 float de_cc_y[12];
 
-#if 0
-static float de_cc_x[12] = { 3 / 4 * FO,  FO,  FO,  FO,  FO,  3 / 4 * FO,
-                            -3 / 4 * RO, -RO, -RO, -RO, -RO, -3 / 4 * RO };
-static float de_cc_y[12] = { HW,  3 / 4 * HW,  1 / 4 * HW, -1 / 4 * HW, -3 / 4 * HW, -HW,
-                            -HW, -3 / 4 * HW, -1 / 4 * HW,  1 / 4 * HW,  3 / 4 * HW,  HW };
-#endif
 
 static const float halt_fov_short = 60;
 static const float halt_fov_long = 30;

@@ -57,9 +57,9 @@ void update_img(void) {
 	alive_count++;
 	plot_axis();
 	plot_vehicle();
+	plot_echo();
 	plot_objs();
 	plot_slots();
-	plot_echo();
 	plot_misc();
 	plot_info();
 	plot_anno();
@@ -102,9 +102,9 @@ static void plot_echo(void) {
 		Size sz1(de_1[i], de_1[i]);
 		Size sz2(de_2[i], de_2[i]);
 		Size sz3(de_3[i], de_3[i]);
-		ellipse(canvas, center, sz1, de_angle_anchor[i], de_angle_start[i], de_angle_end[i], GREENDARK, 2);
-		ellipse(canvas, center, sz2, de_angle_anchor[i], de_angle_start[i], de_angle_end[i], GREENDIM, 2);
-		ellipse(canvas, center, sz3, de_angle_anchor[i], de_angle_start[i], de_angle_end[i], GREENPALE, 2);
+		ellipse(canvas, center, sz1, de_angle_anchor[i], de_angle_start[i], de_angle_end[i], SlateGray1, -1);
+		ellipse(canvas, center, sz2, de_angle_anchor[i], de_angle_start[i], de_angle_end[i], LightBlue1, 2);
+		ellipse(canvas, center, sz3, de_angle_anchor[i], de_angle_start[i], de_angle_end[i], LightYellow2, 2);
 		circle(canvas, Point(de_cc_x[i], de_cc_y[i]), 2, GREENDARK, FILLED, 10);
 		sprintf(label, "%d", i + 1);
 		putText(canvas, label, Point(de_cc_x[i], de_cc_y[i]), FONT_HERSHEY_SIMPLEX, 0.4, GREENDARK, 1, LINE_8, false);
