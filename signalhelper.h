@@ -20,6 +20,16 @@ extern float slotx[8];
 extern float sloty[8];
 extern float slotxrec[16];
 extern float slotyrec[16];
+extern float de_1[12];
+extern float de_2[12];
+extern float de_3[12];
+
+extern float de_cc_x[12];
+extern float de_cc_y[12];
+
+extern const float de_angle_anchor[12];
+extern const float de_angle_start[12];
+extern const float de_angle_end[12];
 
 extern unsigned char objH[20];
 extern unsigned char slotid[4];

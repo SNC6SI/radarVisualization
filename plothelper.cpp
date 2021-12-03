@@ -21,6 +21,7 @@ static void plot_slots(void);
 static void plot_misc(void);
 static void plot_info(void);
 static void plot_anno(void);
+static void plot_echo(void);
 
 static void linspace_step(float x1, float x2, int step, float* xo, int* num);
 static void point2pose(float* x, float* y, int iter);
@@ -58,6 +59,7 @@ void update_img(void) {
 	plot_vehicle();
 	plot_objs();
 	plot_slots();
+	plot_echo();
 	plot_misc();
 	plot_info();
 	plot_anno();
@@ -93,6 +95,22 @@ static void plot_vehicle(void) {
 #endif
 }
 
+static void plot_echo(void) {
+	char label[16] = { 0 };
+	for (int i = 0; i < 12; i++) {
+		Point center(de_cc_x[i], de_cc_y[i]);
+		Size sz1(de_1[i], de_1[i]);
+		Size sz2(de_2[i], de_2[i]);
+		Size sz3(de_3[i], de_3[i]);
+		ellipse(canvas, center, sz1, de_angle_anchor[i], de_angle_start[i], de_angle_end[i], GREENDARK, 2);
+		ellipse(canvas, center, sz2, de_angle_anchor[i], de_angle_start[i], de_angle_end[i], GREENDIM, 2);
+		ellipse(canvas, center, sz3, de_angle_anchor[i], de_angle_start[i], de_angle_end[i], GREENPALE, 2);
+		circle(canvas, Point(de_cc_x[i], de_cc_y[i]), 2, GREENDARK, FILLED, 10);
+		sprintf(label, "%d", i + 1);
+		putText(canvas, label, Point(de_cc_x[i], de_cc_y[i]), FONT_HERSHEY_SIMPLEX, 0.4, GREENDARK, 1, LINE_8, false);
+	}
+}
+
 
 static void plot_objs(void) {
 	char label[16] = { 0 };
@@ -108,6 +126,7 @@ static void plot_objs(void) {
 	}
 		
 }
+
 
 static void plot_slots(void) {
 	char label[16] = { 0 };

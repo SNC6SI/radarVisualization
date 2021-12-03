@@ -7,6 +7,7 @@
 
 static float calcPointDis(float x0, float y0, float x1, float y1);
 static void point4pose(float* x, float* y, float* xo, float* yo, int iter);
+static void lengthScaling(float* l, float* lo, int iter);
 
 float MapObj01P1X=0.0F;
 float MapObj01P1Y=0.0F;
@@ -141,6 +142,43 @@ unsigned char ParkLeftslot1ID = 0.0F;
 unsigned char ParkRightslot0ID = 0.0F;
 unsigned char ParkRightslot1ID = 0.0F;
 
+float USS_DE1_1=0.0F;
+float USS_DE1_2 = 0.0F;
+float USS_DE1_3 = 0.0F;
+float USS_DE1_4 = 0.0F;
+float USS_DE1_5 = 0.0F;
+float USS_DE1_6 = 0.0F;
+float USS_DE1_7 = 0.0F;
+float USS_DE1_8 = 0.0F;
+float USS_DE1_9 = 0.0F;
+float USS_DE1_10 = 0.0F;
+float USS_DE1_11 = 0.0F;
+float USS_DE1_12 = 0.0F;
+float USS_DE2_1 = 0.0F;
+float USS_DE2_2 = 0.0F;
+float USS_DE2_3 = 0.0F;
+float USS_DE2_4 = 0.0F;
+float USS_DE2_5 = 0.0F;
+float USS_DE2_6 = 0.0F;
+float USS_DE2_7 = 0.0F;
+float USS_DE2_8 = 0.0F;
+float USS_DE2_9 = 0.0F;
+float USS_DE2_10 = 0.0F;
+float USS_DE2_11 = 0.0F;
+float USS_DE2_12 = 0.0F;
+float USS_DE3_1 = 0.0F;
+float USS_DE3_2 = 0.0F;
+float USS_DE3_3 = 0.0F;
+float USS_DE3_4 = 0.0F;
+float USS_DE3_5 = 0.0F;
+float USS_DE3_6 = 0.0F;
+float USS_DE3_7 = 0.0F;
+float USS_DE3_8 = 0.0F;
+float USS_DE3_9 = 0.0F;
+float USS_DE3_10 = 0.0F;
+float USS_DE3_11 = 0.0F;
+float USS_DE3_12 = 0.0F; 
+
 float ESP_VehicleSpeed = 0.0F;
 unsigned char GW_VBU_GearLeverPos = 0.0F;
 
@@ -154,6 +192,9 @@ float slotx_rx[8];
 float sloty_rx[8];
 float slotxrec_rx[16];
 float slotyrec_rx[16];
+float de_1_rx[12];
+float de_2_rx[12];
+float de_3_rx[12];
 
 float objx[40];
 float objy[40];
@@ -161,6 +202,9 @@ float slotx[8];
 float sloty[8];
 float slotxrec[16];
 float slotyrec[16];
+float de_1[12];
+float de_2[12];
+float de_3[12];
 
 unsigned char objH[20];
 unsigned char slotid[4];
@@ -170,37 +214,95 @@ float slot_theta[4];
 
 float gScale;
 
+float de_cc_x_raw[12];
+float de_cc_y_raw[12];
+float de_cc_x[12];
+float de_cc_y[12];
+
+#if 0
+static float de_cc_x[12] = { 3 / 4 * FO,  FO,  FO,  FO,  FO,  3 / 4 * FO,
+                            -3 / 4 * RO, -RO, -RO, -RO, -RO, -3 / 4 * RO };
+static float de_cc_y[12] = { HW,  3 / 4 * HW,  1 / 4 * HW, -1 / 4 * HW, -3 / 4 * HW, -HW,
+                            -HW, -3 / 4 * HW, -1 / 4 * HW,  1 / 4 * HW,  3 / 4 * HW,  HW };
+#endif
+
+static const float halt_fov_short = 60;
+static const float halt_fov_long = 30;
+
+const float de_angle_anchor[12] = { 180, -90, -90, -90, -90, 0,
+                                      0,  90,  90,  90,  90, 180};
+const float de_angle_start[12]  = { -halt_fov_long, -halt_fov_short, -halt_fov_short, -halt_fov_short, -halt_fov_short, -halt_fov_long,
+                                    -halt_fov_long, -halt_fov_short, -halt_fov_short, -halt_fov_short, -halt_fov_short, -halt_fov_long };
+const float de_angle_end[12]    = {  halt_fov_long,  halt_fov_short,  halt_fov_short,  halt_fov_short,  halt_fov_short,  halt_fov_long,
+                                     halt_fov_long,  halt_fov_short,  halt_fov_short,  halt_fov_short,  halt_fov_short,  halt_fov_long };
+
+
 void init_sig(void) {
     gScale = DEFAULTSCALE;
-    memset((void*)objx_rx, 0, 40 * sizeof(float));
-    memset((void*)objy_rx, 0, 40 * sizeof(float));
-    memset((void*)slotx_rx, 0, 8 * sizeof(float));
-    memset((void*)sloty_rx, 0, 8 * sizeof(float));
-    memset((void*)objx, 0, 40 * sizeof(float));
-    memset((void*)objy, 0, 40 * sizeof(float));
-    memset((void*)slotx, 0, 8 * sizeof(float));
-    memset((void*)sloty, 0, 8 * sizeof(float));
+    memset((void*)objx_rx, 0, sizeof(objx_rx));
+    memset((void*)objy_rx, 0, sizeof(objy_rx));
+    memset((void*)slotx_rx, 0, sizeof(slotx_rx));
+    memset((void*)sloty_rx, 0, sizeof(sloty_rx));
+    memset((void*)objx, 0, sizeof(objx));
+    memset((void*)objy, 0, sizeof(objy));
+    memset((void*)slotx, 0, sizeof(slotx));
+    memset((void*)sloty, 0, sizeof(sloty));
     memset((void*)slotid, 0, 4);
-    memset((void*)slot_Depth, 0, 4 * sizeof(float));
-    memset((void*)slot_Length, 0, 4 * sizeof(float));
-    memset((void*)slot_theta, 0, 4 * sizeof(float));
+    memset((void*)slot_Depth, 0, sizeof(slot_Depth));
+    memset((void*)slot_Length, 0, sizeof(slot_Length));
+    memset((void*)slot_theta, 0, sizeof(slot_theta));
+    memset((void*)de_1_rx, 0, sizeof(de_1_rx));
+    memset((void*)de_2_rx, 0, sizeof(de_2_rx));
+    memset((void*)de_3_rx, 0, sizeof(de_3_rx));
+    memset((void*)de_1, 0, sizeof(de_1));
+    memset((void*)de_2, 0, sizeof(de_2));
+    memset((void*)de_3, 0, sizeof(de_3));
+    memset((void*)de_cc_x, 0, sizeof(de_cc_x));
+    memset((void*)de_cc_y, 0, sizeof(de_cc_y));
     GW_VBU_GearLeverPos = 0U;
     ESP_VehicleSpeed = 0.0F;
 }
 
 
 static void update_sig_internal(void) {
-    //memcpy(objx, objx_rx, sizeof(objx_rx));
-    //memcpy(objy, objy_rx, sizeof(objy_rx));
     point4pose(&objx_rx[0], &objy_rx[0], &objx[0], &objy[0], sizeof(objy_rx)/ sizeof(objy_rx[0]));
-
-    //memcpy(slotx, slotx_rx, sizeof(slotx_rx));
-    //memcpy(sloty, sloty_rx, sizeof(sloty_rx));
     point4pose(&slotx_rx[0], &sloty_rx[0], &slotx[0], &sloty[0], sizeof(slotx_rx) / sizeof(slotx_rx[0]));
-
-    //memcpy(slotxrec, slotxrec_rx, sizeof(slotxrec_rx));
-    //memcpy(slotyrec, slotyrec_rx, sizeof(slotyrec_rx));
     point4pose(&slotxrec_rx[0], &slotyrec_rx[0], &slotxrec[0], &slotyrec[0], sizeof(slotxrec_rx) / sizeof(slotxrec_rx[0]));
+}
+
+
+static void update_de_internal(void) {
+    de_cc_x_raw[0] = 3.0 / 4.0 * FO_;
+    de_cc_x_raw[1] = FO_;
+    de_cc_x_raw[2] = FO_;
+    de_cc_x_raw[3] = FO_;
+    de_cc_x_raw[4] = FO_;
+    de_cc_x_raw[5] = 3.0 / 4.0 * FO_;
+    de_cc_x_raw[6] = -3.0 / 4.0 * RO_;
+    de_cc_x_raw[7] = -RO_;
+    de_cc_x_raw[8] = -RO_;
+    de_cc_x_raw[9] = -RO_;
+    de_cc_x_raw[10] = -RO_;
+    de_cc_x_raw[11] = -3.0 / 4.0 * RO_;;
+
+    de_cc_y_raw[0] =  HW_;
+    de_cc_y_raw[1] =  3.0 / 4.0 * HW_;
+    de_cc_y_raw[2] =  1.0 / 4.0 * HW_;
+    de_cc_y_raw[3] = -1.0 / 4.0 * HW_;
+    de_cc_y_raw[4] = -3.0 / 4.0 * HW_;
+    de_cc_y_raw[5] = -HW_;
+    de_cc_y_raw[6] = -HW_;
+    de_cc_y_raw[7] = -3.0 / 4.0 * HW_;
+    de_cc_y_raw[8] = -1.0 / 4.0 * HW_;
+    de_cc_y_raw[9] =  1.0 / 4.0 * HW_;
+    de_cc_y_raw[10] = 3.0 / 4.0 * HW_;
+    de_cc_y_raw[11] = HW_;
+
+    point4pose(&de_cc_x_raw[0], &de_cc_y_raw[0], &de_cc_x[0], &de_cc_y[0], 12);
+
+    lengthScaling(&de_1_rx[0], &de_1[0], sizeof(de_1_rx) / sizeof(de_1_rx[0]));
+    lengthScaling(&de_2_rx[0], &de_2[0], sizeof(de_2_rx) / sizeof(de_2_rx[0]));
+    lengthScaling(&de_3_rx[0], &de_3[0], sizeof(de_3_rx) / sizeof(de_3_rx[0]));
 }
 
 
@@ -475,7 +577,6 @@ void update_sig(void) {
         slotid[0] = ParkLeftslot0ID;
         slotid[1] = ParkLeftslot1ID;
 
-
         if (slotx_rx[0] > slotx_rx[1]) {
             slotxrec_rx[0] = slotx_rx[0];
             slotyrec_rx[0] = sloty_rx[0];
@@ -547,7 +648,6 @@ void update_sig(void) {
         slot_Depth[3] = ApaPsc_RightPSL1_Depth;
         slot_Length[3] = ApaPsc_RightPSL1_Length;
 
-
         slotid[2] = ParkRightslot0ID;
         slotid[3] = ParkRightslot1ID;
 
@@ -569,7 +669,6 @@ void update_sig(void) {
         slotxrec_rx[11] = slotxrec_rx[8] + slot_Depth[2] * sinf(slot_theta[2]);
         slotyrec_rx[11] = slotyrec_rx[8] - slot_Depth[2] * cosf(slot_theta[2]);
 
-
         if (slotx_rx[6] > slotx_rx[7]) {
             slotxrec_rx[12] = slotx_rx[6];
             slotyrec_rx[12] = sloty_rx[6];
@@ -587,7 +686,87 @@ void update_sig(void) {
         slotyrec_rx[14] = slotyrec_rx[13] - slot_Depth[3] * cosf(slot_theta[3]);
         slotxrec_rx[15] = slotxrec_rx[12] + slot_Depth[3] * sinf(slot_theta[3]);
         slotyrec_rx[15] = slotyrec_rx[12] - slot_Depth[3] * cosf(slot_theta[3]);
+    }
 
+    if (gcanid == 0x17B) {
+        USS_DE1_1 = ((((ptr[17]) << 2) + (((ptr[18]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_DE1_2 = ((((ptr[1]) << 2) + (((ptr[2]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_DE1_3 = (((((ptr[2]) & 3) << 8) + (ptr[3])) * (1) + (0));
+        USS_DE1_4 = ((((ptr[4]) << 2) + (((ptr[5]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_DE1_5 = (((((ptr[5]) & 3) << 8) + (ptr[6])) * (1) + (0));
+        USS_DE1_6 = (((((ptr[18]) & 3) << 8) + (ptr[19])) * (1) + (0));
+        USS_DE1_7 = ((((ptr[20]) << 2) + (((ptr[21]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_DE1_8 = ((((ptr[9]) << 2) + (((ptr[10]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_DE1_9 = (((((ptr[10]) & 3) << 8) + (ptr[11])) * (1) + (0));
+        USS_DE1_10 = ((((ptr[12]) << 2) + (((ptr[13]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_DE1_11 = (((((ptr[13]) & 3) << 8) + (ptr[14])) * (1) + (0));
+        USS_DE1_12 = (((((ptr[21]) & 3) << 8) + (ptr[22])) * (1) + (0));
+        de_1_rx[0]  = USS_DE1_1;
+        de_1_rx[1]  = USS_DE1_2;
+        de_1_rx[2]  = USS_DE1_3;
+        de_1_rx[3]  = USS_DE1_4;
+        de_1_rx[4]  = USS_DE1_5;
+        de_1_rx[5]  = USS_DE1_6;
+        de_1_rx[6]  = USS_DE1_7;
+        de_1_rx[7]  = USS_DE1_8;
+        de_1_rx[8]  = USS_DE1_9;
+        de_1_rx[9]  = USS_DE1_10;
+        de_1_rx[10] = USS_DE1_11;
+        de_1_rx[11] = USS_DE1_12;
+    }
+
+    if (gcanid == 0x17D) {
+        USS_DE2_1 = ((((ptr[17]) << 2) + (((ptr[18]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_DE2_2 = ((((ptr[1]) << 2) + (((ptr[2]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_DE2_3 = (((((ptr[2]) & 3) << 8) + (ptr[3])) * (1) + (0));
+        USS_DE2_4 = ((((ptr[4]) << 2) + (((ptr[5]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_DE2_5 = (((((ptr[5]) & 3) << 8) + (ptr[6])) * (1) + (0));
+        USS_DE2_6 = (((((ptr[18]) & 3) << 8) + (ptr[19])) * (1) + (0));
+        USS_DE2_7 = ((((ptr[20]) << 2) + (((ptr[21]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_DE2_8 = ((((ptr[9]) << 2) + (((ptr[10]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_DE2_9 = (((((ptr[10]) & 3) << 8) + (ptr[11])) * (1) + (0));
+        USS_DE2_10 = ((((ptr[12]) << 2) + (((ptr[13]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_DE2_11 = (((((ptr[13]) & 3) << 8) + (ptr[14])) * (1) + (0));
+        USS_DE2_12 = (((((ptr[21]) & 3) << 8) + (ptr[22])) * (1) + (0));
+        de_2_rx[0]  = USS_DE2_1;
+        de_2_rx[1]  = USS_DE2_2;
+        de_2_rx[2]  = USS_DE2_3;
+        de_2_rx[3]  = USS_DE2_4;
+        de_2_rx[4]  = USS_DE2_5;
+        de_2_rx[5]  = USS_DE2_6;
+        de_2_rx[6]  = USS_DE2_7;
+        de_2_rx[7]  = USS_DE2_8;
+        de_2_rx[8]  = USS_DE2_9;
+        de_2_rx[9]  = USS_DE2_10;
+        de_2_rx[10] = USS_DE2_11;
+        de_2_rx[11] = USS_DE2_12;
+    }
+
+    if (gcanid == 0x181) {
+        USS_DE3_1 = ((((ptr[17]) << 2) + (((ptr[18]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_DE3_2 = ((((ptr[1]) << 2) + (((ptr[2]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_DE3_3 = (((((ptr[2]) & 3) << 8) + (ptr[3])) * (1) + (0));
+        USS_DE3_4 = ((((ptr[4]) << 2) + (((ptr[5]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_DE3_5 = (((((ptr[5]) & 3) << 8) + (ptr[6])) * (1) + (0));
+        USS_DE3_6 = (((((ptr[18]) & 3) << 8) + (ptr[19])) * (1) + (0));
+        USS_DE3_7 = ((((ptr[20]) << 2) + (((ptr[21]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_DE3_8 = ((((ptr[9]) << 2) + (((ptr[10]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_DE3_9 = (((((ptr[10]) & 3) << 8) + (ptr[11])) * (1) + (0));
+        USS_DE3_10 = ((((ptr[12]) << 2) + (((ptr[13]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_DE3_11 = (((((ptr[13]) & 3) << 8) + (ptr[14])) * (1) + (0));
+        USS_DE3_12 = (((((ptr[21]) & 3) << 8) + (ptr[22])) * (1) + (0));
+        de_3_rx[0]  = USS_DE3_1;
+        de_3_rx[1]  = USS_DE3_2;
+        de_3_rx[2]  = USS_DE3_3;
+        de_3_rx[3]  = USS_DE3_4;
+        de_3_rx[4]  = USS_DE3_5;
+        de_3_rx[5]  = USS_DE3_6;
+        de_3_rx[6]  = USS_DE3_7;
+        de_3_rx[7]  = USS_DE3_8;
+        de_3_rx[8]  = USS_DE3_9;
+        de_3_rx[9]  = USS_DE3_10;
+        de_3_rx[10] = USS_DE3_11;
+        de_3_rx[11] = USS_DE3_12;
     }
 
     if (gcanid == 0x150) {
@@ -602,6 +781,7 @@ void update_sig(void) {
     }
 
     update_sig_internal();
+    update_de_internal();
 }
 
 
@@ -612,10 +792,16 @@ const float S0 = sin(M_PI/2);
 
 
 static void point4pose(float* x, float* y, float* xo, float *yo, int iter) {
-    int i;
-    for (i = 0; i < iter; i++) {
+    for (int i = 0; i < iter; i++) {
         *(xo + i) = ((*(x + i)) * C0 + (-*(y + i)) * S0) * gScale + X0;
         *(yo + i) = ((-*(y + i)) * C0 - (*(x + i)) * S0) * gScale + Y0;
+    }
+}
+
+
+static void lengthScaling(float* l, float* lo, int iter) {
+    for (int i = 0; i < iter; i++) {
+        *(lo + i) = (*(l + i)) * gScale;
     }
 }
 

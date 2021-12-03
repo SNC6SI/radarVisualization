@@ -15,6 +15,10 @@ extern float gScale;
 #define BLUET   Scalar(255, 260, 135)    // 2
 #define BLUEU   Scalar(255, 226, 198)    // 3
 
+#define GREENDARK Scalar(0, 100, 0)
+#define GREENDIM  Scalar(50, 205, 50)
+#define GREENPALE Scalar(152, 251, 152)
+
 #define XCOL 1200
 #define YROW 1000
 
@@ -24,6 +28,10 @@ extern float gScale;
 #define DEFAULTSCALE  0.5
 #define SCALESTEP     0.01
 #define ORIGINSTEP    5
+
+#define RO_ 88.8
+#define FO_ 365.9
+#define HW_ 95.3
 
 #define RO (88.8 * gScale)
 #define FO (365.9 * gScale)
