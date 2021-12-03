@@ -20,7 +20,9 @@ typedef short rv_status;
 #define KEY_ESC   27
 #define KEY_SPACE 32
 
-#define TS_INT 40000000
+#define FPS 25
+#define WAITMS (1000/FPS)
+#define TS_INT (WAITMS*1000000)
 
 #define UTC 8
 

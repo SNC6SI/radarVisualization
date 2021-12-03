@@ -78,9 +78,9 @@ static void online_mode(void) {
     moveWindow("radar visualization online", -15, 0);
     imshow("radar visualization online", recframe);
     setMouseCallback("radar visualization online", mouseCallBackFunc, NULL);
-    video_writer.open(video_filename, VideoWriter::fourcc('m', 'p', '4', 'v'), 25, Size(XCOL + CAM1_XCOL, YROW), true);
+    video_writer.open(video_filename, VideoWriter::fourcc('m', 'p', '4', 'v'), FPS, Size(XCOL + CAM1_XCOL, YROW), true);
 
-    while ((KEYPressed = waitKey(40)) != KEY_ESC) {
+    while ((KEYPressed = waitKey(WAITMS)) != KEY_ESC) {
         if (KEYPressed == KEY_SPACE) {
             restore_axis();
         }
@@ -106,12 +106,12 @@ static void offline_mode(void) {
         init_axis();
         BasicFileOpenSingle();
         prepareVideoFileName();
-        video_writer.open(video_filename, VideoWriter::fourcc('m', 'p', '4', 'v'), 25, Size(XCOL, YROW), true);
+        video_writer.open(video_filename, VideoWriter::fourcc('m', 'p', '4', 'v'), FPS, Size(XCOL, YROW), true);
         moveWindow("radar visualization offline", -15, 0);
         imshow("radar visualization offline", recframe_offline);
         setMouseCallback("radar visualization offline", mouseCallBackFunc, NULL);
         CreateReplayThread();
-        while ((KEYPressed = waitKey(40)) != KEY_ESC) {
+        while ((KEYPressed = waitKey(WAITMS)) != KEY_ESC) {
             if (KEYPressed == KEY_SPACE) {
                 restore_axis();
             }
@@ -147,7 +147,7 @@ static void offline_mode(void) {
             binlog_filename_read_list[i].copy(binlog_filename_read, binlog_filename_read_list[i].length(), 0);
             binlog_filename_read_len = binlog_filename_read_len_list[i];
             prepareVideoFileName();
-            video_writer.open(video_filename, VideoWriter::fourcc('m', 'p', '4', 'v'), 25, Size(XCOL, YROW), true);
+            video_writer.open(video_filename, VideoWriter::fourcc('m', 'p', '4', 'v'), FPS, Size(XCOL, YROW), true);
             status = init_binlog_read();
             if (status == 0) {
                 while (1) {
