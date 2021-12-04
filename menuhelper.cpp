@@ -73,8 +73,8 @@ static char offline_display_mode_menu[] = {
     "\n ========================="
     "\n Select a Display Mode    "
     "\n ========================="
-    "\n  1. generate video"
-    "\n  2. display only"
+    "\n  1. display only"
+    "\n  2. display and video"
     "\n\n"
 };
 

@@ -106,7 +106,7 @@ static void offline_mode(void) {
         init_sig();
         init_axis();
         BasicFileOpenSingle();
-        if (selected_offline_display_mode == 1) {
+        if (selected_offline_display_mode == 2) {
             prepareVideoFileName();
             video_writer.open(video_filename, VideoWriter::fourcc('m', 'p', '4', 'v'), FPS, Size(XCOL, YROW), true);
         }
@@ -124,7 +124,7 @@ static void offline_mode(void) {
             update_img();
             update_video_offline();
             imshow("radar visualization offline", recframe_offline);
-            if (selected_offline_display_mode == 1) {
+            if (selected_offline_display_mode == 2) {
                 video_writer.write(recframe_offline);
             }
             queryProgressPercentDisplay();
