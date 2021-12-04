@@ -101,12 +101,15 @@ static void offline_mode(void) {
     select_offline_mode();
     initProgreassPercent();
     if (selected_offline_mode == 1) {
+        select_offline_display_mode();
         greadcnt = 0;
         init_sig();
         init_axis();
         BasicFileOpenSingle();
-        prepareVideoFileName();
-        video_writer.open(video_filename, VideoWriter::fourcc('m', 'p', '4', 'v'), FPS, Size(XCOL, YROW), true);
+        if (selected_offline_display_mode == 1) {
+            prepareVideoFileName();
+            video_writer.open(video_filename, VideoWriter::fourcc('m', 'p', '4', 'v'), FPS, Size(XCOL, YROW), true);
+        }
         moveWindow("radar visualization offline", -15, 0);
         imshow("radar visualization offline", recframe_offline);
         setMouseCallback("radar visualization offline", mouseCallBackFunc, NULL);
@@ -121,8 +124,9 @@ static void offline_mode(void) {
             update_img();
             update_video_offline();
             imshow("radar visualization offline", recframe_offline);
-            video_writer.write(recframe_offline);
-            queryProgressPercent();
+            if (selected_offline_display_mode == 1) {
+                video_writer.write(recframe_offline);
+            }
             queryProgressPercentDisplay();
             if (gReplayCANThreadRun) {
                 if (!query_pause_status()) {

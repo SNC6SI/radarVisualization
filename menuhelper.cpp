@@ -6,6 +6,7 @@
 
 int selected_mode;
 int selected_offline_mode;
+int selected_offline_display_mode;
 
 
 static char mode_menu[] = {
@@ -62,6 +63,36 @@ void select_offline_mode(void) {
         selected_offline_mode = ch - '0';
         if ((selected_offline_mode != 1) && (selected_offline_mode != 2)) {
             selected_offline_mode = 0U;
+            printf(" Invalid selection %c...Try again...\n", ch);
+        }
+    }
+}
+
+
+static char offline_display_mode_menu[] = {
+    "\n ========================="
+    "\n Select a Display Mode    "
+    "\n ========================="
+    "\n  1. generate video"
+    "\n  2. display only"
+    "\n\n"
+};
+
+void select_offline_display_mode(void) {
+    int ch;
+    printf("%s", offline_display_mode_menu);
+    selected_offline_display_mode = 0;
+    while (!selected_offline_display_mode) {
+        fflush(stdin);
+        ch = getch();
+        printf("  %c\n", ch);
+        if (ch == KEY_ESC) {
+            selected_offline_display_mode = 0U;
+            break;
+        }
+        selected_offline_display_mode = ch - '0';
+        if ((selected_offline_display_mode != 1) && (selected_offline_display_mode != 2)) {
+            selected_offline_display_mode = 0U;
             printf(" Invalid selection %c...Try again...\n", ch);
         }
     }
