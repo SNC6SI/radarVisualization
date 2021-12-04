@@ -1,7 +1,7 @@
 #ifndef _REPLAYHELPER_H_
 #define _REPLAYHELPER_H_
 
-extern int pauseStatus;
+extern int gPauseStatus;
 extern int gReplayCANThreadRun;
 extern unsigned long greadcnt;
 extern char greadcnt_fraction[512];

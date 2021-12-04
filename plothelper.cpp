@@ -32,6 +32,7 @@ static float grid_y[LINSPACEMAXNUM];
 static int grid_num_x = 0;
 static int grid_num_y = 0;
 
+static int gPlotDeStatus;
 static unsigned int alive_count = 0U;
 
 static const char cGEAR[5] = { 'P','R', 'N', 'D', 'E' };
@@ -42,6 +43,7 @@ static const vector<string> mlegend_blue = { "Low", "High" , "Traversable" , "Un
 void init_axis(void) {
 	linspace_step(0, XCOL, LINSPACESTEP, grid_x, &grid_num_x);
 	linspace_step(0, YROW, LINSPACESTEP, grid_y, &grid_num_y);
+	gPlotDeStatus = 1;
 }
 
 
@@ -52,12 +54,19 @@ void restore_axis(void) {
 }
 
 
+void toggle_de_status(void) {
+	gPlotDeStatus = !gPlotDeStatus;
+}
+
+
 void update_img(void) {
 	canvas.setTo(Scalar::all(255));
 	alive_count++;
 	plot_axis();
 	plot_vehicle();
-	plot_echo();
+	if (gPlotDeStatus) {
+		plot_echo();
+	}
 	plot_objs();
 	plot_slots();
 	plot_misc();

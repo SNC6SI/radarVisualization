@@ -84,6 +84,9 @@ static void online_mode(void) {
         if (KEYPressed == KEY_SPACE) {
             restore_axis();
         }
+        if ((KEYPressed == KEY_D) || (KEYPressed == KEY_d)) {
+            toggle_de_status();
+        }
         update_img();
         update_video_online();
         imshow("radar visualization online", recframe);
@@ -120,6 +123,9 @@ static void offline_mode(void) {
             }
             if (KEYPressed == KEY_ENTER) {
                 toggle_pause_status();
+            }
+            if ((KEYPressed == KEY_D) || (KEYPressed == KEY_d)) {
+                toggle_de_status();
             }
             update_img();
             update_video_offline();

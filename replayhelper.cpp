@@ -8,7 +8,7 @@ extern char video_filename[512];
 extern char binlog_filename_read[512];
 extern int binlog_filename_read_len;
 
-int pauseStatus;
+int gPauseStatus;
 int gReplayCANThreadRun;
 unsigned long greadcnt;
 char greadcnt_fraction[512] = {0};
@@ -108,10 +108,10 @@ void deinit_progressPercent(void) {
 
 
 void toggle_pause_status(void) {
-    pauseStatus = !pauseStatus;
+    gPauseStatus = !gPauseStatus;
 }
 
 
 int query_pause_status(void) {
-    return pauseStatus;
+    return gPauseStatus;
 }
