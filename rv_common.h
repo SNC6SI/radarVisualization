@@ -24,6 +24,9 @@ typedef short rv_status;
 #define WAITMS (1000/FPS)
 #define TS_INT (WAITMS*1000000)
 
+#define SILENT_PERCENT_THRESHOLD  1
+#define DISPLAY_PERCENT_THRESHOLD  0.1
+
 #define UTC 8
 
 #define FILENAMEPRE       "D:/rv_test/rv"

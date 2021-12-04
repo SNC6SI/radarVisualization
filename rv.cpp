@@ -123,6 +123,7 @@ static void offline_mode(void) {
             imshow("radar visualization offline", recframe_offline);
             video_writer.write(recframe_offline);
             queryProgressPercent();
+            queryProgressPercentDisplay();
             if (gReplayCANThreadRun) {
                 if (!query_pause_status()) {
                     SetEvent(g_hEvent);
@@ -156,7 +157,7 @@ static void offline_mode(void) {
                         update_img();
                         update_video_offline();
                         video_writer.write(recframe_offline);
-                        queryProgressPercent();
+                        queryProgressPercentSilent();
                     }
                     else {
                         deinit_progressPercent();

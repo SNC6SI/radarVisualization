@@ -14,7 +14,8 @@ extern void prepareVideoFileName(void);
 
 
 extern void initProgreassPercent(void);
-extern void queryProgressPercent(void);
+extern void queryProgressPercentSilent(void);
+extern void queryProgressPercentDisplay(void);
 extern void deinit_progressPercent(void);
 
 extern void toggle_pause_status(void);
