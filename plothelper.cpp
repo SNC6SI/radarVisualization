@@ -84,6 +84,8 @@ static void plot_axis(void) {
 	for (i = 0; i < grid_num_y; i++) {
 		line(canvas, Point(0, grid_y[i]), Point(XCOL, grid_y[i]), GRAY, 1);
 	}
+	//arrowedLine(canvas, Point(X0, Y0), Point(X0, 0), GRAY, 4, LINE_8, 0, 0.8);
+	//arrowedLine(canvas, Point(X0, Y0), Point(0, Y0), GRAY, 4, LINE_8, 0, 0.8);
 }
 
 
