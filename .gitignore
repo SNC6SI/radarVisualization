@@ -3,3 +3,5 @@ exec
 obj
 .svn
 m/*.ini
+record/*.mp4
+record/*.blf
