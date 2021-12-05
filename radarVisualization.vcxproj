@@ -374,6 +374,7 @@
     <ClInclude Include="menuhelper.h" />
     <ClInclude Include="mousehelper.h" />
     <ClInclude Include="replayhelper.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="rv_common.h" />
     <ClInclude Include="rv_param.h" />
     <ClInclude Include="plothelper.h" />
@@ -397,6 +398,12 @@
     <ClCompile Include="systimehelper.cpp" />
     <ClCompile Include="vectorhelper.cpp" />
     <ClCompile Include="videohelper.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="radarVisulization.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resource\radar.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
