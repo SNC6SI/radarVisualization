@@ -24,7 +24,6 @@ static void plot_anno(void);
 static void plot_echo(void);
 
 static void linspace_step(float x1, float x2, int step, float* xo, int* num);
-static void point2pose(float* x, float* y, int iter);
 static void DrawDashedLine(Mat& img, Point pt1, Point pt2, Scalar color, int thickness, string style, int gap);
 
 static float grid_x[LINSPACEMAXNUM];
@@ -307,12 +306,12 @@ static void DrawDashedLine(Mat& img, Point pt1, Point pt2, Scalar color, int thi
 }
 
 
-static void point2pose(float* x, float* y, int iter) {
+void point2pose(float* x, float* y, int iter) {
 	int i;
 	float xx, yy;
 	for (i = 0; i < iter; i++) {
-		xx = (*x - X0) / gScale;
-		yy = - (*y - Y0) / gScale;
+		xx = (*(x + i) - X0) / gScale;
+		yy = - (*(y + i) - Y0) / gScale;
 		*(x + i) = xx * C0 + yy * S0;
 		*(y + i) = yy * C0 - xx * S0;
 	}
