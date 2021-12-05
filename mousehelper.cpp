@@ -16,6 +16,7 @@ static int measureStatus;
 static float xf, yf;
 static vector<float> x_meas, y_meas;
 vector<float> x_meas_label, y_meas_label;
+vector<float> meas_dist;
 
 template <typename T> int sgn(T val) {
     return (T(0) < val) - (val < T(0));
@@ -42,6 +43,7 @@ static void empty_measure_data(void){
     y_meas.clear();
     x_meas_label.clear();
     y_meas_label.clear();
+    meas_dist.clear();
 }
 
 
@@ -56,6 +58,11 @@ void mouseCallBackFunc(int event, int x, int y, int flags, void* userdata) {
             point2pose(&xf, &yf, 1);
             x_meas_label.push_back(xf);
             y_meas_label.push_back(yf);
+            int numPoints = query_measure_data_size();
+            if(numPoints%2==0){
+                meas_dist.push_back(sqrt((x_meas_label[numPoints-1] - x_meas_label[numPoints-2]) * (x_meas_label[numPoints-1] - x_meas_label[numPoints-2]) +
+                    (y_meas_label[numPoints - 1] - y_meas_label[numPoints - 2]) * (y_meas_label[numPoints - 1] - y_meas_label[numPoints - 2])));
+            }
         }
     }
     else {

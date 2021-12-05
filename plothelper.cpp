@@ -278,7 +278,10 @@ static void plot_measure(void) {
 	int numPoints = query_measure_data_size();
 	float x_meas_local[2], y_meas_local[2];
 	static vector<float> x_meas_follow, y_meas_follow;
+	static float x_dist, y_dist;
 	if (numPoints > 0) {
+		x_meas_follow = x_meas_label;
+		y_meas_follow = y_meas_label;
 		point4pose(&x_meas_label[0], &y_meas_label[0], &x_meas_follow[0], &y_meas_follow[0], numPoints);
 	}
 	for (int i = 0; i < numPoints / 2; i++) {
@@ -287,6 +290,11 @@ static void plot_measure(void) {
 		putText(canvas, label, Point(x_meas_follow[2 * i], y_meas_follow[2 * i]), FONT_HERSHEY_SIMPLEX, 0.35, OrangeRed1, 1, LINE_8, false);
 		sprintf(label, "(%4d, %4d)", (int)x_meas_label[2 * i + 1], (int)y_meas_label[2 * i + 1]);
 		putText(canvas, label, Point(x_meas_follow[2 * i + 1], y_meas_follow[2 * i + 1]), FONT_HERSHEY_SIMPLEX, 0.35, OrangeRed1, 1, LINE_8, false);
+
+		x_dist = (x_meas_follow[2 * i + 1] - x_meas_follow[2 * i]) / 2 + x_meas_follow[2 * i];
+		y_dist = (y_meas_follow[2 * i + 1] - y_meas_follow[2 * i]) / 2 + y_meas_follow[2 * i];
+		sprintf(label, "%4d", (int)meas_dist[i]);
+		putText(canvas, label, Point(x_dist, y_dist), FONT_HERSHEY_SIMPLEX, 0.35, OrangeRed1, 1, LINE_8, false);
 	}
 }
 
