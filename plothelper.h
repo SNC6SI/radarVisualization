@@ -8,4 +8,6 @@ void restore_axis(void);
 void toggle_de_status(void);
 void update_img(void);
 
+void point2pose(float* x, float* y, int iter);
+
 #endif
