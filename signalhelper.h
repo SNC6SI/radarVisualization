@@ -47,4 +47,6 @@ extern const float S0;
 void init_sig(void);
 void update_sig(void);
 
+void point4pose(float* x, float* y, float* xo, float* yo, int iter);
+
 #endif

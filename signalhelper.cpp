@@ -6,7 +6,6 @@
 #include "signalhelper.h"
 
 static float calcPointDis(float x0, float y0, float x1, float y1);
-static void point4pose(float* x, float* y, float* xo, float* yo, int iter);
 static void lengthScaling(float* l, float* lo, int iter);
 
 float MapObj01P1X=0.0F;
@@ -785,7 +784,7 @@ const float C0 = cos(M_PI/2);
 const float S0 = sin(M_PI/2);
 
 
-static void point4pose(float* x, float* y, float* xo, float *yo, int iter) {
+void point4pose(float* x, float* y, float* xo, float *yo, int iter) {
     for (int i = 0; i < iter; i++) {
         *(xo + i) = ((*(x + i)) * C0 + (-*(y + i)) * S0) * gScale + X0;
         *(yo + i) = ((-*(y + i)) * C0 - (*(x + i)) * S0) * gScale + Y0;
