@@ -34,6 +34,7 @@ static void offline_mode(void);
 int main(int argc, char* argv[]) {
     utils::logging::setLogLevel(utils::logging::LOG_LEVEL_WARNING);
     select_mode();
+    init_measure_status();
     if (selected_mode == 1) {
         online_mode();
     }
@@ -87,6 +88,9 @@ static void online_mode(void) {
         if ((KEYPressed == KEY_D) || (KEYPressed == KEY_d)) {
             toggle_de_status();
         }
+        if ((KEYPressed == KEY_M) || (KEYPressed == KEY_m)) {
+            toggle_measure_status();
+        }
         update_img();
         update_video_online();
         imshow("radar visualization online", recframe);
@@ -126,6 +130,9 @@ static void offline_mode(void) {
             }
             if ((KEYPressed == KEY_D) || (KEYPressed == KEY_d)) {
                 toggle_de_status();
+            }
+            if ((KEYPressed == KEY_M) || (KEYPressed == KEY_m)) {
+                toggle_measure_status();
             }
             update_img();
             update_video_offline();

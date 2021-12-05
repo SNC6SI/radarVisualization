@@ -19,8 +19,12 @@ typedef short rv_status;
 #define KEY_ENTER 13
 #define KEY_ESC   27
 #define KEY_SPACE 32
+
 #define KEY_D     68
 #define KEY_d     100
+
+#define KEY_M     77
+#define KEY_m     109
 
 #define FPS 25
 #define WAITMS (1000/FPS)

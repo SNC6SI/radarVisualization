@@ -2,33 +2,77 @@
 #include <opencv2/opencv.hpp>
 #include "rv_param.h"
 #include "signalhelper.h"
+#include "plothelper.h"
 
 using namespace std;
 using namespace cv;
 
 unsigned char LBUTTONDOWN_flg = 0;
 static unsigned char MBUTTONDOWN_flg = 0;
+
 int x_anno, y_anno;
 static int x_ud, y_ud;
+static int measureStatus;
+static float xf, yf;
+static vector<float> x_meas, y_meas;
+vector<float> x_meas_label, y_meas_label;
 
 template <typename T> int sgn(T val) {
     return (T(0) < val) - (val < T(0));
 }
 
+void init_measure_status(void) {
+    measureStatus = 0;
+}
+
+void toggle_measure_status(void) {
+    measureStatus = !measureStatus;
+}
+
+int query_measure_status(void) {
+    return measureStatus;
+}
+
+int query_measure_data_size(void) {
+    return x_meas.size();
+}
+
+static void empty_measure_data(void){
+    x_meas.clear();
+    y_meas.clear();
+    x_meas_label.clear();
+    y_meas_label.clear();
+}
+
 
 void mouseCallBackFunc(int event, int x, int y, int flags, void* userdata) {
-    if (event == EVENT_LBUTTONDOWN) {
-        LBUTTONDOWN_flg = 1;
-        x_anno = x;
-        y_anno = y;
-    }
-    else if (event == EVENT_LBUTTONUP) {
+    if (query_measure_status()) {
         LBUTTONDOWN_flg = 0;
+        if (event == EVENT_LBUTTONDOWN) {
+            x_meas.push_back((float)x);
+            y_meas.push_back((float)y);
+            xf = (float)x;
+            yf = (float)y;
+            point2pose(&xf, &yf, 1);
+            x_meas_label.push_back(xf);
+            y_meas_label.push_back(yf);
+        }
     }
-    if (LBUTTONDOWN_flg) {
-        if (event == EVENT_MOUSEMOVE) {
+    else {
+        empty_measure_data();
+        if (event == EVENT_LBUTTONDOWN) {
+            LBUTTONDOWN_flg = 1;
             x_anno = x;
             y_anno = y;
+        }
+        else if (event == EVENT_LBUTTONUP) {
+            LBUTTONDOWN_flg = 0;
+        }
+        if (LBUTTONDOWN_flg) {
+            if (event == EVENT_MOUSEMOVE) {
+                x_anno = x;
+                y_anno = y;
+            }
         }
     }
 

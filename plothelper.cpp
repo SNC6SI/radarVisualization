@@ -21,6 +21,7 @@ static void plot_slots(void);
 static void plot_misc(void);
 static void plot_info(void);
 static void plot_anno(void);
+static void plot_measure(void);
 static void plot_echo(void);
 
 static void linspace_step(float x1, float x2, int step, float* xo, int* num);
@@ -31,7 +32,7 @@ static float grid_y[LINSPACEMAXNUM];
 static int grid_num_x = 0;
 static int grid_num_y = 0;
 
-static int gPlotDeStatus;
+static int plotDeStatus;
 static unsigned int alive_count = 0U;
 
 static const char cGEAR[5] = { 'P','R', 'N', 'D', 'E' };
@@ -42,7 +43,7 @@ static const vector<string> mlegend_blue = { "Low", "High" , "Traversable" , "Un
 void init_axis(void) {
 	linspace_step(0, XCOL, LINSPACESTEP, grid_x, &grid_num_x);
 	linspace_step(0, YROW, LINSPACESTEP, grid_y, &grid_num_y);
-	gPlotDeStatus = 1;
+	plotDeStatus = 1;
 }
 
 
@@ -54,7 +55,7 @@ void restore_axis(void) {
 
 
 void toggle_de_status(void) {
-	gPlotDeStatus = !gPlotDeStatus;
+	plotDeStatus = !plotDeStatus;
 }
 
 
@@ -63,7 +64,7 @@ void update_img(void) {
 	alive_count++;
 	plot_axis();
 	plot_vehicle();
-	if (gPlotDeStatus) {
+	if (plotDeStatus) {
 		plot_echo();
 	}
 	plot_objs();
@@ -71,6 +72,7 @@ void update_img(void) {
 	plot_misc();
 	plot_info();
 	plot_anno();
+	plot_measure();
 }
 
 
@@ -267,6 +269,24 @@ static void plot_anno(void) {
 		else { // 4
 			putText(canvas, label, Point(x_anno, y_anno + 20), FONT_HERSHEY_SIMPLEX, 0.35, DIMGREY, 1, LINE_8, false);
 		}
+	}
+}
+
+
+static void plot_measure(void) {
+	char label[256] = { 0 };
+	int numPoints = query_measure_data_size();
+	float x_meas_local[2], y_meas_local[2];
+	static vector<float> x_meas_follow, y_meas_follow;
+	if (numPoints > 0) {
+		point4pose(&x_meas_label[0], &y_meas_label[0], &x_meas_follow[0], &y_meas_follow[0], numPoints);
+	}
+	for (int i = 0; i < numPoints / 2; i++) {
+		DrawDashedLine(canvas, Point(x_meas_follow[2 * i], y_meas_follow[2 * i]), Point(x_meas_follow[2 * i + 1], y_meas_follow[2 * i + 1]), OrangeRed1, 1, "dotted", 4);
+		sprintf(label, "(%4d, %4d)", (int)x_meas_label[2 * i], (int)y_meas_label[2 * i]);
+		putText(canvas, label, Point(x_meas_follow[2 * i], y_meas_follow[2 * i]), FONT_HERSHEY_SIMPLEX, 0.35, OrangeRed1, 1, LINE_8, false);
+		sprintf(label, "(%4d, %4d)", (int)x_meas_label[2 * i + 1], (int)y_meas_label[2 * i + 1]);
+		putText(canvas, label, Point(x_meas_follow[2 * i + 1], y_meas_follow[2 * i + 1]), FONT_HERSHEY_SIMPLEX, 0.35, OrangeRed1, 1, LINE_8, false);
 	}
 }
 

@@ -23,6 +23,8 @@ extern float gScale;
 #define LightBlue1 Scalar(255, 239, 191)
 #define LightYellow2 Scalar(209, 238, 238)
 
+#define OrangeRed1 Scalar(0, 69, 255)
+
 #define XCOL 1200
 #define YROW 1000
 
