@@ -20,7 +20,8 @@
 
 #pragma comment(linker, "\"/manifestdependency:type='Win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 
-
+extern char record_folder[512];
+extern int record_folder_len;
 extern char binlog_filename_read[512];
 extern std::vector<std::string> binlog_filename_read_list;
 extern int binlog_filename_read_len;
@@ -103,6 +104,42 @@ HRESULT CDialogEventHandler_CreateInstance(REFIID riid, void** ppv) {
     if (SUCCEEDED(hr)) {
         hr = pDialogEventHandler->QueryInterface(riid, ppv);
         pDialogEventHandler->Release();
+    }
+    return hr;
+}
+
+
+HRESULT BasicFolderOpenSingle() {
+    IFileDialog* pfd = NULL;
+    IFileDialogEvents* pfde = NULL;
+    DWORD dwCookie;
+    DWORD dwFlags;
+    TCHAR currentDir[512];
+    wchar_t wcurrentDir[MAX_PATH];
+    PWSTR pszFilePath = NULL;
+    IShellItem* psiResult;
+    IShellItem* psiFolder;
+    HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+    hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pfd));
+    hr = CDialogEventHandler_CreateInstance(IID_PPV_ARGS(&pfde));
+    hr = pfd->Advise(pfde, &dwCookie);
+    hr = pfd->GetOptions(&dwFlags);
+    hr = pfd->SetOptions(dwFlags | FOS_FORCEFILESYSTEM | FOS_PICKFOLDERS);
+    hr = pfd->SetTitle(L"Select a folder to save record...");
+    GetCurrentDirectory(MAX_PATH, currentDir);
+    mbstowcs(wcurrentDir, currentDir, 512);
+    hr = SHCreateItemFromParsingName(wcurrentDir, NULL, IID_PPV_ARGS(&psiFolder));
+    hr = pfd->Show(NULL);
+    if (SUCCEEDED(hr)) {
+        hr = pfd->GetResult(&psiResult);
+        hr = psiResult->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+        setlocale(LC_CTYPE, "");
+        record_folder_len = wcstombs(record_folder, pszFilePath, 512);
+        CoTaskMemFree(pszFilePath);
+        psiResult->Release();
+        pfd->Unadvise(dwCookie);
+        pfde->Release();
+        pfd->Release();
     }
     return hr;
 }

@@ -12,6 +12,6 @@ extern SYSTEMTIME systemTime, localTime;
 extern FILETIME timeInSec;
 extern TM_u TM;
 
-void get_rectime(void);
+void gen_name_with_rectime(void);
 
 #endif

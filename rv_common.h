@@ -35,9 +35,10 @@ typedef short rv_status;
 
 #define UTC 8
 
-#define FILENAMEPRE       "D:/rv_test/rv"
-#define FILENAMEPOSTVIDEO  ".mp4"
-#define FILENAMEPOSTBINLOG ".blf"
+#define DEFAULTRECORDFOLDER "./record"
+#define FILENAMEPRE         "rv"
+#define FILENAMEPOSTVIDEO   ".mp4"
+#define FILENAMEPOSTBINLOG  ".blf"
 
 const char videoext[] = FILENAMEPOSTVIDEO;
 

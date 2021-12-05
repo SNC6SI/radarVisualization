@@ -19,6 +19,8 @@
 using namespace std;
 using namespace cv;
 
+char record_folder[512];
+int record_folder_len;
 char video_filename[512];
 char binlog_filename_write[512];
 char binlog_filename_read[512];
@@ -51,9 +53,8 @@ static void online_mode(void) {
     XLstatus      xlStatus;
     int           activated = 0;
     rv_status     rvStatus;
-    
-    get_rectime();
-
+    BasicFolderOpenSingle();
+    gen_name_with_rectime();
     xlStatus = rvInitDriver();
     if (XL_SUCCESS == xlStatus) {
         select_can_channel();

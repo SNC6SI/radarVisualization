@@ -4,7 +4,9 @@
 #include <windows.h> 
 #include <wchar.h>
 
+extern HRESULT BasicFolderOpenSingle();
 extern HRESULT BasicFileOpenSingle();
 extern HRESULT BasicFileOpenMulti();
+
 
 #endif
