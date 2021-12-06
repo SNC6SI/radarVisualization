@@ -23,12 +23,16 @@ typedef short rv_status;
 #define KEY_D     68
 #define KEY_d     100
 
+#define KEY_F     70
+#define KEY_f     102
+
 #define KEY_M     77
 #define KEY_m     109
 
 #define FPS 25
 #define WAITMS (1000/FPS)
 #define TS_INT (WAITMS*1000000)
+#define TS_ADDITIONAL_DEFAULT (TS_INT*FPS)
 
 #define SILENT_PERCENT_THRESHOLD  1
 #define DISPLAY_PERCENT_THRESHOLD  0.1

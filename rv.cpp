@@ -135,6 +135,9 @@ static void offline_mode(void) {
             if ((KEYPressed == KEY_M) || (KEYPressed == KEY_m)) {
                 toggle_measure_status();
             }
+            if ((KEYPressed == KEY_F) || (KEYPressed == KEY_f)) {
+                push_fast_forward();
+            }
             update_img();
             update_video_offline();
             imshow("radar visualization offline", recframe_offline);

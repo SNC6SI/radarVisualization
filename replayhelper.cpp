@@ -21,6 +21,18 @@ static double percent = 0;
 static double percent_anchor = 0;
 static char backspace[256];
 
+static unsigned __int64 ts_additional;
+
+
+void push_fast_forward(void){
+    ts_additional = TS_ADDITIONAL_DEFAULT;
+}
+
+
+void restore_fash_forward(void) {
+    ts_additional = 0;
+}
+
 
 int update_sig_interval_wrapper(void) {
     int status = NO_ERROR;
@@ -30,8 +42,9 @@ int update_sig_interval_wrapper(void) {
         gcanid = messageFD.mID;
         ts = messageFD.mHeader.mObjectTimeStamp;
         update_sig();
-        if (ts - ts_anchor > TS_INT) {
+        if (ts - ts_anchor > (TS_INT + ts_additional)) {
             ts_anchor = ts;
+            restore_fash_forward();
             break;
         }
     }
@@ -78,6 +91,7 @@ void prepareVideoFileName(void) {
 void initProgreassPercent(void) {
     memset(backspace, '\b', 256);
     backspace[255] = '\0';
+    ts_additional = 0;
 }
 
 
