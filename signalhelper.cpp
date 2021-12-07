@@ -235,6 +235,12 @@ float de_cc_y_raw[12];
 float de_cc_x[12];
 float de_cc_y[12];
 
+float ps_x_raw[28];
+float ps_y_raw[28];
+float ps_x[28];
+float ps_y[28];
+float ps_r_raw;
+float ps_r;
 
 static const float halt_fov_short = 60;
 static const float halt_fov_long = 30;
@@ -313,6 +319,78 @@ static void update_de_internal(void) {
     lengthScaling(&de_1_rx[0], &de_1[0], sizeof(de_1_rx) / sizeof(de_1_rx[0]));
     lengthScaling(&de_2_rx[0], &de_2[0], sizeof(de_2_rx) / sizeof(de_2_rx[0]));
     lengthScaling(&de_3_rx[0], &de_3[0], sizeof(de_3_rx) / sizeof(de_3_rx[0]));
+}
+
+
+static void update_pas_sdw_internal(void) {
+    ps_x_raw[0] = FO_ - GAP_ / 2;
+    ps_x_raw[1] = FO_ - (FO_ + RO_) / 4.0 + GAP_ / 2;
+    ps_x_raw[2] = FO_ - (FO_ + RO_) / 4.0 - GAP_ / 2;
+    ps_x_raw[3] = FO_ - (FO_ + RO_) / 2.0 + GAP_ / 2;
+    ps_x_raw[4] = FO_ - (FO_ + RO_) / 2.0 - GAP_ / 2;
+    ps_x_raw[5] = FO_ - (FO_ + RO_) / 4.0 * 3.0 + GAP_ / 2;
+    ps_x_raw[6] = FO_ - (FO_ + RO_) / 4.0 * 3.0 - GAP_ / 2;
+    ps_x_raw[7] = FO_ - (FO_ + RO_) + GAP_ / 2;
+
+    ps_x_raw[8] = FO_ - GAP_ / 2;
+    ps_x_raw[9] = FO_ - (FO_ + RO_) / 4.0 + GAP_ / 2;
+    ps_x_raw[10] = FO_ - (FO_ + RO_) / 4.0 - GAP_ / 2;
+    ps_x_raw[11] = FO_ - (FO_ + RO_) / 2.0 + GAP_ / 2;
+    ps_x_raw[12] = FO_ - (FO_ + RO_) / 2.0 - GAP_ / 2;
+    ps_x_raw[13] = FO_ - (FO_ + RO_) / 4.0 * 3.0 + GAP_ / 2;
+    ps_x_raw[14] = FO_ - (FO_ + RO_) / 4.0 * 3.0 - GAP_ / 2;
+    ps_x_raw[15] = FO_ - (FO_ + RO_) + GAP_ / 2;
+
+    ps_x_raw[16] = (FO_ + SP_);
+    ps_x_raw[17] = (FO_ + SP_);
+    ps_x_raw[18] = (FO_ + SP_);
+    ps_x_raw[19] = (FO_ + SP_);
+
+    ps_x_raw[20] = -(RO_ + SP_);
+    ps_x_raw[21] = -(RO_ + SP_);
+    ps_x_raw[22] = -(RO_ + SP_);
+    ps_x_raw[23] = -(RO_ + SP_);
+
+    ps_x_raw[24] = (FO_ - HW_);
+    ps_x_raw[25] = (FO_ - HW_);
+    ps_x_raw[26] = (-RO_ + HW_);
+    ps_x_raw[27] = (-RO_ + HW_);
+
+    ps_y_raw[0] = (HW_ + SP_);
+    ps_y_raw[1] = (HW_ + SP_);
+    ps_y_raw[2] = (HW_ + SP_);
+    ps_y_raw[3] = (HW_ + SP_);
+    ps_y_raw[4] = (HW_ + SP_);
+    ps_y_raw[5] = (HW_ + SP_);
+    ps_y_raw[6] = (HW_ + SP_);
+    ps_y_raw[7] = (HW_ + SP_);
+
+    ps_y_raw[8] = -(HW_ + SP_);
+    ps_y_raw[9] = -(HW_ + SP_);
+    ps_y_raw[10] = -(HW_ + SP_);
+    ps_y_raw[11] = -(HW_ + SP_);
+    ps_y_raw[12] = -(HW_ + SP_);
+    ps_y_raw[13] = -(HW_ + SP_);
+    ps_y_raw[14] = -(HW_ + SP_);
+    ps_y_raw[15] = -(HW_ + SP_);
+
+    ps_y_raw[16] = (HW_ - GAP_ / 2);
+    ps_y_raw[17] = (GAP_ / 2);
+    ps_y_raw[18] = -(GAP_ / 2);
+    ps_y_raw[19] = -(HW_ - GAP_ / 2);
+
+    ps_y_raw[20] = (HW_ - GAP_ / 2);
+    ps_y_raw[21] = (GAP_ / 2);
+    ps_y_raw[22] = -(GAP_ / 2);
+    ps_y_raw[23] = -(HW_ - GAP_ / 2);
+
+    ps_y_raw[24] = 0.0;
+    ps_y_raw[25] = 0.0;
+    ps_y_raw[26] = 0.0;
+    ps_y_raw[27] = 0.0;
+
+    ps_r_raw = 1.4 * (HW_ + GAP_);
+    lengthScaling(&ps_r_raw, &ps_r, 1);
 }
 
 
@@ -811,6 +889,7 @@ void update_sig(void) {
 
     update_sig_internal();
     update_de_internal();
+    update_pas_sdw_internal();
 }
 
 

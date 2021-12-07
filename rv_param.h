@@ -38,6 +38,8 @@ extern float gScale;
 #define RO_ 88.8
 #define FO_ 365.9
 #define HW_ 95.3
+#define GAP_ 5.0
+#define SP_  15.0
 
 #define RO (88.8 * gScale)
 #define FO (365.9 * gScale)
