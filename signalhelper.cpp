@@ -265,18 +265,18 @@ static void update_sig_internal(void) {
 
 
 static void update_de_internal(void) {
-    de_cc_x_raw[0] = 3.0 / 4.0 * FO_;
+    de_cc_x_raw[0] = FO_ - 1.0 / 4.0 * RO_;
     de_cc_x_raw[1] = FO_;
     de_cc_x_raw[2] = FO_;
     de_cc_x_raw[3] = FO_;
     de_cc_x_raw[4] = FO_;
-    de_cc_x_raw[5] = 3.0 / 4.0 * FO_;
+    de_cc_x_raw[5] = FO_ - 1.0 / 4.0 * RO_;
     de_cc_x_raw[6] = -3.0 / 4.0 * RO_;
     de_cc_x_raw[7] = -RO_;
     de_cc_x_raw[8] = -RO_;
     de_cc_x_raw[9] = -RO_;
     de_cc_x_raw[10] = -RO_;
-    de_cc_x_raw[11] = -3.0 / 4.0 * RO_;;
+    de_cc_x_raw[11] = -3.0 / 4.0 * RO_;
 
     de_cc_y_raw[0] =  HW_;
     de_cc_y_raw[1] =  3.0 / 4.0 * HW_;
