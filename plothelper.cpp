@@ -277,9 +277,12 @@ static void plot_anno(void) {
 
 static void plot_measure(void) {
 	char label[256] = { 0 };
-	int numPoints = query_measure_data_size();
 	static vector<float> x_meas_follow, y_meas_follow;
 	static float x_dist, y_dist;
+	if (!query_measure_status()) {
+		empty_measure_data();
+	}
+	int numPoints = query_measure_data_size();
 	if (numPoints > 0) {
 		x_meas_follow = x_meas_label;
 		y_meas_follow = y_meas_label;

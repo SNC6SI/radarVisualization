@@ -10,6 +10,7 @@ void init_measure_status(void);
 void toggle_measure_status(void);
 int query_measure_status(void);
 int query_measure_data_size(void);
+void empty_measure_data(void);
 
 void mouseCallBackFunc(int event, int x, int y, int flags, void* userdata);
 
