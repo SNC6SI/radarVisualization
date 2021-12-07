@@ -38,7 +38,7 @@ int query_measure_data_size(void) {
     return x_meas.size();
 }
 
-static void empty_measure_data(void){
+void empty_measure_data(void){
     x_meas.clear();
     y_meas.clear();
     x_meas_label.clear();

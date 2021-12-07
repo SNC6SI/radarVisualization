@@ -141,6 +141,23 @@ unsigned char ParkLeftslot1ID = 0.0F;
 unsigned char ParkRightslot0ID = 0.0F;
 unsigned char ParkRightslot1ID = 0.0F;
 
+float PAS_FL_Distance = 0.0F;
+float PAS_FLM_Distance = 0.0F;
+float PAS_FRM_Distance = 0.0F;
+float PAS_FR_Distance = 0.0F;
+float PAS_RL_Distance = 0.0F;
+float PAS_RLM_Distance = 0.0F;
+float PAS_RRM_Distance = 0.0F;
+float PAS_RR_Distance = 0.0F;
+float SDW_FL_1SideDistance = 0.0F;
+float SDW_FL_2SideDistance = 0.0F;
+float SDW_RL_2SideDistance = 0.0F;
+float SDW_RL_1SideDistance = 0.0F;
+float SDW_FR_1SideDistance = 0.0F;
+float SDW_FR_2SideDistance = 0.0F;
+float SDW_RR_2SideDistance = 0.0F;
+float SDW_RR_1SideDistance = 0.0F;
+
 float USS_DE1_1=0.0F;
 float USS_DE1_2 = 0.0F;
 float USS_DE1_3 = 0.0F;
@@ -760,6 +777,25 @@ void update_sig(void) {
         de_3_rx[9]  = USS_DE3_10;
         de_3_rx[10] = USS_DE3_11;
         de_3_rx[11] = USS_DE3_12;
+    }
+
+    if (gcanid == 0x183) {
+        PAS_FL_Distance = ((ptr[1]) * (1) + (0));
+        PAS_FLM_Distance = ((ptr[2]) * (1) + (0));
+        PAS_FRM_Distance = ((ptr[4]) * (1) + (0));
+        PAS_FR_Distance = ((ptr[3]) * (1) + (0));
+        PAS_RL_Distance = ((ptr[17]) * (1) + (0));
+        PAS_RLM_Distance = ((ptr[18]) * (1) + (0));
+        PAS_RRM_Distance = ((ptr[20]) * (1) + (0));
+        PAS_RR_Distance = ((ptr[19]) * (1) + (0));
+        SDW_FL_1SideDistance = ((ptr[21]) * (1) + (0));
+        SDW_FL_2SideDistance = ((ptr[27]) * (1) + (0));
+        SDW_RL_2SideDistance = ((ptr[29]) * (1) + (0));
+        SDW_RL_1SideDistance = ((ptr[25]) * (1) + (0));
+        SDW_FR_1SideDistance = ((ptr[22]) * (1) + (0));
+        SDW_FR_2SideDistance = ((ptr[28]) * (1) + (0));
+        SDW_RR_2SideDistance = ((ptr[30]) * (1) + (0));
+        SDW_RR_1SideDistance = ((ptr[26]) * (1) + (0));
     }
 
     if (gcanid == 0x150) {
