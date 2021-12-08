@@ -29,6 +29,9 @@ typedef short rv_status;
 #define KEY_M     77
 #define KEY_m     109
 
+#define KEY_W     87
+#define KEY_w     119
+
 #define FPS 25
 #define WAITMS (1000/FPS)
 #define TS_INT (WAITMS*1000000)

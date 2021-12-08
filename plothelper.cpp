@@ -34,6 +34,7 @@ static int grid_num_x = 0;
 static int grid_num_y = 0;
 
 static int plotDeStatus;
+static int plotPsStatus;
 static unsigned int alive_count = 0U;
 
 static const char cGEAR[5] = { 'P','R', 'N', 'D', 'E' };
@@ -46,6 +47,7 @@ void init_axis(void) {
 	linspace_step(0, XCOL, LINSPACESTEP, grid_x, &grid_num_x);
 	linspace_step(0, YROW, LINSPACESTEP, grid_y, &grid_num_y);
 	plotDeStatus = 1;
+	plotPsStatus = 1;
 }
 
 
@@ -60,13 +62,19 @@ void toggle_de_status(void) {
 	plotDeStatus = !plotDeStatus;
 }
 
+void toggle_ps_status(void) {
+	plotPsStatus = !plotPsStatus;
+}
+
 
 void update_img(void) {
 	canvas.setTo(Scalar::all(255));
 	alive_count++;
 	plot_axis();
 	plot_vehicle();
-	plot_pas_sdw();
+	if (plotPsStatus) {
+		plot_pas_sdw();
+	}
 	if (plotDeStatus) {
 		plot_echo();
 	}
