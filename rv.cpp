@@ -95,6 +95,7 @@ static void online_mode(void) {
         if ((KEYPressed == KEY_M) || (KEYPressed == KEY_m)) {
             toggle_measure_status();
         }
+        check_timeout();
         update_img();
         update_video_online();
         imshow("radar visualization online", recframe);
@@ -144,6 +145,7 @@ static void offline_mode(void) {
             if ((KEYPressed == KEY_F) || (KEYPressed == KEY_f)) {
                 push_fast_forward();
             }
+            check_timeout();
             update_img();
             update_video_offline();
             imshow("radar visualization offline", recframe_offline);
@@ -181,6 +183,7 @@ static void offline_mode(void) {
                 while (1) {
                     status = update_sig_interval_wrapper();
                     if (status == NO_ERROR) {
+                        check_timeout();
                         update_img();
                         update_video_offline();
                         video_writer.write(recframe_offline);

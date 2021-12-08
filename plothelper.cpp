@@ -41,6 +41,7 @@ static const char cGEAR[5] = { 'P','R', 'N', 'D', 'E' };
 static const Scalar mHeight_blue[4] = { BLUEL, BLUEH , BLUET , BLUEU };
 static const vector<string> mlegend_blue = { "Low", "High" , "Traversable" , "Unknown" };
 static const Scalar mPs[5] = { RED, ORANGE, YELLOW, GREEN, WHITE };
+static const Scalar mTimeout[2] = { GREEN, RED };
 
 
 void init_axis(void) {
@@ -220,6 +221,23 @@ static void plot_misc(void) {
 		line(canvas, Point(XCOL - 150, 50 + 20 * i), Point(XCOL - 100, 50 + 20 * i), mHeight_blue[i], 2);
 		putText(canvas, mlegend_blue[i], Point(XCOL - 90, 50 + 20 * i), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
 	}
+
+	// timeout
+	sprintf(label, "%s", "ADASCAN");
+	putText(canvas, label, Point(20, YROW - 80), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+	circle(canvas, Point(100, YROW - 80), 8, mTimeout[timeout_0x121], FILLED, 2);
+
+	sprintf(label, "%s", "MCU3_0");
+	putText(canvas, label, Point(20, YROW - 100), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+	circle(canvas, Point(100, YROW - 100), 8, mTimeout[timeout_0x171], FILLED, 2);
+
+	sprintf(label, "%s", "MCU1_0");
+	putText(canvas, label, Point(20, YROW - 120), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+	circle(canvas, Point(100, YROW - 120), 8, mTimeout[timeout_0x150], FILLED, 2);
+
+	sprintf(label, "%s", "PA");
+	putText(canvas, label, Point(20, YROW - 140), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+	circle(canvas, Point(100, YROW - 140), 8, mTimeout[timeout_0x172], FILLED, 2);
 }
 
 

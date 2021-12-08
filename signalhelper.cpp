@@ -4,6 +4,8 @@
 #include "math.h"
 #include "rv_param.h"
 #include "signalhelper.h"
+#include "menuhelper.h"
+#include "systimehelper.h"
 
 static float calcPointDis(float x0, float y0, float x1, float y1);
 static void lengthScaling(float* l, float* lo, int iter);
@@ -257,6 +259,17 @@ const float de_angle_start[12]  = { -halt_fov_long, -halt_fov_short, -halt_fov_s
 const float de_angle_end[12]    = {  halt_fov_long,  halt_fov_short,  halt_fov_short,  halt_fov_short,  halt_fov_short,  halt_fov_long,
                                      halt_fov_long,  halt_fov_short,  halt_fov_short,  halt_fov_short,  halt_fov_short,  halt_fov_long };
 
+static unsigned __int64 ts_anchor_0x121;
+static unsigned __int64 ts_anchor_0x171;
+static unsigned __int64 ts_anchor_0x150;
+static unsigned __int64 ts_anchor_0x172;
+static unsigned __int64 ts_check;
+
+unsigned int timeout_0x121;
+unsigned int timeout_0x171;
+unsigned int timeout_0x150;
+unsigned int timeout_0x172;
+
 
 void init_sig(void) {
     gScale = DEFAULTSCALE;
@@ -282,6 +295,12 @@ void init_sig(void) {
     memset((void*)de_cc_y, 0, sizeof(de_cc_y));
     GW_VBU_GearLeverPos = 0U;
     ESP_VehicleSpeed = 0.0F;
+    ts_anchor_0x121 = 0;
+    ts_anchor_0x171 = 0;
+    ts_anchor_0x150 = 0;
+    ts_anchor_0x172 = 0;
+    ts_check = 0;
+    timeout_0x121 = timeout_0x171 = timeout_0x150 = timeout_0x172 = 0;
 }
 
 
@@ -415,6 +434,27 @@ static void update_pas_sdw_internal(void) {
 }
 
 
+void check_timeout(void) {
+    if (selected_mode == 1) {
+        GetLocalTime(&local_time);
+        SystemTimeToFileTime(&local_time, &local_time_TM.ft);
+        ts_check = local_time_TM.li.QuadPart / 10000;
+    }
+    else if (selected_mode == 2) {
+        ts_check = ts / 1000000;
+    }
+
+    if (ts_check - ts_anchor_0x121 > TM_0x121)
+        timeout_0x121 = 1;
+    if (ts_check - ts_anchor_0x171 > TM_0x171)
+        timeout_0x171 = 1;
+    if (ts_check - ts_anchor_0x150 > TM_0x150)
+        timeout_0x150 = 1;
+    if (ts_check - ts_anchor_0x172 > TM_0x172)
+        timeout_0x172 = 1;
+}
+
+
 void update_sig(void) {
     if (gcanid == 0x172) {
         MapObj01P1X = ((((ptr[1]) << 2) + (((ptr[2]) & (3 << 6)) >> 6))* (4) + (-2044));
@@ -460,6 +500,17 @@ void update_sig(void) {
         objH[1] = MapObj02Height;
         objH[2] = MapObj03Height;
         objH[3] = MapObj04Height;
+
+        if (selected_mode == 1) {
+            GetLocalTime(&local_time);
+            SystemTimeToFileTime(&local_time, &local_time_TM.ft);
+            ts_anchor_0x172 = local_time_TM.li.QuadPart / 10000;
+            timeout_0x172 = 0;
+        }
+        else if (selected_mode == 2) {
+            ts_anchor_0x172 = ts / 1000000;
+            timeout_0x172 = 0;
+        }
     }
 
 
@@ -955,12 +1006,48 @@ void update_sig(void) {
 
     if (gcanid == 0x150) {
         ESP_VehicleSpeed = (((((ptr[1]) & 15) << 8) + (ptr[2])) * (0.05625) + (0));
+        if (selected_mode == 1) {
+            GetLocalTime(&local_time);
+            SystemTimeToFileTime(&local_time, &local_time_TM.ft);
+            ts_anchor_0x150 = local_time_TM.li.QuadPart / 10000;
+            timeout_0x150 = 0;
+        }
+        else if (selected_mode == 2) {
+            ts_anchor_0x150 = ts / 1000000;
+            timeout_0x150 = 0;
+        }
     }
 
     if (gcanid == 0x152) {
         GW_VBU_GearLeverPos = (((ptr[9]) & 7) * (1) + (0));
         if (GW_VBU_GearLeverPos > 3) {
             GW_VBU_GearLeverPos = 4;
+        }
+    }
+
+    if (gcanid == 0x171) {
+        if (selected_mode == 1) {
+            GetLocalTime(&local_time);
+            SystemTimeToFileTime(&local_time, &local_time_TM.ft);
+            ts_anchor_0x171 = local_time_TM.li.QuadPart / 10000;
+            timeout_0x171 = 0;
+        }
+        else if (selected_mode == 2) {
+            ts_anchor_0x171 = ts / 1000000;
+            timeout_0x171 = 0;
+        }
+    }
+
+    if (gcanid == 0x121) {
+        if (selected_mode == 1) {
+            GetLocalTime(&local_time);
+            SystemTimeToFileTime(&local_time, &local_time_TM.ft);
+            ts_anchor_0x121 = local_time_TM.li.QuadPart / 10000;
+            timeout_0x121 = 0;
+        }
+        else if (selected_mode == 2) {
+            ts_anchor_0x121 = ts / 1000000;
+            timeout_0x121 = 0;
         }
     }
 

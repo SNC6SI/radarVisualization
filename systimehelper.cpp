@@ -10,9 +10,9 @@ extern char binlog_filename_write[512];
 static char* p_record_folder;
 static char record_folder_default[] = { DEFAULTRECORDFOLDER };
 
-SYSTEMTIME systemTime, localTime;
+SYSTEMTIME systemTime, localTime, local_time;
 FILETIME   timeInSec;
-TM_u TM;
+TM_u TM, local_time_TM;
 
 void gen_name_with_rectime(void) {
     GetLocalTime(&systemTime);

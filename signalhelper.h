@@ -53,8 +53,15 @@ extern float Y0;
 extern const float C0;
 extern const float S0;
 
+extern unsigned int timeout_0x121; // ADASCAN
+extern unsigned int timeout_0x171; // PACAN APS MCU 3_0
+extern unsigned int timeout_0x150; // PACAN APS MCU 1_0
+extern unsigned int timeout_0x172; // PACAN PA
+
 void init_sig(void);
 void update_sig(void);
+
+void check_timeout(void);
 
 void point4pose(float* x, float* y, float* xo, float* yo, int iter);
 

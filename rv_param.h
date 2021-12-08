@@ -53,4 +53,9 @@ extern float gScale;
 #define LINSPACESTEP 50
 #define LINSPACEMAXNUM 100
 
+#define TM_0x121 400
+#define TM_0x171 400
+#define TM_0x150 400
+#define TM_0x172 400
+
 #endif
