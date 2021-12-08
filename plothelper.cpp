@@ -23,6 +23,7 @@ static void plot_info(void);
 static void plot_anno(void);
 static void plot_measure(void);
 static void plot_echo(void);
+static void plot_pas_sdw(void);
 
 static void linspace_step(float x1, float x2, int step, float* xo, int* num);
 static void DrawDashedLine(Mat& img, Point pt1, Point pt2, Scalar color, int thickness, string style, int gap);
@@ -38,6 +39,7 @@ static unsigned int alive_count = 0U;
 static const char cGEAR[5] = { 'P','R', 'N', 'D', 'E' };
 static const Scalar mHeight_blue[4] = { BLUEL, BLUEH , BLUET , BLUEU };
 static const vector<string> mlegend_blue = { "Low", "High" , "Traversable" , "Unknown" };
+static const Scalar mPs[5] = { RED, ORANGE, YELLOW, GREEN, WHITE };
 
 
 void init_axis(void) {
@@ -64,6 +66,7 @@ void update_img(void) {
 	alive_count++;
 	plot_axis();
 	plot_vehicle();
+	plot_pas_sdw();
 	if (plotDeStatus) {
 		plot_echo();
 	}
@@ -120,6 +123,17 @@ static void plot_echo(void) {
 		circle(canvas, Point(de_cc_x[i], de_cc_y[i]), 2, GREENDARK, FILLED, 10);
 		sprintf(label, "%d", i + 1);
 		putText(canvas, label, Point(de_cc_x[i], de_cc_y[i]), FONT_HERSHEY_SIMPLEX, 0.4, GREENDARK, 1, LINE_8, false);
+	}
+}
+
+static void plot_pas_sdw(void) {
+	int i;
+	for (i = 0; i < 12; i++) {
+		line(canvas, Point(ps_x[2 * i], ps_y[2 * i]), Point(ps_x[2 * i + 1], ps_y[2 * i + 1]), mPs[ps_color_idx[i]], 8);
+		// line(canvas, Point(ps_x[2 * i], ps_y[2 * i]), Point(ps_x[2 * i + 1], ps_y[2 * i + 1]), BLACK, 8);
+	}
+	for (i = 12; i < 16; i++) {
+		ellipse(canvas, Point(ps_x[i + 12], ps_y[i + 12]), Size(ps_r, ps_r), ps_angle_anchor[i - 12], ps_angle_start[i - 12], ps_angle_end[i - 12], mPs[ps_color_idx[i]], 8);
 	}
 }
 

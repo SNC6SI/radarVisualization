@@ -27,6 +27,15 @@ extern float de_3[12];
 extern float de_cc_x[12];
 extern float de_cc_y[12];
 
+extern float ps_x[28];
+extern float ps_y[28];
+extern float ps_r;
+extern float ps_dis[16];
+extern unsigned char ps_color_idx[16];
+extern float ps_angle_anchor[4];
+extern float ps_angle_start[4];
+extern float ps_angle_end[4];
+
 extern const float de_angle_anchor[12];
 extern const float de_angle_start[12];
 extern const float de_angle_end[12];

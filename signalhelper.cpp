@@ -241,6 +241,11 @@ float ps_x[28];
 float ps_y[28];
 float ps_r_raw;
 float ps_r;
+float ps_dis[16];
+unsigned char ps_color_idx[16];
+float ps_angle_anchor[4];
+float ps_angle_start[4];
+float ps_angle_end[4];
 
 static const float halt_fov_short = 60;
 static const float halt_fov_long = 30;
@@ -389,7 +394,23 @@ static void update_pas_sdw_internal(void) {
     ps_y_raw[26] = 0.0;
     ps_y_raw[27] = 0.0;
 
-    ps_r_raw = 1.4 * (HW_ + GAP_);
+    ps_angle_anchor[0] = 180;
+    ps_angle_anchor[1] = -90;
+    ps_angle_anchor[2] = 90;
+    ps_angle_anchor[3] = 0;
+
+    ps_angle_start[0] = AG_;
+    ps_angle_start[1] = AG_;
+    ps_angle_start[2] = AG_;
+    ps_angle_start[3] = AG_;
+
+    ps_angle_end[0] = 90 - AG_;
+    ps_angle_end[1] = 90 - AG_;
+    ps_angle_end[2] = 90 - AG_;
+    ps_angle_end[3] = 90 - AG_;
+
+    point4pose(&ps_x_raw[0], &ps_y_raw[0], &ps_x[0], &ps_y[0], 28);
+    ps_r_raw = (HW_ + GAP_);
     lengthScaling(&ps_r_raw, &ps_r, 1);
 }
 
@@ -874,6 +895,62 @@ void update_sig(void) {
         SDW_FR_2SideDistance = ((ptr[28]) * (1) + (0));
         SDW_RR_2SideDistance = ((ptr[30]) * (1) + (0));
         SDW_RR_1SideDistance = ((ptr[26]) * (1) + (0));
+
+        ps_dis[0] = SDW_FL_1SideDistance;
+        ps_dis[1] = SDW_FL_2SideDistance;
+        ps_dis[2] = SDW_RL_2SideDistance;
+        ps_dis[3] = SDW_RL_1SideDistance;
+
+        ps_dis[4] = SDW_FR_1SideDistance;
+        ps_dis[5] = SDW_FR_2SideDistance;
+        ps_dis[6] = SDW_RR_2SideDistance;
+        ps_dis[7] = SDW_RR_1SideDistance;
+
+        ps_dis[8] = PAS_FLM_Distance;
+        ps_dis[9] = PAS_FRM_Distance;
+        ps_dis[10] = PAS_RLM_Distance;
+        ps_dis[11] = PAS_RRM_Distance;
+
+        ps_dis[12] = PAS_FL_Distance;
+        ps_dis[13] = PAS_FR_Distance;
+        ps_dis[14] = PAS_RL_Distance;
+        ps_dis[15] = PAS_RR_Distance;
+        
+        int i;
+        for (i = 0; i < 12; i++) {
+            if (ps_dis[i] >= 0 && ps_dis[i] <= 30)
+                ps_color_idx[i] = 0;
+            else if (ps_dis[i] > 30 && ps_dis[i] <= 50)
+                ps_color_idx[i] = 1;
+            else if (ps_dis[i] > 50 && ps_dis[i] <= 70)
+                ps_color_idx[i] = 2;
+            else
+                ps_color_idx[i] = 4;
+        }
+        for (i = 12; i < 14; i++) {
+            if (ps_dis[i] >= 0 && ps_dis[i] <= 30)
+                ps_color_idx[i] = 0;
+            else if (ps_dis[i] > 30 && ps_dis[i] <= 50)
+                ps_color_idx[i] = 1;
+            else if (ps_dis[i] > 50 && ps_dis[i] <= 70)
+                ps_color_idx[i] = 2;
+            else if (ps_dis[i] > 70 && ps_dis[i] <= 100)
+                ps_color_idx[i] = 3;
+            else
+                ps_color_idx[i] = 4;
+        }
+        for (i = 14; i < 16; i++) {
+            if (ps_dis[i] >= 0 && ps_dis[i] <= 30)
+                ps_color_idx[i] = 0;
+            else if (ps_dis[i] > 30 && ps_dis[i] <= 50)
+                ps_color_idx[i] = 1;
+            else if (ps_dis[i] > 50 && ps_dis[i] <= 70)
+                ps_color_idx[i] = 2;
+            else if (ps_dis[i] > 70 && ps_dis[i] <= 150)
+                ps_color_idx[i] = 3;
+            else
+                ps_color_idx[i] = 4;
+        }
     }
 
     if (gcanid == 0x150) {

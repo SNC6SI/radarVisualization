@@ -9,6 +9,8 @@ extern float gScale;
 #define BLACK   Scalar(0, 0, 0)
 #define GRAY    Scalar(224,224,224)
 #define DIMGREY Scalar(105,105,105)
+#define WHITE   Scalar(255,255,255)
+#define GREEN   Scalar(0,255,0)
 
 #define BLUEH   BLUE                     // 1
 #define BLUEL   Scalar(255, 144, 30)     // 0
@@ -24,6 +26,8 @@ extern float gScale;
 #define LightYellow2 Scalar(209, 238, 238)
 
 #define OrangeRed1 Scalar(0, 69, 255)
+#define ORANGE Scalar(0, 165, 255)
+#define YELLOW Scalar(0, 255, 255)
 
 #define XCOL 1200
 #define YROW 1000
@@ -38,8 +42,9 @@ extern float gScale;
 #define RO_ 88.8
 #define FO_ 365.9
 #define HW_ 95.3
-#define GAP_ 5.0
-#define SP_  15.0
+#define GAP_ 50.0
+#define SP_  20.0
+#define AG_  40.0
 
 #define RO (88.8 * gScale)
 #define FO (365.9 * gScale)
