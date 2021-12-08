@@ -45,7 +45,7 @@ void update_binlog_write(unsigned int canFdFlag) {
         messageFD.mHeader.mObjectFlags = BL_OBJ_FLAG_TIME_ONE_NANS;
         messageFD.mHeader.mObjectTimeStamp = g_xlCanRxEvt.timeStampSync;
 
-        messageFD.mChannel = g_xlCanRxEvt.channelIndex;
+        messageFD.mChannel = g_xlCanRxEvt.channelIndex + 1;
         messageFD.mFlags = (BYTE)(0x01) << 12;
         messageFD.mDLC = g_xlCanRxEvt.tagData.canRxOkMsg.dlc;
         if (messageFD.mDLC >= 0 && messageFD.mDLC < 17) {
@@ -69,9 +69,10 @@ void update_binlog_write(unsigned int canFdFlag) {
         message2.mHeader.mObjectFlags = BL_OBJ_FLAG_TIME_ONE_NANS;
         message2.mHeader.mObjectTimeStamp = g_xlCanRxEvt.timeStampSync;
 
-        message2.mChannel = g_xlCanRxEvt.channelIndex;
+        message2.mChannel = g_xlCanRxEvt.channelIndex + 1;
         message2.mFlags = 0;
         message2.mDLC = g_xlCanRxEvt.tagData.canRxOkMsg.dlc;
+        message2.mID = g_xlCanRxEvt.tagData.canRxOkMsg.canId;
         memcpy(message2.mData, g_xlCanRxEvt.tagData.canRxOkMsg.data, 8);
         BLWriteObject(hbinlogFile, &message2.mHeader.mBase);
     }

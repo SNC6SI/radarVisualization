@@ -72,6 +72,7 @@ static DWORD WINAPI RxCanFdThread(LPVOID par) {
             gcanid = g_xlCanRxEvt.tagData.canRxOkMsg.canId;
             ts = g_xlCanRxEvt.timeStampSync;
             msgEdlFlag = (g_xlCanRxEvt.tagData.canRxOkMsg.msgFlags & XL_CAN_RXMSG_FLAG_EDL);
+            // printf("0x%X, %d\n", gcanid, msgEdlFlag);
             update_sig();
             update_binlog_write(msgEdlFlag);
         } while (XL_SUCCESS == xlStatus);
