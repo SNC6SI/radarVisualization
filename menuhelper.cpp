@@ -112,9 +112,12 @@ void select_can_channel(void) {
     int xlChannelMaskPre;
     system("cls");
     printf("%s", can_menu);
+    g_xlChannelMask = 0;
     for (i = 0; i < g_xlDrvConfig.channelCount; i++) {
         printf("%3d. %s\n", i + 1, g_xlDrvConfig.channel[i].name);
+        g_xlChannelMask |= g_xlDrvConfig.channel[i].channelMask;
     }
+#if 0
     xlChannelMaskPre = 0U;
     printf("\nPlease select one:\n\n");
     while (!xlChannelMaskPre) {
@@ -130,6 +133,7 @@ void select_can_channel(void) {
     xlChannelMaskPre = xlChannelMaskPre - 1;
     printf("%s is selected.\n", g_xlDrvConfig.channel[xlChannelMaskPre].name);
     g_xlChannelMask = g_xlDrvConfig.channel[xlChannelMaskPre].channelMask;
+#endif
 }
 
 

@@ -15,6 +15,7 @@ extern char binlog_filename_read[512];
 HANDLE hbinlogFile;
 VBLFileStatisticsEx blstatistics;
 VBLCANFDMessage64 messageFD;
+VBLCANMessage2 message2;
 VBLObjectHeaderBase blObjHeaderbase;
 BOOL blSuccess;
 
@@ -32,30 +33,49 @@ int init_binlog_write(void) {
 
 static const BYTE dlcMapping[17] = {0,1,2,3,4,5,6,7,8,12,16,20,24,32,48,64};
 
-void update_binlog_write(void) {
-    memset(&messageFD, 0, sizeof(VBLCANFDMessage64));
+void update_binlog_write(unsigned int canFdFlag) {
+    if (canFdFlag) {
+        memset(&messageFD, 0, sizeof(VBLCANFDMessage64));
 
-    messageFD.mHeader.mBase.mSignature = BL_OBJ_SIGNATURE;
-    messageFD.mHeader.mBase.mHeaderSize = sizeof(messageFD.mHeader);
-    messageFD.mHeader.mBase.mHeaderVersion = 1;
-    messageFD.mHeader.mBase.mObjectSize = sizeof(VBLCANFDMessage64);
-    messageFD.mHeader.mBase.mObjectType = BL_OBJ_TYPE_CAN_FD_MESSAGE_64;
-    messageFD.mHeader.mObjectFlags = BL_OBJ_FLAG_TIME_ONE_NANS;
-    messageFD.mHeader.mObjectTimeStamp = g_xlCanRxEvt.timeStampSync;
+        messageFD.mHeader.mBase.mSignature = BL_OBJ_SIGNATURE;
+        messageFD.mHeader.mBase.mHeaderSize = sizeof(messageFD.mHeader);
+        messageFD.mHeader.mBase.mHeaderVersion = 1;
+        messageFD.mHeader.mBase.mObjectSize = sizeof(VBLCANFDMessage64);
+        messageFD.mHeader.mBase.mObjectType = BL_OBJ_TYPE_CAN_FD_MESSAGE_64;
+        messageFD.mHeader.mObjectFlags = BL_OBJ_FLAG_TIME_ONE_NANS;
+        messageFD.mHeader.mObjectTimeStamp = g_xlCanRxEvt.timeStampSync;
 
-    messageFD.mChannel = 1;
-    messageFD.mFlags = (BYTE)(0x01) << 12;
-    messageFD.mDLC = g_xlCanRxEvt.tagData.canRxOkMsg.dlc;
-    if (messageFD.mDLC >= 0 && messageFD.mDLC < 17) {
-        messageFD.mValidDataBytes = dlcMapping[messageFD.mDLC];
+        messageFD.mChannel = g_xlCanRxEvt.channelIndex;
+        messageFD.mFlags = (BYTE)(0x01) << 12;
+        messageFD.mDLC = g_xlCanRxEvt.tagData.canRxOkMsg.dlc;
+        if (messageFD.mDLC >= 0 && messageFD.mDLC < 17) {
+            messageFD.mValidDataBytes = dlcMapping[messageFD.mDLC];
+        }
+        else {
+            messageFD.mValidDataBytes = 32;
+        }
+        messageFD.mID = g_xlCanRxEvt.tagData.canRxOkMsg.canId;
+        memcpy(messageFD.mData, g_xlCanRxEvt.tagData.canRxOkMsg.data, 64);
+
+        BLWriteObject(hbinlogFile, &messageFD.mHeader.mBase);
     }
     else {
-        messageFD.mValidDataBytes = 32;
-    }
-    messageFD.mID = g_xlCanRxEvt.tagData.canRxOkMsg.canId;
-    memcpy(messageFD.mData, g_xlCanRxEvt.tagData.canRxOkMsg.data, 64);
+        memset(&message2, 0, sizeof(VBLCANMessage2));
+        message2.mHeader.mBase.mSignature = BL_OBJ_SIGNATURE;
+        message2.mHeader.mBase.mHeaderSize = sizeof(message2.mHeader);
+        message2.mHeader.mBase.mHeaderVersion = 1;
+        message2.mHeader.mBase.mObjectSize = sizeof(VBLCANMessage2);
+        message2.mHeader.mBase.mObjectType = BL_OBJ_TYPE_CAN_MESSAGE2;
+        message2.mHeader.mObjectFlags = BL_OBJ_FLAG_TIME_ONE_NANS;
+        message2.mHeader.mObjectTimeStamp = g_xlCanRxEvt.timeStampSync;
 
-    BLWriteObject(hbinlogFile, &messageFD.mHeader.mBase);
+        message2.mChannel = g_xlCanRxEvt.channelIndex;
+        message2.mFlags = 0;
+        message2.mDLC = g_xlCanRxEvt.tagData.canRxOkMsg.dlc;
+        memcpy(message2.mData, g_xlCanRxEvt.tagData.canRxOkMsg.data, 8);
+        BLWriteObject(hbinlogFile, &message2.mHeader.mBase);
+    }
+    
 }
 
 

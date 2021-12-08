@@ -59,6 +59,7 @@ XLstatus rvOpenDriver() {
 
 static DWORD WINAPI RxCanFdThread(LPVOID par) {
     XLstatus        xlStatus = XL_SUCCESS;
+    static unsigned int msgEdlFlag;
     g_RXCANThreadRun = 1;
     while (g_RXCANThreadRun) {
         WaitForSingleObject(g_hMsgEvent, 10);
@@ -70,8 +71,9 @@ static DWORD WINAPI RxCanFdThread(LPVOID par) {
             memcpy(ptr, &(g_xlCanRxEvt.tagData.canRxOkMsg.data), 64);
             gcanid = g_xlCanRxEvt.tagData.canRxOkMsg.canId;
             ts = g_xlCanRxEvt.timeStampSync;
+            msgEdlFlag = (g_xlCanRxEvt.tagData.canRxOkMsg.msgFlags & XL_CAN_RXMSG_FLAG_EDL);
             update_sig();
-            update_binlog_write();
+            update_binlog_write(msgEdlFlag);
         } while (XL_SUCCESS == xlStatus);
     }
     xlClosePort(g_xlPortHandle);
