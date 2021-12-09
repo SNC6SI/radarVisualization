@@ -199,6 +199,70 @@ float USS_DE3_10 = 0.0F;
 float USS_DE3_11 = 0.0F;
 float USS_DE3_12 = 0.0F; 
 
+float USS_CE1_1_right = 0.0F;
+float USS_CE1_2_right = 0.0F;
+float USS_CE1_3_right = 0.0F;
+float USS_CE1_4_right = 0.0F;
+float USS_CE1_5_right = 0.0F;
+float USS_CE1_7_right = 0.0F;
+float USS_CE1_8_right = 0.0F;
+float USS_CE1_9_right = 0.0F;
+float USS_CE1_10_right = 0.0F;
+float USS_CE1_11_right = 0.0F;
+float USS_CE1_2_left = 0.0F;
+float USS_CE1_3_left = 0.0F;
+float USS_CE1_4_left = 0.0F;
+float USS_CE1_5_left = 0.0F;
+float USS_CE1_6_left = 0.0F;
+float USS_CE1_8_left = 0.0F;
+float USS_CE1_9_left = 0.0F;
+float USS_CE1_10_left = 0.0F;
+float USS_CE1_11_left = 0.0F;
+float USS_CE1_12_left = 0.0F;
+
+float USS_CE2_1_right = 0.0F;
+float USS_CE2_2_right = 0.0F;
+float USS_CE2_3_right = 0.0F;
+float USS_CE2_4_right = 0.0F;
+float USS_CE2_5_right = 0.0F;
+float USS_CE2_7_right = 0.0F;
+float USS_CE2_8_right = 0.0F;
+float USS_CE2_9_right = 0.0F;
+float USS_CE2_10_right = 0.0F;
+float USS_CE2_11_right = 0.0F;
+float USS_CE2_2_left = 0.0F;
+float USS_CE2_3_left = 0.0F;
+float USS_CE2_4_left = 0.0F;
+float USS_CE2_5_left = 0.0F;
+float USS_CE2_6_left = 0.0F;
+float USS_CE2_8_left = 0.0F;
+float USS_CE2_9_left = 0.0F;
+float USS_CE2_10_left = 0.0F;
+float USS_CE2_11_left = 0.0F;
+float USS_CE2_12_left = 0.0F;
+
+float USS_CE3_1_right = 0.0F;
+float USS_CE3_2_right = 0.0F;
+float USS_CE3_3_right = 0.0F;
+float USS_CE3_4_right = 0.0F;
+float USS_CE3_5_right = 0.0F;
+float USS_CE3_7_right = 0.0F;
+float USS_CE3_8_right = 0.0F;
+float USS_CE3_9_right = 0.0F;
+float USS_CE3_10_right = 0.0F;
+float USS_CE3_11_right = 0.0F;
+float USS_CE3_2_left = 0.0F;
+float USS_CE3_3_left = 0.0F;
+float USS_CE3_4_left = 0.0F;
+float USS_CE3_5_left = 0.0F;
+float USS_CE3_6_left = 0.0F;
+float USS_CE3_8_left = 0.0F;
+float USS_CE3_9_left = 0.0F;
+float USS_CE3_10_left = 0.0F;
+float USS_CE3_11_left = 0.0F;
+float USS_CE3_12_left = 0.0F;
+
+
 float ESP_VehicleSpeed = 0.0F;
 unsigned char GW_VBU_GearLeverPos = 0.0F;
 
@@ -215,6 +279,12 @@ float slotyrec_rx[16];
 float de_1_rx[12];
 float de_2_rx[12];
 float de_3_rx[12];
+float ce_1_right_rx[10];
+float ce_1_left_rx[10];
+float ce_2_right_rx[10];
+float ce_2_left_rx[10];
+float ce_3_right_rx[10];
+float ce_3_left_rx[10];
 
 float objx[40];
 float objy[40];
@@ -929,6 +999,141 @@ void update_sig(void) {
         de_3_rx[9]  = USS_DE3_10;
         de_3_rx[10] = USS_DE3_11;
         de_3_rx[11] = USS_DE3_12;
+    }
+
+    if (gcanid == 0x17C && msgEdlFlag == 1) {
+        USS_CE1_1_right = ((((ptr[1]) << 2) + (((ptr[2]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_CE1_2_right = (((((ptr[2]) & 63) << 4) + (((ptr[3]) & (15 << 4)) >> 4)) * (1) + (0));
+        USS_CE1_3_right = (((((ptr[3]) & 15) << 6) + (((ptr[4]) & (63 << 2)) >> 2)) * (1) + (0));
+        USS_CE1_4_right = (((((ptr[4]) & 3) << 8) + (ptr[5])) * (1) + (0));
+        USS_CE1_5_right = ((((ptr[6]) << 2) + (((ptr[7]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_CE1_7_right = ((((ptr[9]) << 2) + (((ptr[10]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_CE1_8_right = (((((ptr[10]) & 63) << 4) + (((ptr[11]) & (15 << 4)) >> 4)) * (1) + (0));
+        USS_CE1_9_right = (((((ptr[11]) & 15) << 6) + (((ptr[12]) & (63 << 2)) >> 2)) * (1) + (0));
+        USS_CE1_10_right = (((((ptr[12]) & 3) << 8) + (ptr[13])) * (1) + (0));
+        USS_CE1_11_right = ((((ptr[14]) << 2) + (((ptr[15]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_CE1_2_left = ((((ptr[17]) << 2) + (((ptr[18]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_CE1_3_left = (((((ptr[18]) & 63) << 4) + (((ptr[19]) & (15 << 4)) >> 4)) * (1) + (0));
+        USS_CE1_4_left = (((((ptr[19]) & 15) << 6) + (((ptr[20]) & (63 << 2)) >> 2)) * (1) + (0));
+        USS_CE1_5_left = (((((ptr[20]) & 3) << 8) + (ptr[21])) * (1) + (0));
+        USS_CE1_6_left = ((((ptr[22]) << 2) + (((ptr[23]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_CE1_8_left = ((((ptr[25]) << 2) + (((ptr[26]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_CE1_9_left = (((((ptr[26]) & 63) << 4) + (((ptr[27]) & (15 << 4)) >> 4)) * (1) + (0));
+        USS_CE1_10_left = (((((ptr[27]) & 15) << 6) + (((ptr[28]) & (63 << 2)) >> 2)) * (1) + (0));
+        USS_CE1_11_left = (((((ptr[28]) & 3) << 8) + (ptr[29])) * (1) + (0));
+        USS_CE1_12_left = ((((ptr[30]) << 2) + (((ptr[31]) & (3 << 6)) >> 6)) * (1) + (0));
+
+        ce_1_right_rx[0] = USS_CE1_1_right;
+        ce_1_right_rx[1] = USS_CE1_2_right;
+        ce_1_right_rx[2] = USS_CE1_3_right;
+        ce_1_right_rx[3] = USS_CE1_4_right;
+        ce_1_right_rx[4] = USS_CE1_5_right;
+        ce_1_right_rx[5] = USS_CE1_7_right;
+        ce_1_right_rx[6] = USS_CE1_8_right;
+        ce_1_right_rx[7] = USS_CE1_9_right;
+        ce_1_right_rx[8] = USS_CE1_10_right;
+        ce_1_right_rx[9] = USS_CE1_11_right;
+
+        ce_1_left_rx[0] = USS_CE1_2_left;
+        ce_1_left_rx[1] = USS_CE1_3_left;
+        ce_1_left_rx[2] = USS_CE1_4_left;
+        ce_1_left_rx[3] = USS_CE1_5_left;
+        ce_1_left_rx[4] = USS_CE1_6_left;
+        ce_1_left_rx[5] = USS_CE1_8_left;
+        ce_1_left_rx[6] = USS_CE1_9_left;
+        ce_1_left_rx[7] = USS_CE1_10_left;
+        ce_1_left_rx[8] = USS_CE1_11_left;
+        ce_1_left_rx[9] = USS_CE1_12_left;
+    }
+
+    if (gcanid == 0x17E && msgEdlFlag == 1) {
+        USS_CE2_1_right = ((((ptr[1]) << 2) + (((ptr[2]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_CE2_2_right = (((((ptr[2]) & 63) << 4) + (((ptr[3]) & (15 << 4)) >> 4)) * (1) + (0));
+        USS_CE2_3_right = (((((ptr[3]) & 15) << 6) + (((ptr[4]) & (63 << 2)) >> 2)) * (1) + (0));
+        USS_CE2_4_right = (((((ptr[4]) & 3) << 8) + (ptr[5])) * (1) + (0));
+        USS_CE2_5_right = ((((ptr[6]) << 2) + (((ptr[7]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_CE2_7_right = ((((ptr[9]) << 2) + (((ptr[10]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_CE2_8_right = (((((ptr[10]) & 63) << 4) + (((ptr[11]) & (15 << 4)) >> 4)) * (1) + (0));
+        USS_CE2_9_right = (((((ptr[11]) & 15) << 6) + (((ptr[12]) & (63 << 2)) >> 2)) * (1) + (0));
+        USS_CE2_10_right = (((((ptr[12]) & 3) << 8) + (ptr[13])) * (1) + (0));
+        USS_CE2_11_right = ((((ptr[14]) << 2) + (((ptr[15]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_CE2_2_left = (((((ptr[18]) & 63) << 4) + (((ptr[19]) & (15 << 4)) >> 4)) * (1) + (0));
+        USS_CE2_3_left = (((((ptr[19]) & 15) << 6) + (((ptr[20]) & (63 << 2)) >> 2)) * (1) + (0));
+        USS_CE2_4_left = (((((ptr[20]) & 3) << 8) + (ptr[21])) * (1) + (0));
+        USS_CE2_5_left = ((((ptr[22]) << 2) + (((ptr[23]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_CE2_6_left = ((((ptr[17]) << 2) + (((ptr[18]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_CE2_8_left = (((((ptr[26]) & 63) << 4) + (((ptr[27]) & (15 << 4)) >> 4)) * (1) + (0));
+        USS_CE2_9_left = (((((ptr[27]) & 15) << 6) + (((ptr[28]) & (63 << 2)) >> 2)) * (1) + (0));
+        USS_CE2_10_left = (((((ptr[28]) & 3) << 8) + (ptr[29])) * (1) + (0));
+        USS_CE2_11_left = ((((ptr[30]) << 2) + (((ptr[31]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_CE2_12_left = ((((ptr[25]) << 2) + (((ptr[26]) & (3 << 6)) >> 6)) * (1) + (0));
+
+        ce_2_right_rx[0] = USS_CE2_1_right;
+        ce_2_right_rx[1] = USS_CE2_2_right;
+        ce_2_right_rx[2] = USS_CE2_3_right;
+        ce_2_right_rx[3] = USS_CE2_4_right;
+        ce_2_right_rx[4] = USS_CE2_5_right;
+        ce_2_right_rx[5] = USS_CE2_7_right;
+        ce_2_right_rx[6] = USS_CE2_8_right;
+        ce_2_right_rx[7] = USS_CE2_9_right;
+        ce_2_right_rx[8] = USS_CE2_10_right;
+        ce_2_right_rx[9] = USS_CE2_11_right;
+
+        ce_2_left_rx[0] = USS_CE2_2_left;
+        ce_2_left_rx[1] = USS_CE2_3_left;
+        ce_2_left_rx[2] = USS_CE2_4_left;
+        ce_2_left_rx[3] = USS_CE2_5_left;
+        ce_2_left_rx[4] = USS_CE2_6_left;
+        ce_2_left_rx[5] = USS_CE2_8_left;
+        ce_2_left_rx[6] = USS_CE2_9_left;
+        ce_2_left_rx[7] = USS_CE2_10_left;
+        ce_2_left_rx[8] = USS_CE2_11_left;
+        ce_2_left_rx[9] = USS_CE2_12_left;
+    }
+
+    if (gcanid == 0x182 && msgEdlFlag == 1) {
+        USS_CE3_1_right = ((((ptr[1]) << 2) + (((ptr[2]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_CE3_2_right = (((((ptr[2]) & 63) << 4) + (((ptr[3]) & (15 << 4)) >> 4)) * (1) + (0));
+        USS_CE3_3_right = (((((ptr[3]) & 15) << 6) + (((ptr[4]) & (63 << 2)) >> 2)) * (1) + (0));
+        USS_CE3_4_right = (((((ptr[4]) & 3) << 8) + (ptr[5])) * (1) + (0));
+        USS_CE3_5_right = ((((ptr[6]) << 2) + (((ptr[7]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_CE3_7_right = ((((ptr[9]) << 2) + (((ptr[10]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_CE3_8_right = (((((ptr[10]) & 63) << 4) + (((ptr[11]) & (15 << 4)) >> 4)) * (1) + (0));
+        USS_CE3_9_right = (((((ptr[11]) & 15) << 6) + (((ptr[12]) & (63 << 2)) >> 2)) * (1) + (0));
+        USS_CE3_10_right = (((((ptr[12]) & 3) << 8) + (ptr[13])) * (1) + (0));
+        USS_CE3_11_right = ((((ptr[14]) << 2) + (((ptr[15]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_CE3_2_left = (((((ptr[18]) & 63) << 4) + (((ptr[19]) & (15 << 4)) >> 4)) * (1) + (0));
+        USS_CE3_3_left = (((((ptr[19]) & 15) << 6) + (((ptr[20]) & (63 << 2)) >> 2)) * (1) + (0));
+        USS_CE3_4_left = (((((ptr[20]) & 3) << 8) + (ptr[21])) * (1) + (0));
+        USS_CE3_5_left = ((((ptr[22]) << 2) + (((ptr[23]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_CE3_6_left = ((((ptr[17]) << 2) + (((ptr[18]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_CE3_8_left = (((((ptr[26]) & 63) << 4) + (((ptr[27]) & (15 << 4)) >> 4)) * (1) + (0));
+        USS_CE3_9_left = (((((ptr[27]) & 15) << 6) + (((ptr[28]) & (63 << 2)) >> 2)) * (1) + (0));
+        USS_CE3_10_left = (((((ptr[28]) & 3) << 8) + (ptr[29])) * (1) + (0));
+        USS_CE3_11_left = ((((ptr[30]) << 2) + (((ptr[31]) & (3 << 6)) >> 6)) * (1) + (0));
+        USS_CE3_12_left = ((((ptr[25]) << 2) + (((ptr[26]) & (3 << 6)) >> 6)) * (1) + (0));
+
+        ce_3_right_rx[0] = USS_CE3_1_right;
+        ce_3_right_rx[1] = USS_CE3_2_right;
+        ce_3_right_rx[2] = USS_CE3_3_right;
+        ce_3_right_rx[3] = USS_CE3_4_right;
+        ce_3_right_rx[4] = USS_CE3_5_right;
+        ce_3_right_rx[5] = USS_CE3_7_right;
+        ce_3_right_rx[6] = USS_CE3_8_right;
+        ce_3_right_rx[7] = USS_CE3_9_right;
+        ce_3_right_rx[8] = USS_CE3_10_right;
+        ce_3_right_rx[9] = USS_CE3_11_right;
+
+        ce_3_left_rx[0] = USS_CE3_2_left;
+        ce_3_left_rx[1] = USS_CE3_3_left;
+        ce_3_left_rx[2] = USS_CE3_4_left;
+        ce_3_left_rx[3] = USS_CE3_5_left;
+        ce_3_left_rx[4] = USS_CE3_6_left;
+        ce_3_left_rx[5] = USS_CE3_8_left;
+        ce_3_left_rx[6] = USS_CE3_9_left;
+        ce_3_left_rx[7] = USS_CE3_10_left;
+        ce_3_left_rx[8] = USS_CE3_11_left;
+        ce_3_left_rx[9] = USS_CE3_12_left;
     }
 
     if (gcanid == 0x183 && msgEdlFlag == 1) {
