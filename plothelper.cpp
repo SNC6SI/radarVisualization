@@ -108,9 +108,13 @@ static void plot_help(void) {
 	putText(canvas, label, Point(XCOL / 2 - 100, YROW - 160), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
 	sprintf(label, "%s", "M: messure distance");
 	putText(canvas, label, Point(XCOL / 2 - 100, YROW - 140), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+	sprintf(label, "%s", "Space: restore axis");
+	putText(canvas, label, Point(XCOL / 2 - 100, YROW - 120), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
 	if (selected_mode == 2) {
 		sprintf(label, "%s", "F: fast forward");
-		putText(canvas, label, Point(XCOL / 2 - 100, YROW - 120), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+		putText(canvas, label, Point(XCOL / 2 - 100, YROW - 100), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+		sprintf(label, "%s", "Enter: pause");
+		putText(canvas, label, Point(XCOL / 2 - 100, YROW - 80), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
 	}
 }
 
