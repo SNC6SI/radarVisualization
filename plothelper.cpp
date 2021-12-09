@@ -24,6 +24,7 @@ static void plot_anno(void);
 static void plot_measure(void);
 static void plot_echo(void);
 static void plot_pas_sdw(void);
+static void plot_help(void);
 
 static void linspace_step(float x1, float x2, int step, float* xo, int* num);
 static void DrawDashedLine(Mat& img, Point pt1, Point pt2, Scalar color, int thickness, string style, int gap);
@@ -35,6 +36,7 @@ static int grid_num_y = 0;
 
 static int plotDeStatus;
 static int plotPsStatus;
+static int plotHelpStatus;
 static unsigned int alive_count = 0U;
 
 static const char cGEAR[5] = { 'P','R', 'N', 'D', 'E' };
@@ -49,6 +51,7 @@ void init_axis(void) {
 	linspace_step(0, YROW, LINSPACESTEP, grid_y, &grid_num_y);
 	plotDeStatus = 1;
 	plotPsStatus = 1;
+	plotHelpStatus = 0;
 }
 
 
@@ -65,6 +68,10 @@ void toggle_de_status(void) {
 
 void toggle_ps_status(void) {
 	plotPsStatus = !plotPsStatus;
+}
+
+void toggle_help_status(void) {
+	plotHelpStatus = !plotHelpStatus;
 }
 
 
@@ -85,8 +92,27 @@ void update_img(void) {
 	plot_info();
 	plot_anno();
 	plot_measure();
+	if (plotHelpStatus) {
+		plot_help();
+	}
 }
 
+
+static void plot_help(void) {
+	char label[256] = { 0 };
+	sprintf(label, "%s", "H: help menu");
+	putText(canvas, label, Point(XCOL / 2 - 100, YROW - 200), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+	sprintf(label, "%s", "D: direct echo");
+	putText(canvas, label, Point(XCOL / 2 - 100, YROW - 180), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+	sprintf(label, "%s", "W: radar wall");
+	putText(canvas, label, Point(XCOL / 2 - 100, YROW - 160), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+	sprintf(label, "%s", "M: messure distance");
+	putText(canvas, label, Point(XCOL / 2 - 100, YROW - 140), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+	if (selected_mode == 2) {
+		sprintf(label, "%s", "F: fast forward");
+		putText(canvas, label, Point(XCOL / 2 - 100, YROW - 120), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+	}
+}
 
 static void plot_axis(void) {
 	int i;

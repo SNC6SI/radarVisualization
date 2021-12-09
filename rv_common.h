@@ -26,6 +26,9 @@ typedef short rv_status;
 #define KEY_F     70
 #define KEY_f     102
 
+#define KEY_H     72
+#define KEY_h     104
+
 #define KEY_M     77
 #define KEY_m     109
 
