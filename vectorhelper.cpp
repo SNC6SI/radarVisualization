@@ -14,6 +14,8 @@ XLhandle        g_hMsgEvent;
 HANDLE          g_hRXThread;
 int             g_RXCANThreadRun;
 
+extern unsigned int msgEdlFlag;
+
 
 XLstatus rvInitDriver() {
     XLstatus          xlStatus;
@@ -59,7 +61,6 @@ XLstatus rvOpenDriver() {
 
 static DWORD WINAPI RxCanFdThread(LPVOID par) {
     XLstatus        xlStatus = XL_SUCCESS;
-    static unsigned int msgEdlFlag;
     g_RXCANThreadRun = 1;
     while (g_RXCANThreadRun) {
         WaitForSingleObject(g_hMsgEvent, 10);
@@ -74,7 +75,7 @@ static DWORD WINAPI RxCanFdThread(LPVOID par) {
             msgEdlFlag = (g_xlCanRxEvt.tagData.canRxOkMsg.msgFlags & XL_CAN_RXMSG_FLAG_EDL);
             // printf("0x%X, %d\n", gcanid, msgEdlFlag);
             update_sig();
-            update_binlog_write(msgEdlFlag);
+            update_binlog_write();
         } while (XL_SUCCESS == xlStatus);
     }
     xlClosePort(g_xlPortHandle);

@@ -7,6 +7,8 @@
 #include "menuhelper.h"
 #include "systimehelper.h"
 
+extern unsigned int msgEdlFlag;
+
 static float calcPointDis(float x0, float y0, float x1, float y1);
 static void lengthScaling(float* l, float* lo, int iter);
 
@@ -456,7 +458,7 @@ void check_timeout(void) {
 
 
 void update_sig(void) {
-    if (gcanid == 0x172) {
+    if (gcanid == 0x172 && msgEdlFlag == 1) {
         MapObj01P1X = ((((ptr[1]) << 2) + (((ptr[2]) & (3 << 6)) >> 6))* (4) + (-2044));
         MapObj01P1Y = ((((ptr[3]) << 2) + (((ptr[4]) & (3 << 6)) >> 6))* (4) + (-2044));
         MapObj01P2X = (((((ptr[4]) & 3) << 8) + (ptr[5])) * (4) + (-2044));
@@ -514,7 +516,7 @@ void update_sig(void) {
     }
 
 
-    if (gcanid == 0x173) {
+    if (gcanid == 0x173 && msgEdlFlag == 1) {
         MapObj05P1X = ((((ptr[1]) << 2) + (((ptr[2]) & (3 << 6)) >> 6))* (4) + (-2044));
         MapObj05P1Y = ((((ptr[3]) << 2) + (((ptr[4]) & (3 << 6)) >> 6))* (4) + (-2044));
         MapObj05P2X = (((((ptr[4]) & 3) << 8) + (ptr[5])) * (4) + (-2044));
@@ -561,7 +563,7 @@ void update_sig(void) {
     }
 
 
-    if (gcanid == 0x174) {
+    if (gcanid == 0x174 && msgEdlFlag == 1) {
         MapObj09P1X = ((((ptr[1]) << 2) + (((ptr[2]) & (3 << 6)) >> 6))* (4) + (-2044));
         MapObj09P1Y = ((((ptr[3]) << 2) + (((ptr[4]) & (3 << 6)) >> 6))* (4) + (-2044));
         MapObj09P2X = (((((ptr[4]) & 3) << 8) + (ptr[5])) * (4) + (-2044));
@@ -608,7 +610,7 @@ void update_sig(void) {
     }
 
 
-    if (gcanid == 0x177) {
+    if (gcanid == 0x177 && msgEdlFlag == 1) {
         MapObj13P1X = ((((ptr[1]) << 2) + (((ptr[2]) & (3 << 6)) >> 6))* (4) + (-2044));
         MapObj13P1Y = ((((ptr[3]) << 2) + (((ptr[4]) & (3 << 6)) >> 6))* (4) + (-2044));
         MapObj13P2X = (((((ptr[4]) & 3) << 8) + (ptr[5])) * (4) + (-2044));
@@ -655,7 +657,7 @@ void update_sig(void) {
     }
 
 
-    if (gcanid == 0x178) {
+    if (gcanid == 0x178 && msgEdlFlag == 1) {
         MapObj17P1X = ((((ptr[1]) << 2) + (((ptr[2]) & (3 << 6)) >> 6))* (4) + (-2044));
         MapObj17P1Y = ((((ptr[3]) << 2) + (((ptr[4]) & (3 << 6)) >> 6))* (4) + (-2044));
         MapObj17P2X = (((((ptr[4]) & 3) << 8) + (ptr[5])) * (4) + (-2044));
@@ -702,7 +704,7 @@ void update_sig(void) {
     }
 
 
-    if (gcanid == 0x179) {
+    if (gcanid == 0x179 && msgEdlFlag == 1) {
         ApaPscLeftSlot0Obj1X = ((((ptr[2]) << 3) + (((ptr[3]) & (7 << 5)) >> 5))* (2) + (-3584));
         ApaPscLeftSlot0Obj1Y = (((((ptr[3]) & 31) << 6) + (((ptr[4]) & (63 << 2)) >> 2))* (2) + (-3584));
         ApaPscLeftSlot0Obj2X = (((((ptr[4]) & 3) << 9) + ((ptr[5]) << 1) + (((ptr[6]) & (1 << 7)) >> 7))* (2) + (-3584));
@@ -776,7 +778,7 @@ void update_sig(void) {
     }
 
 
-    if (gcanid == 0x17A) {
+    if (gcanid == 0x17A && msgEdlFlag == 1) {
         ApaPscRightSlot0Obj1X = ((((ptr[2]) << 3) + (((ptr[3]) & (7 << 5)) >> 5))* (2) + (-3584));
         ApaPscRightSlot0Obj1Y = (((((ptr[3]) & 31) << 6) + (((ptr[4]) & (63 << 2)) >> 2))* (2) + (-3584));
         ApaPscRightSlot0Obj2X = (((((ptr[4]) & 3) << 9) + ((ptr[5]) << 1) + (((ptr[6]) & (1 << 7)) >> 7))* (2) + (-3584));
@@ -848,7 +850,7 @@ void update_sig(void) {
         slotyrec_rx[15] = slotyrec_rx[12] - slot_Depth[3] * cosf(slot_theta[3]);
     }
 
-    if (gcanid == 0x17B) {
+    if (gcanid == 0x17B && msgEdlFlag == 1) {
         USS_DE1_1 = ((((ptr[17]) << 2) + (((ptr[18]) & (3 << 6)) >> 6)) * (1) + (0));
         USS_DE1_2 = ((((ptr[1]) << 2) + (((ptr[2]) & (3 << 6)) >> 6)) * (1) + (0));
         USS_DE1_3 = (((((ptr[2]) & 3) << 8) + (ptr[3])) * (1) + (0));
@@ -875,7 +877,7 @@ void update_sig(void) {
         de_1_rx[11] = USS_DE1_12;
     }
 
-    if (gcanid == 0x17D) {
+    if (gcanid == 0x17D && msgEdlFlag == 1) {
         USS_DE2_1 = ((((ptr[17]) << 2) + (((ptr[18]) & (3 << 6)) >> 6)) * (1) + (0));
         USS_DE2_2 = ((((ptr[1]) << 2) + (((ptr[2]) & (3 << 6)) >> 6)) * (1) + (0));
         USS_DE2_3 = (((((ptr[2]) & 3) << 8) + (ptr[3])) * (1) + (0));
@@ -902,7 +904,7 @@ void update_sig(void) {
         de_2_rx[11] = USS_DE2_12;
     }
 
-    if (gcanid == 0x181) {
+    if (gcanid == 0x181 && msgEdlFlag == 1) {
         USS_DE3_1 = ((((ptr[17]) << 2) + (((ptr[18]) & (3 << 6)) >> 6)) * (1) + (0));
         USS_DE3_2 = ((((ptr[1]) << 2) + (((ptr[2]) & (3 << 6)) >> 6)) * (1) + (0));
         USS_DE3_3 = (((((ptr[2]) & 3) << 8) + (ptr[3])) * (1) + (0));
@@ -929,7 +931,7 @@ void update_sig(void) {
         de_3_rx[11] = USS_DE3_12;
     }
 
-    if (gcanid == 0x183) {
+    if (gcanid == 0x183 && msgEdlFlag == 1) {
         PAS_FL_Distance = ((ptr[1]) * (1) + (0));
         PAS_FLM_Distance = ((ptr[2]) * (1) + (0));
         PAS_FRM_Distance = ((ptr[4]) * (1) + (0));
@@ -1004,7 +1006,7 @@ void update_sig(void) {
         }
     }
 
-    if (gcanid == 0x150) {
+    if (gcanid == 0x150 && msgEdlFlag == 1) {
         ESP_VehicleSpeed = (((((ptr[1]) & 15) << 8) + (ptr[2])) * (0.05625) + (0));
         if (selected_mode == 1) {
             GetLocalTime(&local_time);
@@ -1018,14 +1020,14 @@ void update_sig(void) {
         }
     }
 
-    if (gcanid == 0x152) {
+    if (gcanid == 0x152 && msgEdlFlag == 1) {
         GW_VBU_GearLeverPos = (((ptr[9]) & 7) * (1) + (0));
         if (GW_VBU_GearLeverPos > 3) {
             GW_VBU_GearLeverPos = 4;
         }
     }
 
-    if (gcanid == 0x171) {
+    if (gcanid == 0x171 && msgEdlFlag == 1) {
         if (selected_mode == 1) {
             GetLocalTime(&local_time);
             SystemTimeToFileTime(&local_time, &local_time_TM.ft);

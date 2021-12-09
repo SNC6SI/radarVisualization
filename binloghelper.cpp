@@ -11,6 +11,7 @@
 
 extern char binlog_filename_write[512];
 extern char binlog_filename_read[512];
+extern unsigned int msgEdlFlag;
 
 HANDLE hbinlogFile;
 VBLFileStatisticsEx blstatistics;
@@ -33,8 +34,8 @@ int init_binlog_write(void) {
 
 static const BYTE dlcMapping[17] = {0,1,2,3,4,5,6,7,8,12,16,20,24,32,48,64};
 
-void update_binlog_write(unsigned int canFdFlag) {
-    if (canFdFlag) {
+void update_binlog_write() {
+    if (msgEdlFlag) {
         memset(&messageFD, 0, sizeof(VBLCANFDMessage64));
 
         messageFD.mHeader.mBase.mSignature = BL_OBJ_SIGNATURE;
@@ -102,6 +103,15 @@ int update_binlog_read(void) {
                 if (blSuccess) {
                     BLFreeObject(hbinlogFile, &messageFD.mHeader.mBase);
                 }
+                msgEdlFlag = 1;
+                break;
+            case BL_OBJ_TYPE_CAN_MESSAGE2:
+                message2.mHeader.mBase = blObjHeaderbase;
+                blSuccess = BLReadObjectSecure(hbinlogFile, &message2.mHeader.mBase, sizeof(message2));
+                if (blSuccess) {
+                    BLFreeObject(hbinlogFile, &message2.mHeader.mBase);
+                }
+                msgEdlFlag = 0;
                 break;
             default:
                 blSuccess = BLSkipObject(hbinlogFile, &blObjHeaderbase);

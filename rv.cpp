@@ -29,6 +29,7 @@ int binlog_filename_read_len;
 vector<int> binlog_filename_read_len_list;
 DWORD num_binlog_files;
 static int KEYPressed = 0xFFFF;
+unsigned int msgEdlFlag;
 static void online_mode(void);
 static void offline_mode(void);
 

@@ -23,6 +23,7 @@ static char backspace[256];
 
 static unsigned __int64 ts_additional;
 
+extern unsigned int msgEdlFlag;
 
 void push_fast_forward(void){
     ts_additional = TS_ADDITIONAL_DEFAULT;
@@ -38,9 +39,16 @@ int update_sig_interval_wrapper(void) {
     int status = NO_ERROR;
     while ((status = update_binlog_read()) == NO_ERROR) {
         greadcnt++;
-        memcpy(ptr, messageFD.mData, 64);
-        gcanid = messageFD.mID;
-        ts = messageFD.mHeader.mObjectTimeStamp;
+        if (msgEdlFlag == 1) {
+            memcpy(ptr, messageFD.mData, 64);
+            gcanid = messageFD.mID;
+            ts = messageFD.mHeader.mObjectTimeStamp;
+        }
+        else if (msgEdlFlag == 0) {
+            memcpy(ptr, message2.mData, 8);
+            gcanid = message2.mID;
+            ts = message2.mHeader.mObjectTimeStamp;
+        }
         update_sig();
         if (ts - ts_anchor > (TS_INT + ts_additional)) {
             ts_anchor = ts;
