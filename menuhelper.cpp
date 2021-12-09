@@ -115,7 +115,9 @@ void select_can_channel(void) {
     g_xlChannelMask = 0;
     for (i = 0; i < g_xlDrvConfig.channelCount; i++) {
         printf("%3d. %s\n", i + 1, g_xlDrvConfig.channel[i].name);
-        g_xlChannelMask |= (g_xlDrvConfig.channel[i].channelMask & 0xF);
+        if (g_xlDrvConfig.channel[i].busParams.busType == XL_BUS_TYPE_CAN) {
+            g_xlChannelMask |= g_xlDrvConfig.channel[i].channelMask;
+        }
     }
 #if 0
     xlChannelMaskPre = 0U;

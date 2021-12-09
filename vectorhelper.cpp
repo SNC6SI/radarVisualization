@@ -32,24 +32,24 @@ XLstatus rvOpenDriver() {
     // CAN FD
     xlStatus = xlOpenPort(&g_xlPortHandle, g_AppName, g_xlChannelMask, &g_xlPermissionMask, 16000, XL_INTERFACE_VERSION_V4, XL_BUS_TYPE_CAN);
     if ((XL_SUCCESS == xlStatus) && (XL_INVALID_PORTHANDLE != g_xlPortHandle)) {
-        if (g_xlChannelMask == g_xlPermissionMask) {
-            XLcanFdConf fdParams;
-            memset(&fdParams, 0, sizeof(fdParams));
-            // arbitration bitrate
-            fdParams.arbitrationBitRate = 500000;
-            fdParams.tseg1Abr = 3;
-            fdParams.tseg2Abr = 1;
-            fdParams.sjwAbr = 1;
-            // data bitrate
-            fdParams.dataBitRate = 2000000;
-            fdParams.tseg1Dbr = 15;
-            fdParams.tseg2Dbr = 4;
-            fdParams.sjwDbr = 4;
-            xlStatus = xlCanFdSetConfiguration(g_xlPortHandle, g_xlChannelMask, &fdParams);
-        }
-        else {
-            printf("NO init access!\n");
-        }
+        //if (g_xlChannelMask == g_xlPermissionMask) {
+        XLcanFdConf fdParams;
+        memset(&fdParams, 0, sizeof(fdParams));
+        // arbitration bitrate
+        fdParams.arbitrationBitRate = 500000;
+        fdParams.tseg1Abr = 3;
+        fdParams.tseg2Abr = 1;
+        fdParams.sjwAbr = 1;
+        // data bitrate
+        fdParams.dataBitRate = 2000000;
+        fdParams.tseg1Dbr = 15;
+        fdParams.tseg2Dbr = 4;
+        fdParams.sjwDbr = 4;
+        xlStatus = xlCanFdSetConfiguration(g_xlPortHandle, g_xlPermissionMask, &fdParams);
+        //}
+        //else {
+            //printf("NO init access!\n");
+        //}
     }
     else {
         xlClosePort(g_xlPortHandle);
