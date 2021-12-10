@@ -321,8 +321,8 @@ float ps_angle_anchor[4];
 float ps_angle_start[4];
 float ps_angle_end[4];
 
-static const float halt_fov_short = 60;
-static const float halt_fov_long = 30;
+static const float halt_fov_short = 25;
+static const float halt_fov_long = 20;
 
 const float de_angle_anchor[12] = { 180, -90, -90, -90, -90, 0,
                                       0,  90,  90,  90,  90, 180};
