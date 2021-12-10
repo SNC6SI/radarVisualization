@@ -140,6 +140,15 @@ float ApaPsc_RightPSL0_Length = 0.0F;
 float ApaPsc_RightPSL1_Depth = 0.0F;
 float ApaPsc_RightPSL1_Length = 0.0F;
 
+float ApaPscLeftSlot0Obj1Alpha = 0.0F;
+float ApaPscLeftSlot0Obj2Alpha = 0.0F;
+float ApaPscLeftSlot1Obj1Alpha = 0.0F;
+float ApaPscLeftSlot1Obj2Alpha = 0.0F;
+float ApaPscRightSlot0Obj1Alpha = 0.0F;
+float ApaPscRightSlot0Obj2Alpha = 0.0F;
+float ApaPscRightSlot1Obj1Alpha = 0.0F;
+float ApaPscRightSlot1Obj2Alpha = 0.0F;
+
 unsigned char ParkLeftslot0ID = 0.0F;
 unsigned char ParkLeftslot1ID = 0.0F;
 unsigned char ParkRightslot0ID = 0.0F;
@@ -785,6 +794,10 @@ void update_sig(void) {
         ApaPscLeftSlot1Obj2Y = (((((ptr[22]) & 127) << 4) + (((ptr[23]) & (15 << 4)) >> 4))* (2) + (-3584));
         ParkLeftslot0ID = (unsigned char)((ptr[1]) * (1) + (0));
         ParkLeftslot1ID = (unsigned char)((ptr[17]) * (1) + (0));
+        ApaPscLeftSlot0Obj1Alpha = ((((ptr[9]) & (127 << 1)) >> 1) * (2) + (-128));
+        ApaPscLeftSlot0Obj2Alpha = ((((ptr[10]) & (127 << 1)) >> 1) * (2) + (-128));
+        ApaPscLeftSlot1Obj1Alpha = ((((ptr[25]) & (127 << 1)) >> 1) * (2) + (-128));
+        ApaPscLeftSlot1Obj2Alpha = ((((ptr[26]) & (127 << 1)) >> 1) * (2) + (-128));
 
         ApaPsc_LeftPSL0_Depth = ((ptr[11]) * (4) + (0));
         ApaPsc_LeftPSL0_Length = ((((ptr[12]) << 1) + (((ptr[13]) & (1 << 7)) >> 7)) * (4) + (0));
@@ -859,6 +872,10 @@ void update_sig(void) {
         ApaPscRightSlot1Obj2Y = (((((ptr[22]) & 127) << 4) + (((ptr[23]) & (15 << 4)) >> 4))* (2) + (-3584));
         ParkRightslot0ID = (unsigned char)((ptr[1]) * (1) + (0));
         ParkRightslot1ID = (unsigned char)((ptr[17]) * (1) + (0));
+        ApaPscRightSlot0Obj1Alpha = ((((ptr[9]) & (127 << 1)) >> 1) * (2) + (-128));
+        ApaPscRightSlot0Obj2Alpha = ((((ptr[10]) & (127 << 1)) >> 1) * (2) + (-128));
+        ApaPscRightSlot1Obj1Alpha = ((((ptr[25]) & (127 << 1)) >> 1) * (2) + (-128));
+        ApaPscRightSlot1Obj2Alpha = ((((ptr[26]) & (127 << 1)) >> 1) * (2) + (-128));
 
         ApaPsc_RightPSL0_Depth = ((ptr[11]) * (4) + (0));
         ApaPsc_RightPSL0_Length = ((((ptr[12]) << 1) + (((ptr[13]) & (1 << 7)) >> 7)) * (4) + (0));

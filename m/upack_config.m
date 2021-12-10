@@ -106,6 +106,8 @@ function config = upack_config
         0x179, 'ApaPscLeftSlot0Obj2Y';
         0x179, 'ApaPsc_LeftPSL0_Depth';
         0x179, 'ApaPsc_LeftPSL0_Length';
+        0x179, 'ApaPscLeftSlot0Obj1Alpha';
+        0x179, 'ApaPscLeftSlot0Obj2Alpha';
 
         0x179, 'ApaPscLeftSlot1Obj1X';
         0x179, 'ApaPscLeftSlot1Obj1Y';
@@ -113,6 +115,8 @@ function config = upack_config
         0x179, 'ApaPscLeftSlot1Obj2Y';
         0x179, 'ApaPsc_LeftPSL1_Depth';
         0x179, 'ApaPsc_LeftPSL1_Length';
+        0x179, 'ApaPscLeftSlot1Obj1Alpha';
+        0x179, 'ApaPscLeftSlot1Obj2Alpha';
 
         0x179, 'ParkLeftslot0ID';
         0x179, 'ParkLeftslot1ID';
@@ -123,6 +127,8 @@ function config = upack_config
         0x17A, 'ApaPscRightSlot0Obj2Y';
         0x17A, 'ApaPsc_RightPSL0_Depth';
         0x17A, 'ApaPsc_RightPSL0_Length';
+        0x17A, 'ApaPscRightSlot0Obj1Alpha';
+        0x17A, 'ApaPscRightSlot0Obj2Alpha';
 
         0x17A, 'ApaPscRightSlot1Obj1X';
         0x17A, 'ApaPscRightSlot1Obj1Y';
@@ -130,6 +136,8 @@ function config = upack_config
         0x17A, 'ApaPscRightSlot1Obj2Y';
         0x17A, 'ApaPsc_RightPSL1_Depth';
         0x17A, 'ApaPsc_RightPSL1_Length';
+        0x17A, 'ApaPscRightSlot1Obj1Alpha';
+        0x17A, 'ApaPscRightSlot1Obj2Alpha';
 
         0x17A, 'ParkRightslot0ID';
         0x17A, 'ParkRightslot1ID';
