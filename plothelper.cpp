@@ -44,7 +44,7 @@ static const Scalar mHeight_blue[4] = { BLUEL, BLUEH , BLUET , BLUEU };
 static const vector<string> mlegend_blue = { "Low", "High" , "Traversable" , "Unknown" };
 static const Scalar mPs[5] = { RED, ORANGE, YELLOW, GREEN, WHITE };
 static const Scalar mTimeout[2] = { GREEN, RED };
-
+static const vector<string> mAPS2PA_working_sts = { "Off", "Standby", "Searching", "Tracking", "APS Failure", "PA Failure", "Reserved", "Reserved"};
 
 void init_axis(void) {
 	linspace_step(0, XCOL, LINSPACESTEP, grid_x, &grid_num_x);
@@ -314,6 +314,12 @@ static void plot_info(void) {
 		sprintf(label, "slot : (%4.0f, %4.0f) (%4.0f, %4.0f)", slotx_rx[2 * i], sloty_rx[2 * i], slotx_rx[2 * i + 1], sloty_rx[2 * i + 1]);
 		putText(canvas, label, Point(20, 310 + i * 10), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 	}
+	// 0x171
+	//mAPS2PA_working_sts   APS_Workingsts
+	sprintf(label, "APS_Workingsts: %s", mAPS2PA_working_sts[APS_Workingsts]);
+	putText(canvas, label, Point(20, 400), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+	sprintf(label, "ParkslotI_Selected: %d", ParkslotI_Selected);
+	putText(canvas, label, Point(20, 415), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 }
 
 
