@@ -27,6 +27,7 @@ extern unsigned int msgEdlFlag;
 
 void push_fast_forward(void){
     ts_additional = TS_ADDITIONAL_DEFAULT;
+    gPauseStatus = 0;
 }
 
 
