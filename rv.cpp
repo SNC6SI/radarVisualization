@@ -84,7 +84,7 @@ static void online_mode(void) {
     video_writer.open(video_filename, VideoWriter::fourcc('m', 'p', '4', 'v'), FPS, Size(XCOL + CAM1_XCOL, YROW), true);
 
     while ((KEYPressed = waitKey(WAITMS)) != KEY_ESC) {
-        if (KEYPressed == KEY_SPACE) {
+        if (KEYPressed == KEY_ENTER) {
             restore_axis();
         }
         if ((KEYPressed == KEY_D) || (KEYPressed == KEY_d)) {
@@ -131,10 +131,10 @@ static void offline_mode(void) {
         setMouseCallback("radar visualization offline", mouseCallBackFunc, NULL);
         CreateReplayThread();
         while ((KEYPressed = waitKey(WAITMS)) != KEY_ESC) {
-            if (KEYPressed == KEY_SPACE) {
+            if (KEYPressed == KEY_ENTER) {
                 restore_axis();
             }
-            if (KEYPressed == KEY_ENTER) {
+            if (KEYPressed == KEY_SPACE) {
                 toggle_pause_status();
             }
             if ((KEYPressed == KEY_D) || (KEYPressed == KEY_d)) {
