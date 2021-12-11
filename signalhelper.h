@@ -47,6 +47,9 @@ extern float slot_Depth[4];
 extern float slot_Length[4];
 extern float slot_theta[4];
 
+extern unsigned char ParkslotI_Selected;
+extern unsigned char APS_Workingsts;
+
 extern float X0;
 extern float Y0;
 

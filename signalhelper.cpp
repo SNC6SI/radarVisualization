@@ -275,6 +275,9 @@ float USS_CE3_12_left = 0.0F;
 float ESP_VehicleSpeed = 0.0F;
 unsigned char GW_VBU_GearLeverPos = 0.0F;
 
+unsigned char ParkslotI_Selected = 0U;
+unsigned char APS_Workingsts = 0U;
+
 unsigned int gcanid = 0;
 unsigned char ptr[64];
 unsigned __int64 ts;
@@ -1250,6 +1253,8 @@ void update_sig(void) {
     }
 
     if (gcanid == 0x171 && msgEdlFlag == 1) {
+        ParkslotI_Selected = ((ptr[1]) * (1) + (0));
+        APS_Workingsts = ((((ptr[2]) & (7 << 5)) >> 5) * (1) + (0));
         if (selected_mode == 1) {
             GetLocalTime(&local_time);
             SystemTimeToFileTime(&local_time, &local_time_TM.ft);
