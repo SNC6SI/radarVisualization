@@ -29,6 +29,8 @@ extern float gScale;
 #define ORANGE Scalar(0, 165, 255)
 #define YELLOW Scalar(0, 255, 255)
 
+#define Chocolate Scalar(30, 105, 210)
+
 #define XCOL 1200
 #define YROW 1000
 
