@@ -1287,7 +1287,7 @@ void update_sig(void) {
 
 
 float X0 = XCOL/2;
-float Y0 = YROW/2;
+float Y0 = YROW / 2 - 80;
 const float C0 = cos(M_PI_2);
 const float S0 = sin(M_PI_2);
 
