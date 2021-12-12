@@ -4,7 +4,7 @@ function [msg_unpack_s, def_s, dcl_s] = write_unpack_code
 
     % read config: canid, signal_name
 %     config = upack_config;
-    config = upack_config_5;
+    config = upack_config_6;
 
     % 
     unique_canids = unique(cell2mat(config(:,1)));
