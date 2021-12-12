@@ -62,6 +62,9 @@ static const vector<string> mUPC_SDW_WorkMode = { "0x0 Off", "0x1 Standby", "0x2
 static const vector<string> mAPA_PSLSts = { "0x0 Off", "0x1 Standby", "0x2 Searching", "0x3 Tracking", "0x4 APS Failure", "0x5 PA Failure",
                                             "0x6 Reserved", "0x7 Reserved"};
 static const vector<string> mMapObjType = { "None", "Point", "Straight0Corner", "Straight1Corner", "Straight2Corner", "Reserved", "Reserved", "Invalid"};
+static const vector<string> mSlot = { "left0", "left1", "right0" , "right1" };
+static const vector<string> mApaPscSlotTpye = { "None", "LeftParallel", "RightParallel", "LeftCross", "RightCross", "LeftDiagnal", "RightDiagnal", "Invalid"};
+static const vector<string> mApaPscPSLObjectType = { "None", "Curb", "Wall", "Virtual", "Low", "High", "Unknow", "Reserved"};
 
 
 void init_axis(void) {
@@ -391,33 +394,31 @@ static void plot_info(void) {
 		putText(canvas, label, Point(20, 50 + i * 10), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 	}
 
-	// slot id
-	sprintf(label, "slotid: %d %d %d %d", slotid[0], slotid[1], slotid[2], slotid[3]);
-	putText(canvas, label, Point(20, 300), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
-
 	// slot
 	for (i = 0; i < 4; i++) {
-		sprintf(label, "slot: (%6.0f, %-6.0f) (%6.0f, %-6.0f) {%4.0fdeg %-4.0fdeg}", slotx_rx[2 * i], sloty_rx[2 * i], slotx_rx[2 * i + 1], sloty_rx[2 * i + 1], slot_alpha_deg_rx[2 * i], slot_alpha_deg_rx[2 * i + 1]);
-		putText(canvas, label, Point(20, 310 + i * 10), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+		sprintf(label, "slot: %3d %s %s %s", slotid[i], mSlot[i].c_str(), mApaPscSlotTpye[ApaPscSlotTpye[i]].c_str(), mApaPscPSLObjectType[ApaPscPSLObjectType[i]].c_str());
+		putText(canvas, label, Point(20, 280 + 2 * i * 15), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+		sprintf(label, "     (%6.0f, %-6.0f) (%6.0f, %-6.0f) {%4.0fdeg %-4.0fdeg}", slotx_rx[2 * i], sloty_rx[2 * i], slotx_rx[2 * i + 1], sloty_rx[2 * i + 1], slot_alpha_deg_rx[2 * i], slot_alpha_deg_rx[2 * i + 1]);
+		putText(canvas, label, Point(20, 280 + 2 * i * 15 + 10), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 	}
 
 	// 0x171
 	sprintf(label, "APS_Workingsts: %s", mAPS2PA_working_sts[APS_Workingsts].c_str());
-	putText(canvas, label, Point(20, 400), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+	putText(canvas, label, Point(20, 420), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 	sprintf(label, "ParkslotI_Selected: %d", ParkslotI_Selected);
-	putText(canvas, label, Point(20, 415), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+	putText(canvas, label, Point(20, 435), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 
 	// 0x2B0
 	sprintf(label, "PAS_Mode: %s", mPAS_Mode[PAS_Mode].c_str());
-	putText(canvas, label, Point(20, 460), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+	putText(canvas, label, Point(20, 470), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 	sprintf(label, "PASWarningType: %s", mPASWarningType[PASWarningType].c_str());
-	putText(canvas, label, Point(20, 475), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+	putText(canvas, label, Point(20, 485), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 	sprintf(label, "PASFailureReason: %s", mPASFailureReason[PASFailureReason].c_str());
-	putText(canvas, label, Point(20, 490), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+	putText(canvas, label, Point(20, 500), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 	sprintf(label, "UPC_SDW_WorkMode: %s", mUPC_SDW_WorkMode[UPC_SDW_WorkMode].c_str());
-	putText(canvas, label, Point(20, 505), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+	putText(canvas, label, Point(20, 515), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 	sprintf(label, "APA_PSLSts: %s", mAPA_PSLSts[APA_PSLSts].c_str());
-	putText(canvas, label, Point(20, 520), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+	putText(canvas, label, Point(20, 530), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 }
 
 

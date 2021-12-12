@@ -29,6 +29,9 @@ extern float slotxrec_alpha[24];
 extern float slotyrec_alpha[24];
 extern float slot_alpha_deg_rx[8];
 
+extern unsigned char ApaPscSlotTpye[4];
+extern unsigned char ApaPscPSLObjectType[4];
+
 extern float de_1[12];
 extern float de_2[12];
 extern float de_3[12];

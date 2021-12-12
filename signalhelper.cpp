@@ -223,6 +223,18 @@ unsigned char ParkLeftslot1ID = 0.0F;
 unsigned char ParkRightslot0ID = 0.0F;
 unsigned char ParkRightslot1ID = 0.0F;
 
+unsigned char ApaPscLeftSlot0Tpye = 0U;
+unsigned char ApaPscLeftSlot1Tpye = 0U;
+unsigned char ApaPscRightSlot0Tpye = 0U;
+unsigned char ApaPscRightSlot1Tpye = 0U;
+unsigned char ApaPsc_LeftPSL0_ObjectType = 0U;
+unsigned char ApaPsc_LeftPSL1_ObjectType = 0U;
+unsigned char ApaPsc_RightPSL0_ObjectType = 0U;
+unsigned char ApaPsc_RightPSL1_ObjectType = 0U;
+
+unsigned char ApaPscSlotTpye[4];
+unsigned char ApaPscPSLObjectType[4];
+
 float PAS_FL_Distance = 0.0F;
 float PAS_FLM_Distance = 0.0F;
 float PAS_FRM_Distance = 0.0F;
@@ -1033,6 +1045,16 @@ void update_sig(void) {
         ApaPsc_LeftPSL1_Depth = ((ptr[27]) * (4) + (0));
         ApaPsc_LeftPSL1_Length = ((((ptr[28]) << 1) + (((ptr[29]) & (1 << 7)) >> 7)) * (4) + (0));
 
+        ApaPscLeftSlot0Tpye = ((((ptr[13]) & (7 << 4)) >> 4) * (1) + (0));
+        ApaPscLeftSlot1Tpye = ((((ptr[29]) & (7 << 4)) >> 4) * (1) + (0));
+        ApaPsc_LeftPSL0_ObjectType = ((((ptr[14]) & (7 << 5)) >> 5) * (1) + (0));
+        ApaPsc_LeftPSL1_ObjectType = ((((ptr[30]) & (7 << 5)) >> 5) * (1) + (0));
+
+        ApaPscSlotTpye[0] = ApaPscLeftSlot0Tpye;
+        ApaPscSlotTpye[1] = ApaPscLeftSlot1Tpye;
+        ApaPscPSLObjectType[0] = ApaPsc_LeftPSL0_ObjectType;
+        ApaPscPSLObjectType[1] = ApaPsc_LeftPSL1_ObjectType;
+
         slot_alpha_deg_rx[0] = ApaPscLeftSlot0Obj1Alpha;
         slot_alpha_deg_rx[1] = ApaPscLeftSlot0Obj2Alpha;
         slot_alpha_deg_rx[2] = ApaPscLeftSlot1Obj1Alpha;
@@ -1134,6 +1156,16 @@ void update_sig(void) {
         ApaPsc_RightPSL0_Length = ((((ptr[12]) << 1) + (((ptr[13]) & (1 << 7)) >> 7)) * (4) + (0));
         ApaPsc_RightPSL1_Depth = ((ptr[27]) * (4) + (0));
         ApaPsc_RightPSL1_Length = ((((ptr[28]) << 1) + (((ptr[29]) & (1 << 7)) >> 7)) * (4) + (0));
+
+        ApaPscRightSlot0Tpye = ((((ptr[13]) & (7 << 4)) >> 4) * (1) + (0));
+        ApaPscRightSlot1Tpye = ((((ptr[29]) & (7 << 4)) >> 4) * (1) + (0));
+        ApaPsc_RightPSL0_ObjectType = ((((ptr[14]) & (7 << 5)) >> 5) * (1) + (0));
+        ApaPsc_RightPSL1_ObjectType = ((((ptr[30]) & (7 << 5)) >> 5) * (1) + (0));
+
+        ApaPscSlotTpye[2] = ApaPscRightSlot0Tpye;
+        ApaPscSlotTpye[3] = ApaPscRightSlot1Tpye;
+        ApaPscPSLObjectType[2] = ApaPsc_RightPSL0_ObjectType;
+        ApaPscPSLObjectType[3] = ApaPsc_RightPSL1_ObjectType;
 
         slot_alpha_deg_rx[4] = ApaPscRightSlot0Obj1Alpha;
         slot_alpha_deg_rx[5] = ApaPscRightSlot0Obj2Alpha;
