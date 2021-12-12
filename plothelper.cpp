@@ -44,7 +44,18 @@ static const Scalar mHeight_blue[4] = { BLUEL, BLUEH , BLUET , BLUEU };
 static const vector<string> mlegend_blue = { "Low", "High" , "Traversable" , "Unknown" };
 static const Scalar mPs[5] = { RED, ORANGE, YELLOW, GREEN, WHITE };
 static const Scalar mTimeout[2] = { GREEN, RED };
-static const vector<string> mAPS2PA_working_sts = { "Off", "Standby", "Searching", "Tracking", "APS Failure", "PA Failure", "Reserved", "Reserved"};
+static const vector<string> mAPS2PA_working_sts = { "0x0 Off", "0x1 Standby", "0x2 Searching", "0x3 Tracking", "0x4 APS Failure", "0x5 PA Failure", "0x6 Reserved", "0x7 Reserved"};
+static const vector<string> mPAS_Mode = {"0x0 Off", "0x1 Standby", "0x2 StandbyAndFrontFailure", "0x3 StandbyAndRearFailure",
+                                         "0x4 FrontAcitve", "0x5 FrontActiveAndRearFailure", "0x6 RearActive", "0x7 RearActiveAndFrontFailure",
+                                         "0x8 FrontRearActive", "0x9 SystemFailure", "0xA FrontFailureAndRearInactive", "0xB RearFailureAndFrontInactive",
+                                         "0xC Reserved", "0xD Reserved" , "0xE Reserved" , "0xF Reserved" };
+static const vector<string> mPASWarningType = { "0x0 no object", "0x1 Buzzer On", "0x2 Buzzer ON at 8Hz", "0x3 Buzzer ON at 4Hz", "0x4 Buzzer ON at 1Hz",
+												"0x5 Reserved", "0x6 Reserved", "0x7 Reserved" };
+static const vector<string> mPASFailureReason = { "0x0 No failure", "0x1 Sensor blindness", "0x2 Other reason", "0x3 reserved"};
+static const vector<string> mUPC_SDW_WorkMode = { "0x0 Off", "0x1 Standby", "0x2 Active", "0x3 Failure"};
+static const vector<string> mAPA_PSLSts = { "0x0 Off", "0x1 Standby", "0x2 Searching", "0x3 Tracking", "0x4 APS Failure", "0x5 PA Failure",
+                                            "0x6 Reserved", "0x7 Reserved"};
+
 
 void init_axis(void) {
 	linspace_step(0, XCOL, LINSPACESTEP, grid_x, &grid_num_x);
@@ -360,11 +371,22 @@ static void plot_info(void) {
 	}
 
 	// 0x171
-	//mAPS2PA_working_sts   APS_Workingsts
-	sprintf(label, "APS_Workingsts: %s", mAPS2PA_working_sts[APS_Workingsts]);
+	sprintf(label, "APS_Workingsts: %s", mAPS2PA_working_sts[APS_Workingsts].c_str());
 	putText(canvas, label, Point(20, 400), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 	sprintf(label, "ParkslotI_Selected: %d", ParkslotI_Selected);
 	putText(canvas, label, Point(20, 415), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+
+	// 0x2B0
+	sprintf(label, "PAS_Mode: %s", mPAS_Mode[PAS_Mode].c_str());
+	putText(canvas, label, Point(20, 460), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+	sprintf(label, "PASWarningType: %s", mPASWarningType[PASWarningType].c_str());
+	putText(canvas, label, Point(20, 475), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+	sprintf(label, "PASFailureReason: %s", mPASFailureReason[PASFailureReason].c_str());
+	putText(canvas, label, Point(20, 490), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+	sprintf(label, "UPC_SDW_WorkMode: %s", mUPC_SDW_WorkMode[UPC_SDW_WorkMode].c_str());
+	putText(canvas, label, Point(20, 505), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+	sprintf(label, "APA_PSLSts: %s", mAPA_PSLSts[APA_PSLSts].c_str());
+	putText(canvas, label, Point(20, 520), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 }
 
 
