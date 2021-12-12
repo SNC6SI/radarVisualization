@@ -146,10 +146,15 @@ static void plot_help(void) {
 	sprintf(label, "%s", "Enter: restore axis");
 	putText(canvas, label, Point(XCOL / 2 - 300, YROW - 120), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
 
-	sprintf(label, "%s", "Mouse Left: measure");
+	sprintf(label, "%s", "G: grid");
 	putText(canvas, label, Point(XCOL / 2, YROW - 200), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
-	sprintf(label, "%s", "Mouse Wheel: zoom");
+	sprintf(label, "%s", "I: infos");
 	putText(canvas, label, Point(XCOL / 2, YROW - 180), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+
+	sprintf(label, "%s", "Mouse Left: measure");
+	putText(canvas, label, Point(XCOL / 2, YROW - 140), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+	sprintf(label, "%s", "Mouse Wheel: zoom");
+	putText(canvas, label, Point(XCOL / 2, YROW - 120), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
 
 	if (selected_mode == 2) {
 		sprintf(label, "%s", "F: fast forward");
