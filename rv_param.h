@@ -37,7 +37,7 @@ extern float gScale;
 #define CAM1_XCOL 640
 #define CAM1_YROW 480
 
-#define DEFAULTSCALE  0.4
+#define DEFAULTSCALE  0.35
 #define SCALESTEP     0.01
 #define ORIGINSTEP    5
 
