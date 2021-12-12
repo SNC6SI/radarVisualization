@@ -9,6 +9,10 @@ extern unsigned __int64 ts;
 
 extern unsigned char ptr[64];
 
+extern unsigned char MapObjType[20];
+extern float MapObjProb[20];
+extern float MapObjHeightProb[20];
+
 extern float objx_rx[40];
 extern float objy_rx[40];
 extern float slotx_rx[8];

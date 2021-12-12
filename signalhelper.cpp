@@ -95,6 +95,73 @@ float MapObj20P1Y=0.0F;
 float MapObj20P2X=0.0F;
 float MapObj20P2Y=0.0F;
 
+unsigned char MapObj01Type = 0U;
+unsigned char MapObj02Type = 0U;
+unsigned char MapObj03Type = 0U;
+unsigned char MapObj04Type = 0U;
+unsigned char MapObj05Type = 0U;
+unsigned char MapObj06Type = 0U;
+unsigned char MapObj07Type = 0U;
+unsigned char MapObj08Type = 0U;
+unsigned char MapObj09Type = 0U;
+unsigned char MapObj10Type = 0U;
+unsigned char MapObj11Type = 0U;
+unsigned char MapObj12Type = 0U;
+unsigned char MapObj13Type = 0U;
+unsigned char MapObj14Type = 0U;
+unsigned char MapObj15Type = 0U;
+unsigned char MapObj16Type = 0U;
+unsigned char MapObj17Type = 0U;
+unsigned char MapObj18Type = 0U;
+unsigned char MapObj19Type = 0U;
+unsigned char MapObj20Type = 0U;
+
+float MapObj01Prob = 0.0F;
+float MapObj02Prob = 0.0F;
+float MapObj03Prob = 0.0F;
+float MapObj04Prob = 0.0F;
+float MapObj05Prob = 0.0F;
+float MapObj06Prob = 0.0F;
+float MapObj07Prob = 0.0F;
+float MapObj08Prob = 0.0F;
+float MapObj09Prob = 0.0F;
+float MapObj10Prob = 0.0F;
+float MapObj11Prob = 0.0F;
+float MapObj12Prob = 0.0F;
+float MapObj13Prob = 0.0F;
+float MapObj14Prob = 0.0F;
+float MapObj15Prob = 0.0F;
+float MapObj16Prob = 0.0F;
+float MapObj17Prob = 0.0F;
+float MapObj18Prob = 0.0F;
+float MapObj19Prob = 0.0F;
+float MapObj20Prob = 0.0F;
+
+float MapObj01HeightProb = 0.0F;
+float MapObj02HeightProb = 0.0F;
+float MapObj03HeightProb = 0.0F;
+float MapObj04HeightProb = 0.0F;
+float MapObj05HeightProb = 0.0F;
+float MapObj06HeightProb = 0.0F;
+float MapObj07HeightProb = 0.0F;
+float MapObj08HeightProb = 0.0F;
+float MapObj09HeightProb = 0.0F;
+float MapObj10HeightProb = 0.0F;
+float MapObj11HeightProb = 0.0F;
+float MapObj12HeightProb = 0.0F;
+float MapObj13HeightProb = 0.0F;
+float MapObj14HeightProb = 0.0F;
+float MapObj15HeightProb = 0.0F;
+float MapObj16HeightProb = 0.0F;
+float MapObj17HeightProb = 0.0F;
+float MapObj18HeightProb = 0.0F;
+float MapObj19HeightProb = 0.0F;
+float MapObj20HeightProb = 0.0F;
+
+unsigned char MapObjType[20];
+float MapObjProb[20];
+float MapObjHeightProb[20];
+
 unsigned char MapObj01Height = 0U;
 unsigned char MapObj02Height = 0U;
 unsigned char MapObj03Height = 0U;
@@ -377,6 +444,9 @@ void init_sig(void) {
     memset((void*)sloty_rx, 0, sizeof(sloty_rx));
     memset((void*)objx, 0, sizeof(objx));
     memset((void*)objy, 0, sizeof(objy));
+    memset((void*)MapObjType, 0, sizeof(MapObjType));
+    memset((void*)MapObjProb, 0, sizeof(MapObjProb));
+    memset((void*)MapObjHeightProb, 0, sizeof(MapObjHeightProb));
     memset((void*)slotx, 0, sizeof(slotx));
     memset((void*)sloty, 0, sizeof(sloty));
     memset((void*)slotxrec_alpha_rx, 0, sizeof(slotxrec_alpha_rx));
@@ -582,6 +652,33 @@ void update_sig(void) {
         MapObj02Height = ((((ptr[15]) & (3 << 4)) >> 4) * (1) + (0));
         MapObj03Height = ((((ptr[23]) & (3 << 4)) >> 4) * (1) + (0));
         MapObj04Height = ((((ptr[31]) & (3 << 4)) >> 4) * (1) + (0));
+        MapObj01Type = (((ptr[2]) & 7) * (1) + (0));
+        MapObj02Type = (((ptr[10]) & 7) * (1) + (0));
+        MapObj03Type = (((ptr[18]) & 7) * (1) + (0));
+        MapObj04Type = (((ptr[26]) & 7) * (1) + (0));
+        MapObj01Prob = ((((ptr[2]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj02Prob = ((((ptr[10]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj03Prob = ((((ptr[18]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj04Prob = ((((ptr[26]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj01HeightProb = ((((ptr[4]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj02HeightProb = ((((ptr[12]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj03HeightProb = ((((ptr[20]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj04HeightProb = ((((ptr[28]) & (7 << 3)) >> 3) * (16.666) + (0));
+
+        MapObjType[0] = MapObj01Type;
+        MapObjType[1] = MapObj02Type;
+        MapObjType[2] = MapObj03Type;
+        MapObjType[3] = MapObj04Type;
+
+        MapObjProb[0] = MapObj01Prob;
+        MapObjProb[1] = MapObj02Prob;
+        MapObjProb[2] = MapObj03Prob;
+        MapObjProb[3] = MapObj04Prob;
+
+        MapObjHeightProb[0] = MapObj01HeightProb;
+        MapObjHeightProb[1] = MapObj02HeightProb;
+        MapObjHeightProb[2] = MapObj03HeightProb;
+        MapObjHeightProb[3] = MapObj04HeightProb;
 
         objx_rx[0] = MapObj01P1X;
         objx_rx[1] = MapObj01P2X;
@@ -640,6 +737,33 @@ void update_sig(void) {
         MapObj06Height = ((((ptr[15]) & (3 << 4)) >> 4) * (1) + (0));
         MapObj07Height = ((((ptr[23]) & (3 << 4)) >> 4) * (1) + (0));
         MapObj08Height = ((((ptr[31]) & (3 << 4)) >> 4) * (1) + (0));
+        MapObj05Type = (((ptr[2]) & 7) * (1) + (0));
+        MapObj06Type = (((ptr[10]) & 7) * (1) + (0));
+        MapObj07Type = (((ptr[18]) & 7) * (1) + (0));
+        MapObj08Type = (((ptr[26]) & 7) * (1) + (0));
+        MapObj05Prob = ((((ptr[2]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj06Prob = ((((ptr[10]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj07Prob = ((((ptr[18]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj08Prob = ((((ptr[26]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj05HeightProb = ((((ptr[4]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj06HeightProb = ((((ptr[12]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj07HeightProb = ((((ptr[20]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj08HeightProb = ((((ptr[28]) & (7 << 3)) >> 3) * (16.666) + (0));
+
+        MapObjType[4] = MapObj05Type;
+        MapObjType[5] = MapObj06Type;
+        MapObjType[6] = MapObj07Type;
+        MapObjType[7] = MapObj08Type;
+
+        MapObjProb[4] = MapObj05Prob;
+        MapObjProb[5] = MapObj06Prob;
+        MapObjProb[6] = MapObj07Prob;
+        MapObjProb[7] = MapObj08Prob;
+
+        MapObjHeightProb[4] = MapObj05HeightProb;
+        MapObjHeightProb[5] = MapObj06HeightProb;
+        MapObjHeightProb[6] = MapObj07HeightProb;
+        MapObjHeightProb[7] = MapObj08HeightProb;
 
         objx_rx[8] = MapObj05P1X;
         objx_rx[9] = MapObj05P2X;
@@ -687,6 +811,33 @@ void update_sig(void) {
         MapObj10Height = ((((ptr[15]) & (3 << 4)) >> 4) * (1) + (0));
         MapObj11Height = ((((ptr[23]) & (3 << 4)) >> 4) * (1) + (0));
         MapObj12Height = ((((ptr[31]) & (3 << 4)) >> 4) * (1) + (0));
+        MapObj09Type = (((ptr[2]) & 7) * (1) + (0));
+        MapObj10Type = (((ptr[10]) & 7) * (1) + (0));
+        MapObj11Type = (((ptr[18]) & 7) * (1) + (0));
+        MapObj12Type = (((ptr[26]) & 7) * (1) + (0));
+        MapObj09Prob = ((((ptr[2]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj10Prob = ((((ptr[10]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj11Prob = ((((ptr[18]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj12Prob = ((((ptr[26]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj09HeightProb = ((((ptr[4]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj10HeightProb = ((((ptr[12]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj11HeightProb = ((((ptr[20]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj12HeightProb = ((((ptr[28]) & (7 << 3)) >> 3) * (16.666) + (0));
+
+        MapObjType[8] = MapObj09Type;
+        MapObjType[9] = MapObj10Type;
+        MapObjType[10] = MapObj11Type;
+        MapObjType[11] = MapObj12Type;
+
+        MapObjProb[8] = MapObj09Prob;
+        MapObjProb[9] = MapObj10Prob;
+        MapObjProb[10] = MapObj11Prob;
+        MapObjProb[11] = MapObj12Prob;
+
+        MapObjHeightProb[8] = MapObj09HeightProb;
+        MapObjHeightProb[9] = MapObj10HeightProb;
+        MapObjHeightProb[10] = MapObj11HeightProb;
+        MapObjHeightProb[11] = MapObj12HeightProb;
 
         objx_rx[16] = MapObj09P1X;
         objx_rx[17] = MapObj09P2X;
@@ -734,6 +885,33 @@ void update_sig(void) {
         MapObj14Height = ((((ptr[15]) & (3 << 4)) >> 4) * (1) + (0));
         MapObj15Height = ((((ptr[23]) & (3 << 4)) >> 4) * (1) + (0));
         MapObj16Height = ((((ptr[31]) & (3 << 4)) >> 4) * (1) + (0));
+        MapObj13Type = (((ptr[2]) & 7) * (1) + (0));
+        MapObj14Type = (((ptr[10]) & 7) * (1) + (0));
+        MapObj15Type = (((ptr[18]) & 7) * (1) + (0));
+        MapObj16Type = (((ptr[26]) & 7) * (1) + (0));
+        MapObj13Prob = ((((ptr[2]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj14Prob = ((((ptr[10]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj15Prob = ((((ptr[18]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj16Prob = ((((ptr[26]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj13HeightProb = ((((ptr[4]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj14HeightProb = ((((ptr[12]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj15HeightProb = ((((ptr[20]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj16HeightProb = ((((ptr[28]) & (7 << 3)) >> 3) * (16.666) + (0));
+
+        MapObjType[12] = MapObj13Type;
+        MapObjType[13] = MapObj14Type;
+        MapObjType[14] = MapObj15Type;
+        MapObjType[15] = MapObj16Type;
+
+        MapObjProb[12] = MapObj13Prob;
+        MapObjProb[13] = MapObj14Prob;
+        MapObjProb[14] = MapObj15Prob;
+        MapObjProb[15] = MapObj16Prob;
+
+        MapObjHeightProb[12] = MapObj13HeightProb;
+        MapObjHeightProb[13] = MapObj14HeightProb;
+        MapObjHeightProb[14] = MapObj15HeightProb;
+        MapObjHeightProb[15] = MapObj16HeightProb;
 
         objx_rx[24] = MapObj13P1X;
         objx_rx[25] = MapObj13P2X;
@@ -781,6 +959,33 @@ void update_sig(void) {
         MapObj18Height = ((((ptr[15]) & (3 << 4)) >> 4) * (1) + (0));
         MapObj19Height = ((((ptr[23]) & (3 << 4)) >> 4) * (1) + (0));
         MapObj20Height = ((((ptr[31]) & (3 << 4)) >> 4) * (1) + (0));
+        MapObj17Type = (((ptr[2]) & 7) * (1) + (0));
+        MapObj18Type = (((ptr[10]) & 7) * (1) + (0));
+        MapObj19Type = (((ptr[18]) & 7) * (1) + (0));
+        MapObj20Type = (((ptr[26]) & 7) * (1) + (0));
+        MapObj17Prob = ((((ptr[2]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj18Prob = ((((ptr[10]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj19Prob = ((((ptr[18]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj20Prob = ((((ptr[26]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj17HeightProb = ((((ptr[4]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj18HeightProb = ((((ptr[12]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj19HeightProb = ((((ptr[20]) & (7 << 3)) >> 3) * (16.666) + (0));
+        MapObj20HeightProb = ((((ptr[28]) & (7 << 3)) >> 3) * (16.666) + (0));
+
+        MapObjType[16] = MapObj17Type;
+        MapObjType[17] = MapObj18Type;
+        MapObjType[18] = MapObj19Type;
+        MapObjType[19] = MapObj20Type;
+
+        MapObjProb[16] = MapObj17Prob;
+        MapObjProb[17] = MapObj18Prob;
+        MapObjProb[18] = MapObj19Prob;
+        MapObjProb[19] = MapObj20Prob;
+
+        MapObjHeightProb[16] = MapObj17HeightProb;
+        MapObjHeightProb[17] = MapObj18HeightProb;
+        MapObjHeightProb[18] = MapObj19HeightProb;
+        MapObjHeightProb[19] = MapObj20HeightProb;
 
         objx_rx[32] = MapObj17P1X;
         objx_rx[33] = MapObj17P2X;

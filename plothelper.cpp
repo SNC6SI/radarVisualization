@@ -61,6 +61,7 @@ static const vector<string> mPASFailureReason = { "0x0 No failure", "0x1 Sensor 
 static const vector<string> mUPC_SDW_WorkMode = { "0x0 Off", "0x1 Standby", "0x2 Active", "0x3 Failure"};
 static const vector<string> mAPA_PSLSts = { "0x0 Off", "0x1 Standby", "0x2 Searching", "0x3 Tracking", "0x4 APS Failure", "0x5 PA Failure",
                                             "0x6 Reserved", "0x7 Reserved"};
+static const vector<string> mMapObjType = { "None", "Point", "Straight0Corner", "Straight1Corner", "Straight2Corner", "Reserved", "Reserved", "Invalid"};
 
 
 void init_axis(void) {
@@ -385,7 +386,8 @@ static void plot_info(void) {
 
 	// obj
 	for (i = 0; i < 20; i++) {
-		sprintf(label, "Obj%02d: (%4.0f, %4.0f) (%4.0f, %4.0f)", i + 1, objx_rx[2 * i], objy_rx[2 * i], objx_rx[2 * i + 1], objy_rx[2 * i + 1]);
+		sprintf(label, "Obj%02d: (%4.0f, %-4.0f) (%4.0f, %-4.0f) {H: %-3.1f%%} |%3.1f%% %-s| ", i + 1, objx_rx[2 * i], objy_rx[2 * i], objx_rx[2 * i + 1], objy_rx[2 * i + 1],
+			    MapObjHeightProb[i], MapObjProb[i], mMapObjType[MapObjType[i]].c_str());
 		putText(canvas, label, Point(20, 50 + i * 10), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 	}
 
@@ -395,7 +397,7 @@ static void plot_info(void) {
 
 	// slot
 	for (i = 0; i < 4; i++) {
-		sprintf(label, "slot: (%6.0f, %6.0f) (%6.0f, %6.0f) %4.0fdeg %4.0fdeg", slotx_rx[2 * i], sloty_rx[2 * i], slotx_rx[2 * i + 1], sloty_rx[2 * i + 1], slot_alpha_deg_rx[2 * i], slot_alpha_deg_rx[2 * i + 1]);
+		sprintf(label, "slot: (%6.0f, %-6.0f) (%6.0f, %-6.0f) {%4.0fdeg %-4.0fdeg}", slotx_rx[2 * i], sloty_rx[2 * i], slotx_rx[2 * i + 1], sloty_rx[2 * i + 1], slot_alpha_deg_rx[2 * i], slot_alpha_deg_rx[2 * i + 1]);
 		putText(canvas, label, Point(20, 310 + i * 10), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 	}
 
