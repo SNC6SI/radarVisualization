@@ -19,6 +19,8 @@
 using namespace std;
 using namespace cv;
 
+char version[] = "0.1.8";
+
 char record_folder[512];
 int record_folder_len;
 char video_filename[512];

@@ -12,6 +12,9 @@
 
 using namespace std;
 using namespace cv;
+
+extern char version[];
+
 Mat canvas(YROW, XCOL, CV_8UC3, Scalar(255, 255, 255));
 
 static void plot_axis(void);
@@ -25,6 +28,7 @@ static void plot_measure(void);
 static void plot_echo(void);
 static void plot_pas_sdw(void);
 static void plot_help(void);
+static void plot_version(void);
 
 static void linspace_step(float x1, float x2, int step, float* xo, int* num);
 static void DrawDashedLine(Mat& img, Point pt1, Point pt2, Scalar color, int thickness, string style, int gap);
@@ -90,6 +94,7 @@ void update_img(void) {
 	canvas.setTo(Scalar::all(255));
 	alive_count++;
 	plot_axis();
+	plot_version();
 	plot_vehicle();
 	if (plotPsStatus) {
 		plot_pas_sdw();
@@ -107,7 +112,11 @@ void update_img(void) {
 		plot_help();
 	}
 }
-
+static void plot_version(void) {
+	char label[256] = { 0 };
+	sprintf(label, "version: %s by SNC6SI", version);
+	putText(canvas, label, Point(XCOL - 180, YROW - 20), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
+}
 
 static void plot_help(void) {
 	char label[256] = { 0 };
