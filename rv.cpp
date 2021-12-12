@@ -92,6 +92,12 @@ static void online_mode(void) {
         if ((KEYPressed == KEY_D) || (KEYPressed == KEY_d)) {
             toggle_de_status();
         }
+        if ((KEYPressed == KEY_G) || (KEYPressed == KEY_g)) {
+            toggle_grid_status();
+        }
+        if ((KEYPressed == KEY_I) || (KEYPressed == KEY_i)) {
+            toggle_info_status();
+        }
         if ((KEYPressed == KEY_W) || (KEYPressed == KEY_w)) {
             toggle_ps_status();
         }
@@ -141,6 +147,12 @@ static void offline_mode(void) {
             }
             if ((KEYPressed == KEY_D) || (KEYPressed == KEY_d)) {
                 toggle_de_status();
+            }
+            if ((KEYPressed == KEY_G) || (KEYPressed == KEY_g)) {
+                toggle_grid_status();
+            }
+            if ((KEYPressed == KEY_I) || (KEYPressed == KEY_i)) {
+                toggle_info_status();
             }
             if ((KEYPressed == KEY_W) || (KEYPressed == KEY_w)) {
                 toggle_ps_status();

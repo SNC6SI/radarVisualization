@@ -40,6 +40,8 @@ static int grid_num_y = 0;
 
 static int plotDeStatus;
 static int plotPsStatus;
+static int plotInfoStatus;
+static int plotGridStatus;
 static int plotHelpStatus;
 static unsigned int alive_count = 0U;
 
@@ -66,6 +68,8 @@ void init_axis(void) {
 	linspace_step(0, YROW, LINSPACESTEP, grid_y, &grid_num_y);
 	plotDeStatus = 1;
 	plotPsStatus = 1;
+	plotInfoStatus = 1;
+	plotGridStatus = 1;
 	plotHelpStatus = 0;
 }
 
@@ -76,6 +80,13 @@ void restore_axis(void) {
 	Y0 = YROW / 2;
 }
 
+void toggle_info_status(void) {
+	plotInfoStatus = !plotInfoStatus;
+}
+
+void toggle_grid_status(void) {
+	plotGridStatus = !plotGridStatus;
+}
 
 void toggle_de_status(void) {
 	plotDeStatus = !plotDeStatus;
@@ -93,7 +104,9 @@ void toggle_help_status(void) {
 void update_img(void) {
 	canvas.setTo(Scalar::all(255));
 	alive_count++;
-	plot_axis();
+	if (plotGridStatus) {
+		plot_axis();
+	}
 	plot_version();
 	plot_vehicle();
 	if (plotPsStatus) {
@@ -102,10 +115,12 @@ void update_img(void) {
 	if (plotDeStatus) {
 		plot_echo();
 	}
-	plot_objs();
-	plot_slots();
-	plot_misc();
-	plot_info();
+	if (plotInfoStatus) {
+		plot_objs();
+		plot_slots();
+		plot_misc();
+		plot_info();
+	}
 	plot_anno();
 	plot_measure();
 	if (plotHelpStatus) {
