@@ -398,7 +398,7 @@ static void plot_info(void) {
 	for (i = 0; i < 4; i++) {
 		sprintf(label, "slot: %3d %s %s %s", slotid[i], mSlot[i].c_str(), mApaPscSlotTpye[ApaPscSlotTpye[i]].c_str(), mApaPscPSLObjectType[ApaPscPSLObjectType[i]].c_str());
 		putText(canvas, label, Point(20, 280 + 2 * i * 15), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
-		sprintf(label, "     (%6.0f, %-6.0f) (%6.0f, %-6.0f) {%4.0fdeg %-4.0fdeg}", slotx_rx[2 * i], sloty_rx[2 * i], slotx_rx[2 * i + 1], sloty_rx[2 * i + 1], slot_alpha_deg_rx[2 * i], slot_alpha_deg_rx[2 * i + 1]);
+		sprintf(label, "     (%6.0f, %-6.0f) (%6.0f, %-6.0f) <%.0fdeg %.0fdeg>", slotx_rx[2 * i], sloty_rx[2 * i], slotx_rx[2 * i + 1], sloty_rx[2 * i + 1], slot_alpha_deg_rx[2 * i], slot_alpha_deg_rx[2 * i + 1]);
 		putText(canvas, label, Point(20, 280 + 2 * i * 15 + 10), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 	}
 
