@@ -55,6 +55,12 @@ extern unsigned char slotid[4];
 extern unsigned char ParkslotI_Selected;
 extern unsigned char APS_Workingsts;
 
+extern unsigned char PAS_Mode;
+extern unsigned char PASWarningType;
+extern unsigned char PASFailureReason;
+extern unsigned char UPC_SDW_WorkMode;
+extern unsigned char APA_PSLSts;
+
 extern float X0;
 extern float Y0;
 

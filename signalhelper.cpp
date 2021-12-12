@@ -273,6 +273,12 @@ float USS_CE3_10_left = 0.0F;
 float USS_CE3_11_left = 0.0F;
 float USS_CE3_12_left = 0.0F;
 
+unsigned char PAS_Mode = 0U;
+unsigned char PASWarningType = 0U;
+unsigned char PASFailureReason = 0U;
+unsigned char UPC_SDW_WorkMode = 0U;
+unsigned char APA_PSLSts = 0U;
+
 
 float ESP_VehicleSpeed = 0.0F;
 unsigned char GW_VBU_GearLeverPos = 0.0F;
@@ -1293,6 +1299,14 @@ void update_sig(void) {
             else
                 ps_color_idx[i] = 4;
         }
+    }
+
+    if (gcanid == 0x2B0 && msgEdlFlag == 1) {
+        PAS_Mode = (((ptr[1]) & 15) * (1) + (0));
+        PASWarningType = (((ptr[5]) & 7) * (1) + (0));
+        PASFailureReason = ((((ptr[5]) & (3 << 3)) >> 3) * (1) + (0));
+        UPC_SDW_WorkMode = ((((ptr[10]) & (3 << 6)) >> 6) * (1) + (0));
+        APA_PSLSts = ((((ptr[11]) & (7 << 5)) >> 5) * (1) + (0));
     }
 
     if (gcanid == 0x150 && msgEdlFlag == 1) {
