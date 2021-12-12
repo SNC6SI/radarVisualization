@@ -18,8 +18,13 @@ extern float objx[40];
 extern float objy[40];
 extern float slotx[8];
 extern float sloty[8];
-extern float slotxrec[16];
-extern float slotyrec[16];
+//extern float slotxrec[16];
+//extern float slotyrec[16];
+
+extern float slotxrec_alpha[24];
+extern float slotyrec_alpha[24];
+extern float slot_alpha_deg_rx[8];
+
 extern float de_1[12];
 extern float de_2[12];
 extern float de_3[12];
@@ -43,9 +48,9 @@ extern const float de_angle_end[12];
 extern unsigned char objH[20];
 extern unsigned char slotid[4];
 
-extern float slot_Depth[4];
-extern float slot_Length[4];
-extern float slot_theta[4];
+//extern float slot_Depth[4];
+//extern float slot_Length[4];
+//extern float slot_theta[4];
 
 extern unsigned char ParkslotI_Selected;
 extern unsigned char APS_Workingsts;

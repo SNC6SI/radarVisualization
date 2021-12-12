@@ -7,6 +7,8 @@
 #include "menuhelper.h"
 #include "systimehelper.h"
 
+#define DEG2RAD(x) (x/180.0*M_PI)
+
 extern unsigned int msgEdlFlag;
 
 static float calcPointDis(float x0, float y0, float x1, float y1);
@@ -286,8 +288,11 @@ float objx_rx[40];
 float objy_rx[40];
 float slotx_rx[8];
 float sloty_rx[8];
-float slotxrec_rx[16];
-float slotyrec_rx[16];
+//float slotxrec_rx[16];
+//float slotyrec_rx[16];
+float slotxrec_alpha_rx[24];
+float slotyrec_alpha_rx[24];
+float slot_alpha_deg_rx[8];
 float de_1_rx[12];
 float de_2_rx[12];
 float de_3_rx[12];
@@ -302,8 +307,11 @@ float objx[40];
 float objy[40];
 float slotx[8];
 float sloty[8];
-float slotxrec[16];
-float slotyrec[16];
+//float slotxrec[16];
+//float slotyrec[16];
+float slotxrec_alpha[24];
+float slotyrec_alpha[24];
+float slot_alpha_rad[8];
 float de_1[12];
 float de_2[12];
 float de_3[12];
@@ -312,7 +320,7 @@ unsigned char objH[20];
 unsigned char slotid[4];
 float slot_Depth[4];
 float slot_Length[4];
-float slot_theta[4];
+//float slot_theta[4];
 
 float gScale;
 
@@ -365,10 +373,16 @@ void init_sig(void) {
     memset((void*)objy, 0, sizeof(objy));
     memset((void*)slotx, 0, sizeof(slotx));
     memset((void*)sloty, 0, sizeof(sloty));
+    memset((void*)slotxrec_alpha_rx, 0, sizeof(slotxrec_alpha_rx));
+    memset((void*)slotyrec_alpha_rx, 0, sizeof(slotyrec_alpha_rx));
+    memset((void*)slotxrec_alpha, 0, sizeof(slotxrec_alpha));
+    memset((void*)slotyrec_alpha, 0, sizeof(slotyrec_alpha));
+    memset((void*)slot_alpha_deg_rx, 0, sizeof(slot_alpha_deg_rx));
+    memset((void*)slot_alpha_rad, 0, sizeof(slot_alpha_rad));
     memset((void*)slotid, 0, 4);
     memset((void*)slot_Depth, 0, sizeof(slot_Depth));
     memset((void*)slot_Length, 0, sizeof(slot_Length));
-    memset((void*)slot_theta, 0, sizeof(slot_theta));
+    //memset((void*)slot_theta, 0, sizeof(slot_theta));
     memset((void*)de_1_rx, 0, sizeof(de_1_rx));
     memset((void*)de_2_rx, 0, sizeof(de_2_rx));
     memset((void*)de_3_rx, 0, sizeof(de_3_rx));
@@ -391,7 +405,8 @@ void init_sig(void) {
 static void update_sig_internal(void) {
     point4pose(&objx_rx[0], &objy_rx[0], &objx[0], &objy[0], sizeof(objy_rx)/ sizeof(objy_rx[0]));
     point4pose(&slotx_rx[0], &sloty_rx[0], &slotx[0], &sloty[0], sizeof(slotx_rx) / sizeof(slotx_rx[0]));
-    point4pose(&slotxrec_rx[0], &slotyrec_rx[0], &slotxrec[0], &slotyrec[0], sizeof(slotxrec_rx) / sizeof(slotxrec_rx[0]));
+    //point4pose(&slotxrec_rx[0], &slotyrec_rx[0], &slotxrec[0], &slotyrec[0], sizeof(slotxrec_rx) / sizeof(slotxrec_rx[0]));
+    point4pose(&slotxrec_alpha_rx[0], &slotyrec_alpha_rx[0], &slotxrec_alpha[0], &slotyrec_alpha[0], sizeof(slotxrec_alpha_rx) / sizeof(slotxrec_alpha_rx[0]));
 }
 
 
@@ -801,11 +816,20 @@ void update_sig(void) {
         ApaPscLeftSlot0Obj2Alpha = ((((ptr[10]) & (127 << 1)) >> 1) * (2) + (-128));
         ApaPscLeftSlot1Obj1Alpha = ((((ptr[25]) & (127 << 1)) >> 1) * (2) + (-128));
         ApaPscLeftSlot1Obj2Alpha = ((((ptr[26]) & (127 << 1)) >> 1) * (2) + (-128));
-
+        
         ApaPsc_LeftPSL0_Depth = ((ptr[11]) * (4) + (0));
         ApaPsc_LeftPSL0_Length = ((((ptr[12]) << 1) + (((ptr[13]) & (1 << 7)) >> 7)) * (4) + (0));
         ApaPsc_LeftPSL1_Depth = ((ptr[27]) * (4) + (0));
         ApaPsc_LeftPSL1_Length = ((((ptr[28]) << 1) + (((ptr[29]) & (1 << 7)) >> 7)) * (4) + (0));
+
+        slot_alpha_deg_rx[0] = ApaPscLeftSlot0Obj1Alpha;
+        slot_alpha_deg_rx[1] = ApaPscLeftSlot0Obj2Alpha;
+        slot_alpha_deg_rx[2] = ApaPscLeftSlot1Obj1Alpha;
+        slot_alpha_deg_rx[3] = ApaPscLeftSlot1Obj2Alpha;
+        slot_alpha_rad[0] = DEG2RAD(slot_alpha_deg_rx[0]);
+        slot_alpha_rad[1] = DEG2RAD(slot_alpha_deg_rx[1]);
+        slot_alpha_rad[2] = DEG2RAD(slot_alpha_deg_rx[2]);
+        slot_alpha_rad[3] = DEG2RAD(slot_alpha_deg_rx[3]);
 
         slotx_rx[0] = ApaPscLeftSlot0Obj1X;
         slotx_rx[1] = ApaPscLeftSlot0Obj2X;
@@ -824,43 +848,58 @@ void update_sig(void) {
 
         slotid[0] = ParkLeftslot0ID;
         slotid[1] = ParkLeftslot1ID;
+#if 0
+        slotxrec_rx[0] = slotx_rx[1];
+        slotyrec_rx[0] = sloty_rx[1];
+        slotxrec_rx[1] = slotx_rx[0];
+        slotyrec_rx[1] = sloty_rx[0];
 
-        if (slotx_rx[0] > slotx_rx[1]) {
-            slotxrec_rx[0] = slotx_rx[0];
-            slotyrec_rx[0] = sloty_rx[0];
-            slotxrec_rx[1] = slotx_rx[1];
-            slotyrec_rx[1] = sloty_rx[1];
-        }
-        else {
-            slotxrec_rx[0] = slotx_rx[1];
-            slotyrec_rx[0] = sloty_rx[1];
-            slotxrec_rx[1] = slotx_rx[0];
-            slotyrec_rx[1] = sloty_rx[0];
-        }
         slot_theta[0] = -asinf((slotyrec_rx[0] - slotyrec_rx[1]) / calcPointDis(slotxrec_rx[0], slotyrec_rx[0], slotxrec_rx[1], slotyrec_rx[1]));
         slotxrec_rx[2] = slotxrec_rx[1] + slot_Depth[0] * sinf(slot_theta[0]);
         slotyrec_rx[2] = slotyrec_rx[1] + slot_Depth[0] * cosf(slot_theta[0]);
         slotxrec_rx[3] = slotxrec_rx[0] + slot_Depth[0] * sinf(slot_theta[0]);
         slotyrec_rx[3] = slotyrec_rx[0] + slot_Depth[0] * cosf(slot_theta[0]);
+#endif
+        // slot corner
+        slotxrec_alpha_rx[0] = slotx_rx[1];
+        slotyrec_alpha_rx[0] = sloty_rx[1];
+        slotxrec_alpha_rx[1] = slotxrec_alpha_rx[0] + fminf(slot_Length[0], slot_Depth[0]) / 2.0 * cosf(slot_alpha_rad[0]);
+        slotyrec_alpha_rx[1] = slotyrec_alpha_rx[0] + fminf(slot_Length[0], slot_Depth[0]) / 2.0 * sinf(slot_alpha_rad[0]);
+        slotxrec_alpha_rx[2] = slotxrec_alpha_rx[0] + slot_Depth[0] * cosf(slot_alpha_rad[0] + M_PI_2);
+        slotyrec_alpha_rx[2] = slotyrec_alpha_rx[0] + slot_Depth[0] * sinf(slot_alpha_rad[0] + M_PI_2);
 
+        slotxrec_alpha_rx[3] = slotx_rx[0];
+        slotyrec_alpha_rx[3] = sloty_rx[0];
+        slotxrec_alpha_rx[4] = slotxrec_alpha_rx[3] - fminf(slot_Length[0], slot_Depth[0]) / 2.0 * cosf(slot_alpha_rad[1]);
+        slotyrec_alpha_rx[4] = slotyrec_alpha_rx[3] - fminf(slot_Length[0], slot_Depth[0]) / 2.0 * sinf(slot_alpha_rad[1]);
+        slotxrec_alpha_rx[5] = slotxrec_alpha_rx[3] - slot_Depth[0] * cosf(slot_alpha_rad[1] - M_PI_2);
+        slotyrec_alpha_rx[5] = slotyrec_alpha_rx[3] - slot_Depth[0] * sinf(slot_alpha_rad[1] - M_PI_2);
+#if 0
+        slotxrec_rx[4] = slotx_rx[3];
+        slotyrec_rx[4] = sloty_rx[3];
+        slotxrec_rx[5] = slotx_rx[2];
+        slotyrec_rx[5] = sloty_rx[2];
 
-        if (slotx_rx[2] > slotx_rx[3]) {
-            slotxrec_rx[4] = slotx_rx[2];
-            slotyrec_rx[4] = sloty_rx[2];
-            slotxrec_rx[5] = slotx_rx[3];
-            slotyrec_rx[5] = sloty_rx[3];
-        }
-        else {
-            slotxrec_rx[4] = slotx_rx[3];
-            slotyrec_rx[4] = sloty_rx[3];
-            slotxrec_rx[5] = slotx_rx[2];
-            slotyrec_rx[5] = sloty_rx[2];
-        }
         slot_theta[1] = -asinf((slotyrec_rx[4] - slotyrec_rx[5]) / calcPointDis(slotxrec_rx[4], slotyrec_rx[4], slotxrec_rx[5], slotyrec_rx[5]));
         slotxrec_rx[6] = slotxrec_rx[5] + slot_Depth[1] * sinf(slot_theta[1]);
         slotyrec_rx[6] = slotyrec_rx[5] + slot_Depth[1] * cosf(slot_theta[1]);
         slotxrec_rx[7] = slotxrec_rx[4] + slot_Depth[1] * sinf(slot_theta[1]);
         slotyrec_rx[7] = slotyrec_rx[4] + slot_Depth[1] * cosf(slot_theta[1]);
+#endif
+        // slot corner
+        slotxrec_alpha_rx[6] = slotx_rx[3];
+        slotyrec_alpha_rx[6] = sloty_rx[3];
+        slotxrec_alpha_rx[7] = slotxrec_alpha_rx[6] + fminf(slot_Length[1], slot_Depth[1]) / 2.0 * cosf(slot_alpha_rad[2]);
+        slotyrec_alpha_rx[7] = slotyrec_alpha_rx[6] + fminf(slot_Length[1], slot_Depth[1]) / 2.0 * sinf(slot_alpha_rad[2]);
+        slotxrec_alpha_rx[8] = slotxrec_alpha_rx[6] + slot_Depth[1] * cosf(slot_alpha_rad[2] + M_PI_2);
+        slotyrec_alpha_rx[8] = slotyrec_alpha_rx[6] + slot_Depth[1] * sinf(slot_alpha_rad[2] + M_PI_2);
+
+        slotxrec_alpha_rx[9] = slotx_rx[2];
+        slotyrec_alpha_rx[9] = sloty_rx[2];
+        slotxrec_alpha_rx[10] = slotxrec_alpha_rx[9] - fminf(slot_Length[1], slot_Depth[1]) / 2.0 * cosf(slot_alpha_rad[3]);
+        slotyrec_alpha_rx[10] = slotyrec_alpha_rx[9] - fminf(slot_Length[1], slot_Depth[1]) / 2.0 * sinf(slot_alpha_rad[3]);
+        slotxrec_alpha_rx[11] = slotxrec_alpha_rx[9] - slot_Depth[1] * cosf(slot_alpha_rad[3] - M_PI_2);
+        slotyrec_alpha_rx[11] = slotyrec_alpha_rx[9] - slot_Depth[1] * sinf(slot_alpha_rad[3] - M_PI_2);
     }
 
 
@@ -885,6 +924,15 @@ void update_sig(void) {
         ApaPsc_RightPSL1_Depth = ((ptr[27]) * (4) + (0));
         ApaPsc_RightPSL1_Length = ((((ptr[28]) << 1) + (((ptr[29]) & (1 << 7)) >> 7)) * (4) + (0));
 
+        slot_alpha_deg_rx[4] = ApaPscRightSlot0Obj1Alpha;
+        slot_alpha_deg_rx[5] = ApaPscRightSlot0Obj2Alpha;
+        slot_alpha_deg_rx[6] = ApaPscRightSlot1Obj1Alpha;
+        slot_alpha_deg_rx[7] = ApaPscRightSlot1Obj2Alpha;
+        slot_alpha_rad[4] = DEG2RAD(slot_alpha_deg_rx[4]);
+        slot_alpha_rad[5] = DEG2RAD(slot_alpha_deg_rx[5]);
+        slot_alpha_rad[6] = DEG2RAD(slot_alpha_deg_rx[6]);
+        slot_alpha_rad[7] = DEG2RAD(slot_alpha_deg_rx[7]);
+
         slotx_rx[4] = ApaPscRightSlot0Obj1X;
         slotx_rx[5] = ApaPscRightSlot0Obj2X;
         slotx_rx[6] = ApaPscRightSlot1Obj1X;
@@ -902,42 +950,58 @@ void update_sig(void) {
 
         slotid[2] = ParkRightslot0ID;
         slotid[3] = ParkRightslot1ID;
+#if 0
+        slotxrec_rx[8] = slotx_rx[5];
+        slotyrec_rx[8] = sloty_rx[5];
+        slotxrec_rx[9] = slotx_rx[4];
+        slotyrec_rx[9] = sloty_rx[4];
 
-        if (slotx_rx[4] > slotx_rx[5]) {
-            slotxrec_rx[8] = slotx_rx[4];
-            slotyrec_rx[8] = sloty_rx[4];
-            slotxrec_rx[9] = slotx_rx[5];
-            slotyrec_rx[9] = sloty_rx[5];
-        }
-        else {
-            slotxrec_rx[8] = slotx_rx[5];
-            slotyrec_rx[8] = sloty_rx[5];
-            slotxrec_rx[9] = slotx_rx[4];
-            slotyrec_rx[9] = sloty_rx[4];
-        }
         slot_theta[2] = asinf((slotyrec_rx[8] - slotyrec_rx[9]) / calcPointDis(slotxrec_rx[8], slotyrec_rx[8], slotxrec_rx[9], slotyrec_rx[9]));
         slotxrec_rx[10] = slotxrec_rx[9] + slot_Depth[2] * sinf(slot_theta[2]);
         slotyrec_rx[10] = slotyrec_rx[9] - slot_Depth[2] * cosf(slot_theta[2]);
         slotxrec_rx[11] = slotxrec_rx[8] + slot_Depth[2] * sinf(slot_theta[2]);
         slotyrec_rx[11] = slotyrec_rx[8] - slot_Depth[2] * cosf(slot_theta[2]);
+#endif
+        // slot corner
+        slotxrec_alpha_rx[12] = slotx_rx[5];
+        slotyrec_alpha_rx[12] = sloty_rx[5];
+        slotxrec_alpha_rx[13] = slotxrec_alpha_rx[12] + fminf(slot_Length[2], slot_Depth[2]) / 2.0 * cosf(slot_alpha_rad[4]);
+        slotyrec_alpha_rx[13] = slotyrec_alpha_rx[12] + fminf(slot_Length[2], slot_Depth[2]) / 2.0 * sinf(slot_alpha_rad[4]);
+        slotxrec_alpha_rx[14] = slotxrec_alpha_rx[12] + slot_Depth[2] * cosf(slot_alpha_rad[4] - M_PI_2);
+        slotyrec_alpha_rx[14] = slotyrec_alpha_rx[12] + slot_Depth[2] * sinf(slot_alpha_rad[4] - M_PI_2);
 
-        if (slotx_rx[6] > slotx_rx[7]) {
-            slotxrec_rx[12] = slotx_rx[6];
-            slotyrec_rx[12] = sloty_rx[6];
-            slotxrec_rx[13] = slotx_rx[7];
-            slotyrec_rx[13] = sloty_rx[7];
-        }
-        else {
-            slotxrec_rx[12] = slotx_rx[7];
-            slotyrec_rx[12] = sloty_rx[7];
-            slotxrec_rx[13] = slotx_rx[6];
-            slotyrec_rx[13] = sloty_rx[6];
-        }
+        slotxrec_alpha_rx[15] = slotx_rx[4];
+        slotyrec_alpha_rx[15] = sloty_rx[4];
+        slotxrec_alpha_rx[16] = slotxrec_alpha_rx[15] - fminf(slot_Length[2], slot_Depth[2]) / 2.0 * cosf(slot_alpha_rad[5]);
+        slotyrec_alpha_rx[16] = slotyrec_alpha_rx[15] - fminf(slot_Length[2], slot_Depth[2]) / 2.0 * sinf(slot_alpha_rad[5]);
+        slotxrec_alpha_rx[17] = slotxrec_alpha_rx[15] - slot_Depth[2] * cosf(slot_alpha_rad[5] + M_PI_2);
+        slotyrec_alpha_rx[17] = slotyrec_alpha_rx[15] - slot_Depth[2] * sinf(slot_alpha_rad[5] + M_PI_2);
+#if 0
+        slotxrec_rx[12] = slotx_rx[7];
+        slotyrec_rx[12] = sloty_rx[7];
+        slotxrec_rx[13] = slotx_rx[6];
+        slotyrec_rx[13] = sloty_rx[6];
+
         slot_theta[3] = asinf((slotyrec_rx[12] - slotyrec_rx[13]) / calcPointDis(slotxrec_rx[12], slotyrec_rx[12], slotxrec_rx[13], slotyrec_rx[13]));
         slotxrec_rx[14] = slotxrec_rx[13] + slot_Depth[3] * sinf(slot_theta[3]);
         slotyrec_rx[14] = slotyrec_rx[13] - slot_Depth[3] * cosf(slot_theta[3]);
         slotxrec_rx[15] = slotxrec_rx[12] + slot_Depth[3] * sinf(slot_theta[3]);
         slotyrec_rx[15] = slotyrec_rx[12] - slot_Depth[3] * cosf(slot_theta[3]);
+#endif
+        // slot corner
+        slotxrec_alpha_rx[18] = slotx_rx[7];
+        slotyrec_alpha_rx[18] = sloty_rx[7];
+        slotxrec_alpha_rx[19] = slotxrec_alpha_rx[18] + fminf(slot_Length[3], slot_Depth[3]) / 2.0 * cosf(slot_alpha_rad[6]);
+        slotyrec_alpha_rx[19] = slotyrec_alpha_rx[18] + fminf(slot_Length[3], slot_Depth[3]) / 2.0 * sinf(slot_alpha_rad[6]);
+        slotxrec_alpha_rx[20] = slotxrec_alpha_rx[18] + slot_Depth[3] * cosf(slot_alpha_rad[6] - M_PI_2);
+        slotyrec_alpha_rx[20] = slotyrec_alpha_rx[18] + slot_Depth[3] * sinf(slot_alpha_rad[6] - M_PI_2);
+
+        slotxrec_alpha_rx[21] = slotx_rx[6];
+        slotyrec_alpha_rx[21] = sloty_rx[6];
+        slotxrec_alpha_rx[22] = slotxrec_alpha_rx[21] - fminf(slot_Length[3], slot_Depth[3]) / 2.0 * cosf(slot_alpha_rad[7]);
+        slotyrec_alpha_rx[22] = slotyrec_alpha_rx[21] - fminf(slot_Length[3], slot_Depth[3]) / 2.0 * sinf(slot_alpha_rad[7]);
+        slotxrec_alpha_rx[23] = slotxrec_alpha_rx[21] - slot_Depth[3] * cosf(slot_alpha_rad[7] + M_PI_2);
+        slotyrec_alpha_rx[23] = slotyrec_alpha_rx[21] - slot_Depth[3] * sinf(slot_alpha_rad[7] + M_PI_2);
     }
 
     if (gcanid == 0x17B && msgEdlFlag == 1) {

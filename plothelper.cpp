@@ -101,20 +101,26 @@ void update_img(void) {
 static void plot_help(void) {
 	char label[256] = { 0 };
 	sprintf(label, "%s", "H: help menu");
-	putText(canvas, label, Point(XCOL / 2 - 100, YROW - 200), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+	putText(canvas, label, Point(XCOL / 2 - 300, YROW - 200), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
 	sprintf(label, "%s", "D: direct echo");
-	putText(canvas, label, Point(XCOL / 2 - 100, YROW - 180), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+	putText(canvas, label, Point(XCOL / 2 - 300, YROW - 180), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
 	sprintf(label, "%s", "W: radar wall");
-	putText(canvas, label, Point(XCOL / 2 - 100, YROW - 160), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+	putText(canvas, label, Point(XCOL / 2 - 300, YROW - 160), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
 	sprintf(label, "%s", "M: messure distance");
-	putText(canvas, label, Point(XCOL / 2 - 100, YROW - 140), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
-	sprintf(label, "%s", "Space: restore axis");
-	putText(canvas, label, Point(XCOL / 2 - 100, YROW - 120), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+	putText(canvas, label, Point(XCOL / 2 - 300, YROW - 140), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+	sprintf(label, "%s", "Enter: restore axis");
+	putText(canvas, label, Point(XCOL / 2 - 300, YROW - 120), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+
+	sprintf(label, "%s", "Mouse Left: measure");
+	putText(canvas, label, Point(XCOL / 2, YROW - 200), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+	sprintf(label, "%s", "Mouse Wheel: zoom");
+	putText(canvas, label, Point(XCOL / 2, YROW - 180), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+
 	if (selected_mode == 2) {
 		sprintf(label, "%s", "F: fast forward");
-		putText(canvas, label, Point(XCOL / 2 - 100, YROW - 100), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
-		sprintf(label, "%s", "Enter: pause");
-		putText(canvas, label, Point(XCOL / 2 - 100, YROW - 80), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+		putText(canvas, label, Point(XCOL / 2 - 300, YROW - 100), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+		sprintf(label, "%s", "Space: pause");
+		putText(canvas, label, Point(XCOL / 2 - 300, YROW - 80), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
 	}
 }
 
@@ -198,6 +204,7 @@ static void plot_slots(void) {
 	for (int i = 0; i < 4; i++) {
 		if (slotid[i] != 0 && slotid[i] != 255) {
 			if ((slotx[2 * i] != 0) && (sloty[2 * i] != 0) && (slotx[2 * i + 1] != 0) && (sloty[2 * i + 1] != 0)) {
+#if 0
 				circle(canvas, Point(slotx[2 * i], sloty[2 * i]), 2, RED, FILLED, 2);
 				circle(canvas, Point(slotx[2 * i + 1], sloty[2 * i + 1]), 2, RED, FILLED, 2);
 				line(canvas, Point(slotx[2 * i], sloty[2 * i]), Point(slotx[2 * i + 1], sloty[2 * i + 1]), RED, 2);
@@ -210,9 +217,46 @@ static void plot_slots(void) {
 						line(canvas, Point(slotxrec[4 * i + j], slotyrec[4 * i + j]), Point(slotxrec[4 * i], slotyrec[4 * i]), BLACK, 1, LINE_4);
 					}
 				}
+#endif
+				
+				line(canvas, Point(slotxrec_alpha[6 * i], slotyrec_alpha[6 * i]), Point(slotxrec_alpha[6 * i + 1], slotyrec_alpha[6 * i + 1]), Chocolate, 2, LINE_4);
+				line(canvas, Point(slotxrec_alpha[6 * i], slotyrec_alpha[6 * i]), Point(slotxrec_alpha[6 * i + 2], slotyrec_alpha[6 * i + 2]), Chocolate, 2, LINE_4);
+
+				line(canvas, Point(slotxrec_alpha[6 * i + 3], slotyrec_alpha[6 * i + 3]), Point(slotxrec_alpha[6 * i + 4], slotyrec_alpha[6 * i + 4]), Chocolate, 2, LINE_4);
+				line(canvas, Point(slotxrec_alpha[6 * i + 3], slotyrec_alpha[6 * i + 3]), Point(slotxrec_alpha[6 * i + 5], slotyrec_alpha[6 * i + 5]), Chocolate, 2, LINE_4);
+#if 0
+				circle(canvas, Point(slotxrec_alpha[6 * i], slotyrec_alpha[6 * i]), 3, Chocolate, FILLED, 2);
+				sprintf(label, "%d", 6 * i);
+				putText(canvas, label, Point(slotxrec_alpha[6 * i], slotyrec_alpha[6 * i]), FONT_HERSHEY_SIMPLEX, 0.4, Chocolate, 1, LINE_8, false);
+
+				circle(canvas, Point(slotxrec_alpha[6 * i + 1], slotyrec_alpha[6 * i + 1]), 3, Chocolate, FILLED, 2);
+				sprintf(label, "%d", 6 * i + 1);
+				putText(canvas, label, Point(slotxrec_alpha[6 * i + 1], slotyrec_alpha[6 * i + 1]), FONT_HERSHEY_SIMPLEX, 0.4, Chocolate, 1, LINE_8, false);
+
+				circle(canvas, Point(slotxrec_alpha[6 * i + 2], slotyrec_alpha[6 * i + 2]), 3, Chocolate, FILLED, 2);
+				sprintf(label, "%d", 6 * i + 2);
+				putText(canvas, label, Point(slotxrec_alpha[6 * i + 2], slotyrec_alpha[6 * i + 2]), FONT_HERSHEY_SIMPLEX, 0.4, Chocolate, 1, LINE_8, false);
+
+				circle(canvas, Point(slotxrec_alpha[6 * i + 3], slotyrec_alpha[6 * i + 3]), 3, Chocolate, FILLED, 2);
+				sprintf(label, "%d", 6 * i + 3);
+				putText(canvas, label, Point(slotxrec_alpha[6 * i + 3], slotyrec_alpha[6 * i + 3]), FONT_HERSHEY_SIMPLEX, 0.4, Chocolate, 1, LINE_8, false);
+
+				circle(canvas, Point(slotxrec_alpha[6 * i + 4], slotyrec_alpha[6 * i + 4]), 3, Chocolate, FILLED, 2);
+				sprintf(label, "%d", 6 * i + 4);
+				putText(canvas, label, Point(slotxrec_alpha[6 * i + 4], slotyrec_alpha[6 * i + 4]), FONT_HERSHEY_SIMPLEX, 0.4, Chocolate, 1, LINE_8, false);
+
+				circle(canvas, Point(slotxrec_alpha[6 * i + 5], slotyrec_alpha[6 * i + 5]), 3, Chocolate, FILLED, 2);
+				sprintf(label, "%d", 6 * i + 5);
+				putText(canvas, label, Point(slotxrec_alpha[6 * i + 5], slotyrec_alpha[6 * i + 5]), FONT_HERSHEY_SIMPLEX, 0.4, Chocolate, 1, LINE_8, false);
+
+				sprintf(label, "%4.1f", slot_alpha_deg_rx[2 * i]);
+				putText(canvas, label, Point(slotx[2 * i] + 10, sloty[2 * i] + 10), FONT_HERSHEY_SIMPLEX, 0.4, Chocolate, 1, LINE_8, false);
+				sprintf(label, "%4.1f", slot_alpha_deg_rx[2 * i + 1]);
+				putText(canvas, label, Point(slotx[2 * i + 1] + 10, sloty[2 * i + 1] + 10), FONT_HERSHEY_SIMPLEX, 0.4, Chocolate, 1, LINE_8, false);
+#endif
 
 				sprintf(label, "%d", slotid[i]);
-				putText(canvas, label, Point(slotx[2 * i], sloty[2 * i]), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
+				putText(canvas, label, Point(slotx[2 * i], sloty[2 * i]), FONT_HERSHEY_SIMPLEX, 0.4, Chocolate, 1, LINE_8, false);
 			}
 		}
 	}
@@ -311,9 +355,10 @@ static void plot_info(void) {
 
 	// slot
 	for (i = 0; i < 4; i++) {
-		sprintf(label, "slot : (%4.0f, %4.0f) (%4.0f, %4.0f)", slotx_rx[2 * i], sloty_rx[2 * i], slotx_rx[2 * i + 1], sloty_rx[2 * i + 1]);
+		sprintf(label, "slot: (%6.0f, %6.0f) (%6.0f, %6.0f) %4.0fdeg %4.0fdeg", slotx_rx[2 * i], sloty_rx[2 * i], slotx_rx[2 * i + 1], sloty_rx[2 * i + 1], slot_alpha_deg_rx[2 * i], slot_alpha_deg_rx[2 * i + 1]);
 		putText(canvas, label, Point(20, 310 + i * 10), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 	}
+
 	// 0x171
 	//mAPS2PA_working_sts   APS_Workingsts
 	sprintf(label, "APS_Workingsts: %s", mAPS2PA_working_sts[APS_Workingsts]);
