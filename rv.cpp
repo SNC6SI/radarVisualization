@@ -127,10 +127,16 @@ static void offline_mode(void) {
     initProgreassPercent();
     if (selected_offline_mode == 1) {
         select_offline_display_mode();
+        if (selected_offline_display_mode == 0) {
+            return;
+        }
         greadcnt = 0;
         init_sig();
         init_axis();
         BasicFileOpenSingle();
+        if (binlog_filename_read_len == 0) {
+            return;
+        }
         if (selected_offline_display_mode == 2) {
             prepareVideoFileName();
             video_writer.open(video_filename, VideoWriter::fourcc('m', 'p', '4', 'v'), FPS, Size(XCOL, YROW), true);
@@ -193,6 +199,9 @@ static void offline_mode(void) {
         init_sig();
         init_axis();
         BasicFileOpenMulti();
+        if (binlog_filename_read_list.size() == 0) {
+            return;
+        }
         for (int i = 0; i < num_binlog_files; i++) {
             greadcnt = 0;
             memset(binlog_filename_read, 0, sizeof(binlog_filename_read));
