@@ -14,7 +14,7 @@ extern float gScale;
 
 #define BLUEH   BLUE                     // 1
 #define BLUEL   Scalar(255, 144, 30)     // 0
-#define BLUET   Scalar(255, 260, 135)    // 2
+#define BLUET   DIMGREY //Scalar(255, 206, 135)    // 2
 #define BLUEU   Scalar(255, 226, 198)    // 3
 
 #define GREENDARK Scalar(0, 100, 0)
