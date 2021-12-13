@@ -47,7 +47,7 @@ static unsigned int alive_count = 0U;
 
 static const char cGEAR[5] = { 'P','R', 'N', 'D', 'E' };
 static const Scalar mHeight_blue[4] = { BLUEL, BLUEH , BLUET , BLUEU };
-static const vector<string> mlegend_blue = { "Low", "High" , "Traversable" , "Unknown" };
+static const vector<string> mlobjheight = { "Low", "High" , "Traversable" , "Unknown" };
 static const Scalar mPs[5] = { RED, ORANGE, YELLOW, GREEN, WHITE };
 static const Scalar mTimeout[2] = { GREEN, RED };
 static const vector<string> mAPS2PA_working_sts = { "0x0 Off", "0x1 Standby", "0x2 Searching", "0x3 Tracking", "0x4 APS Failure", "0x5 PA Failure", "0x6 Reserved", "0x7 Reserved"};
@@ -337,7 +337,7 @@ static void plot_misc(void) {
 	// legend
 	for (i = 0; i < 4; i++) {
 		line(canvas, Point(XCOL - 150, 50 + 20 * i), Point(XCOL - 100, 50 + 20 * i), mHeight_blue[i], 2);
-		putText(canvas, mlegend_blue[i], Point(XCOL - 90, 50 + 20 * i), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+		putText(canvas, mlobjheight[i], Point(XCOL - 90, 50 + 20 * i), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
 	}
 
 	// timeout
@@ -389,8 +389,8 @@ static void plot_info(void) {
 
 	// obj
 	for (i = 0; i < 20; i++) {
-		sprintf(label, "Obj%02d: (%4.0f, %-4.0f) (%4.0f, %-4.0f) {H: %-3.1f%%} |%3.1f%% %-s| ", i + 1, objx_rx[2 * i], objy_rx[2 * i], objx_rx[2 * i + 1], objy_rx[2 * i + 1],
-			    MapObjHeightProb[i], MapObjProb[i], mMapObjType[MapObjType[i]].c_str());
+		sprintf(label, "Obj%02d: (%4.0f, %-4.0f) (%4.0f, %-4.0f) {%-3.1f%% %s} |%3.1f%% %-s| ", i + 1, objx_rx[2 * i], objy_rx[2 * i], objx_rx[2 * i + 1], objy_rx[2 * i + 1],
+			    MapObjHeightProb[i], mlobjheight[objH[i]].c_str(), MapObjProb[i], mMapObjType[MapObjType[i]].c_str());
 		putText(canvas, label, Point(20, 50 + i * 10), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 	}
 
