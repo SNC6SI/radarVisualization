@@ -187,7 +187,7 @@ HRESULT BasicFileOpenMulti() {
     hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pfd));
     hr = pfd->GetOptions(&dwFlags);
     hr = pfd->SetOptions(dwFlags | FOS_FORCEFILESYSTEM | FOS_ALLOWMULTISELECT);
-    hr = pfd->SetTitle(L"Select a blf file to visiuaization");
+    hr = pfd->SetTitle(L"Select blf file(s) to convert");
     hr = pfd->SetFileTypes(ARRAYSIZE(c_rgSaveTypes), c_rgSaveTypes);
     hr = pfd->SetFileTypeIndex(INDEX_BLF);
     hr = pfd->SetDefaultExtension(L"blf");
