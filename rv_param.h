@@ -4,6 +4,8 @@
 #include <opencv2/opencv.hpp>
 extern float gScale;
 
+#define CONSOLE_COLOR() system("color F0")
+
 #define RED     Scalar(0, 0, 255)
 #define BLUE    Scalar(255, 0, 0)
 #define BLACK   Scalar(0, 0, 0)

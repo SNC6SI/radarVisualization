@@ -37,6 +37,7 @@ static void offline_mode(void);
 
 
 int main(int argc, char* argv[]) {
+    CONSOLE_COLOR();
     utils::logging::setLogLevel(utils::logging::LOG_LEVEL_WARNING);
     select_mode();
     init_measure_status();
