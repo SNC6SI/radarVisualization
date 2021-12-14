@@ -39,6 +39,8 @@ extern float gScale;
 #define XCOL 1200
 #define YROW 1000
 
+#define YOFFSET -135
+
 #define CAM1_XCOL 640
 #define CAM1_YROW 480
 

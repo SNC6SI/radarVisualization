@@ -81,7 +81,7 @@ void init_axis(void) {
 void restore_axis(void) {
 	gScale = DEFAULTSCALE;
 	X0 = XCOL / 2;
-	Y0 = YROW / 2;
+	Y0 = YROW / 2 + YOFFSET;
 }
 
 void toggle_info_status(void) {
