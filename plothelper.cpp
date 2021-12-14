@@ -263,10 +263,12 @@ static void plot_slots(void) {
 				}
 #endif
 				
-				line(canvas, Point(slotxrec_alpha[6 * i], slotyrec_alpha[6 * i]), Point(slotxrec_alpha[6 * i + 1], slotyrec_alpha[6 * i + 1]), Chocolate, 2, LINE_4);
+				//line(canvas, Point(slotxrec_alpha[6 * i], slotyrec_alpha[6 * i]), Point(slotxrec_alpha[6 * i + 1], slotyrec_alpha[6 * i + 1]), Chocolate, 2, LINE_4);
+				DrawDashedLine(canvas, Point(slotxrec_alpha[6 * i], slotyrec_alpha[6 * i]), Point(slotxrec_alpha[6 * i + 1], slotyrec_alpha[6 * i + 1]), Chocolate, 1, "dotted", 4);
 				line(canvas, Point(slotxrec_alpha[6 * i], slotyrec_alpha[6 * i]), Point(slotxrec_alpha[6 * i + 2], slotyrec_alpha[6 * i + 2]), Chocolate, 2, LINE_4);
 
-				line(canvas, Point(slotxrec_alpha[6 * i + 3], slotyrec_alpha[6 * i + 3]), Point(slotxrec_alpha[6 * i + 4], slotyrec_alpha[6 * i + 4]), Chocolate, 2, LINE_4);
+				//line(canvas, Point(slotxrec_alpha[6 * i + 3], slotyrec_alpha[6 * i + 3]), Point(slotxrec_alpha[6 * i + 4], slotyrec_alpha[6 * i + 4]), Chocolate, 2, LINE_4);
+				DrawDashedLine(canvas, Point(slotxrec_alpha[6 * i + 3], slotyrec_alpha[6 * i + 3]), Point(slotxrec_alpha[6 * i + 4], slotyrec_alpha[6 * i + 4]), Chocolate, 1, "dotted", 4);
 				line(canvas, Point(slotxrec_alpha[6 * i + 3], slotyrec_alpha[6 * i + 3]), Point(slotxrec_alpha[6 * i + 5], slotyrec_alpha[6 * i + 5]), Chocolate, 2, LINE_4);
 #if 0
 				circle(canvas, Point(slotxrec_alpha[6 * i], slotyrec_alpha[6 * i]), 3, Chocolate, FILLED, 2);
