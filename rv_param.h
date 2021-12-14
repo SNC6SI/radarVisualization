@@ -14,8 +14,11 @@ extern float gScale;
 #define WHITE   Scalar(255,255,255)
 #define GREEN   Scalar(0,255,0)
 
+#define Purple  Scalar(240, 32, 160)
+#define Magenta Scalar(255, 0, 255)
+
 #define BLUEH   BLUE                     // 1
-#define BLUEL   Scalar(255, 144, 30)     // 0
+#define BLUEL   Magenta  //Scalar(255, 144, 30)     // 0
 #define BLUET   DIMGREY //Scalar(255, 206, 135)    // 2
 #define BLUEU   Scalar(255, 226, 198)    // 3
 
