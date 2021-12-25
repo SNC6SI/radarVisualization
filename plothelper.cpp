@@ -104,6 +104,18 @@ void toggle_help_status(void) {
 	plotHelpStatus = !plotHelpStatus;
 }
 
+void increase_one_de_lim(void) {
+	if (de_lim < DE_LIM) {
+		de_lim++;
+	}
+}
+
+void decrease_one_de_lim(void) {
+	if (de_lim > 1) {
+		de_lim--;
+	}
+}
+
 
 void update_img(void) {
 	canvas.setTo(Scalar::all(255));
@@ -154,11 +166,15 @@ static void plot_help(void) {
 	putText(canvas, label, Point(XCOL / 2, YROW - 200), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
 	sprintf(label, "%s", "I: infos");
 	putText(canvas, label, Point(XCOL / 2, YROW - 180), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+	sprintf(label, "%s", "Up Arrow: increase direct echo filter");
+	putText(canvas, label, Point(XCOL / 2, YROW - 140), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+	sprintf(label, "%s", "down Arrow: decrease direct echo filter");
+	putText(canvas, label, Point(XCOL / 2, YROW - 120), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
 
 	sprintf(label, "%s", "Mouse Left: measure");
-	putText(canvas, label, Point(XCOL / 2, YROW - 140), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+	putText(canvas, label, Point(XCOL / 2 + 300, YROW - 200), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
 	sprintf(label, "%s", "Mouse Wheel: zoom");
-	putText(canvas, label, Point(XCOL / 2, YROW - 120), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+	putText(canvas, label, Point(XCOL / 2 + 300, YROW - 180), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
 
 	if (selected_mode == 2) {
 		sprintf(label, "%s", "F: fast forward");
@@ -341,6 +357,10 @@ static void plot_misc(void) {
 		line(canvas, Point(XCOL - 150, 50 + 20 * i), Point(XCOL - 100, 50 + 20 * i), mHeight_blue[i], 2);
 		putText(canvas, mlobjheight[i], Point(XCOL - 90, 50 + 20 * i), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
 	}
+
+	// direct echo turn on delay cnt
+	sprintf(label, "direct echo filter: %d", de_lim);
+	putText(canvas, label, Point(20, YROW - 200), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
 
 	// timeout
 	sprintf(label, "%s", "ADASCAN");

@@ -90,6 +90,12 @@ static void online_mode(void) {
         if (KEYPressed == KEY_ENTER) {
             restore_axis();
         }
+        if (KEYPressed == KEY_A_U) {
+            increase_one_de_lim();
+        }
+        if (KEYPressed == KEY_A_D) {
+            decrease_one_de_lim();
+        }
         if ((KEYPressed == KEY_D) || (KEYPressed == KEY_d)) {
             toggle_de_status();
         }
@@ -151,6 +157,12 @@ static void offline_mode(void) {
             }
             if (KEYPressed == KEY_SPACE) {
                 toggle_pause_status();
+            }
+            if (KEYPressed == KEY_A_U) {
+                increase_one_de_lim();
+            }
+            if (KEYPressed == KEY_A_D) {
+                decrease_one_de_lim();
             }
             if ((KEYPressed == KEY_D) || (KEYPressed == KEY_d)) {
                 toggle_de_status();

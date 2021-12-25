@@ -10,6 +10,8 @@ void toggle_ps_status(void);
 void toggle_help_status(void);
 void toggle_info_status(void);
 void toggle_grid_status(void);
+void increase_one_de_lim(void);
+void decrease_one_de_lim(void);
 void update_img(void);
 
 void point2pose(float* x, float* y, int iter);
