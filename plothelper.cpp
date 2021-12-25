@@ -168,7 +168,7 @@ static void plot_help(void) {
 	putText(canvas, label, Point(XCOL / 2, YROW - 180), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
 	sprintf(label, "%s", "Up Arrow: increase direct echo filter");
 	putText(canvas, label, Point(XCOL / 2, YROW - 140), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
-	sprintf(label, "%s", "down Arrow: decrease direct echo filter");
+	sprintf(label, "%s", "Down Arrow: decrease direct echo filter");
 	putText(canvas, label, Point(XCOL / 2, YROW - 120), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
 
 	sprintf(label, "%s", "Mouse Left: measure");
