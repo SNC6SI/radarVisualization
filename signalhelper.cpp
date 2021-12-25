@@ -13,6 +13,7 @@ extern unsigned int msgEdlFlag;
 
 static float calcPointDis(float x0, float y0, float x1, float y1);
 static void lengthScaling(float* l, float* lo, int iter);
+static void deFilter(float* de, unsigned char* de_cnt, unsigned char limit, int iter);
 
 float MapObj01P1X=0.0F;
 float MapObj01P1Y=0.0F;
@@ -252,7 +253,7 @@ float SDW_FR_2SideDistance = 0.0F;
 float SDW_RR_2SideDistance = 0.0F;
 float SDW_RR_1SideDistance = 0.0F;
 
-float USS_DE1_1=0.0F;
+float USS_DE1_1 = 0.0F;
 float USS_DE1_2 = 0.0F;
 float USS_DE1_3 = 0.0F;
 float USS_DE1_4 = 0.0F;
@@ -388,6 +389,11 @@ float ce_2_left_rx[10];
 float ce_3_right_rx[10];
 float ce_3_left_rx[10];
 
+unsigned char de_lim;
+static unsigned char de_1_cnt[12];
+static unsigned char de_2_cnt[12];
+static unsigned char de_3_cnt[12];
+
 float objx[40];
 float objy[40];
 float slotx[8];
@@ -487,6 +493,10 @@ void init_sig(void) {
     ts_anchor_0x172 = 0;
     ts_check = 0;
     timeout_0x121 = timeout_0x171 = timeout_0x150 = timeout_0x172 = 0;
+    memset((void*)de_1_cnt, 0, sizeof(de_1_cnt));
+    memset((void*)de_2_cnt, 0, sizeof(de_2_cnt));
+    memset((void*)de_3_cnt, 0, sizeof(de_3_cnt));
+    de_lim = 1;
 }
 
 
@@ -1272,6 +1282,7 @@ void update_sig(void) {
         de_1_rx[9]  = USS_DE1_10;
         de_1_rx[10] = USS_DE1_11;
         de_1_rx[11] = USS_DE1_12;
+        deFilter(de_1_rx, de_1_cnt, de_lim, 12);
     }
 
     if (gcanid == 0x17D && msgEdlFlag == 1) {
@@ -1299,6 +1310,7 @@ void update_sig(void) {
         de_2_rx[9]  = USS_DE2_10;
         de_2_rx[10] = USS_DE2_11;
         de_2_rx[11] = USS_DE2_12;
+        deFilter(de_2_rx, de_2_cnt, de_lim, 12);
     }
 
     if (gcanid == 0x181 && msgEdlFlag == 1) {
@@ -1326,6 +1338,7 @@ void update_sig(void) {
         de_3_rx[9]  = USS_DE3_10;
         de_3_rx[10] = USS_DE3_11;
         de_3_rx[11] = USS_DE3_12;
+        deFilter(de_3_rx, de_3_cnt, de_lim, 12);
     }
 
     if (gcanid == 0x17C && msgEdlFlag == 1) {
@@ -1625,3 +1638,21 @@ static void lengthScaling(float* l, float* lo, int iter) {
 static float calcPointDis(float x0, float y0, float x1, float y1) {
     return sqrtf((x0 - x1) * (x0 - x1) + (y0 - y1) * (y0 - y1));
 }
+
+
+static void deFilter(float* de, unsigned char* de_cnt, unsigned char limit, int iter) {
+    for (int i = 0; i < iter; i++) {
+        if (de[i] != 0) {
+            ++de_cnt[i] > DE_LIM ? de_cnt[i] = DE_LIM : de_cnt[i] = de_cnt[i];
+        }
+        else {
+            de_cnt[i] = 0;
+        }
+        if (de_cnt[i] < limit) {
+            de[i] = 0;
+        }
+    }
+}
+
+
+

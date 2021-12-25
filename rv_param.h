@@ -67,4 +67,6 @@ extern float gScale;
 #define TM_0x150 400
 #define TM_0x172 400
 
+#define DE_LIM 20
+
 #endif

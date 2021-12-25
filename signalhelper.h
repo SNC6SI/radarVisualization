@@ -35,6 +35,7 @@ extern unsigned char ApaPscPSLObjectType[4];
 extern float de_1[12];
 extern float de_2[12];
 extern float de_3[12];
+extern unsigned char de_lim;
 
 extern float de_cc_x[12];
 extern float de_cc_y[12];
