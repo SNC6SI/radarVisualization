@@ -65,7 +65,7 @@ function BOblk_O =BOstruct(BOblk)
     % SGstruct (:, 1:5) for unpack, (:, 6) raw signum * 8*1 cells for pack
     % pack
     global CRLF
-    BOblk_O = cell(1,3);
+    BOblk_O = cell(1,4);
     
     BOinfo = strsplit(BOblk, CRLF);
     if length(BOinfo) > 1
@@ -77,9 +77,9 @@ function BOblk_O =BOstruct(BOblk)
         % BOblk_O{1,3} = vertcat(SGblks_{:});
         % -----------------------------------------------------------------
         signum = numel(SGblks);
-        BOblktmp = cell(signum,2);
+        BOblktmp = cell(signum,6);
         for i=1:signum
-            BOblktmp(i,:) = SGstruct(SGblks{i},i);
+            BOblktmp(i,:) = SGstruct(SGblks{i});
         end
         BOblk_O{1,3} = BOblktmp;
     end
@@ -91,13 +91,17 @@ function BOblk_O =BOstruct(BOblk)
         BOblk_O{1,1} = BOinfo{3};
     end
     BOblk_O{1,2} = str2double(BOinfo{2});
+    % 4 pack
+    tmpmat = BOblk_O{1,3}(:,6);
+    tmpmat = horzcat(tmpmat{:});
+    BOblk_O{1,4} = SGpackmerge(tmpmat);
     
 end
 
 % =========================================================================
 % SGstruct
 % =========================================================================
-function SGblk_O = SGstruct(SGblk,sigidx)
+function SGblk_O = SGstruct(SGblk)
     % signal name
     % unpack string
     % unit
@@ -105,15 +109,16 @@ function SGblk_O = SGstruct(SGblk,sigidx)
     % offset
     % pack string in 8*1 cell
     SGinfo = strsplit(SGblk);
-    SGblk_O= cell(1,2);
+    SGblk_O= cell(1,6);
     SGblk_O{1} = SGinfo{3};
-    SGblk_O{2} = SGalgo(SGinfo{5}, SGinfo{6},sigidx);
+    [SGblk_O{2},SGblk_O{4},SGblk_O{5},SGblk_O{6}] = SGalgo(SGinfo{5}, SGinfo{6}, SGinfo{3});
+    SGblk_O{3} = SGinfo{8}(2:end-1);
 end
 
 % =========================================================================
 % SGalgo
 % =========================================================================
-function SGupack = SGalgo(SGbit, SG2phy, sidx)
+function [SGupack,Gain,Offset,SGpackraw] = SGalgo(SGbit, SG2phy, SGname)
     global bitmatrix
     SGupack = '';
     
@@ -205,6 +210,8 @@ function SGupack = SGalgo(SGbit, SG2phy, sidx)
     sig2phy = regexp(SG2phy,'\((.*),(.*)\)','tokens');
     str_gain = sig2phy{1}{1};
     str_offset = sig2phy{1}{2};
+    Gain = str2double(str_gain);
+    Offset = str2double(str_offset);
     % ---------------------------------------------------------------------
     if strcmpi(codestyle,'c')
         % -----------------------------------------------------------------
@@ -238,5 +245,64 @@ function SGupack = SGalgo(SGbit, SG2phy, sidx)
         
         % offset ang gain
         SGupack = ['(' SGupack '*(' str_gain ')+(' str_offset '))'];
+
+        % -----------------------------------------------------------------
+        % -----------------------------------------------------------------
+        % Pack
+        SGpackraw = cell(64,1);
+        % vv = 'val';
+        % vv = ['u' num2str(sidx-1)];
+        vv = SGname;
+        % add parentheses to make it a group and easier to be replaced
+        vv = ['(' vv ')'];
+        % offset and gain
+        vv = ['((uint32_T)(((real32_T)' vv '-(' str_offset '))/(' str_gain ')))'];
+        for k =1:loopnum
+            if sigmat(k, 5)==0
+                if sigmat(k, 2)==1
+                    str = ['(' vv '&' num2str(2^sigmat(k, 4)-1) ')'];
+                else
+                    str = ['((' vv '&' num2str(2^sigmat(k, 4)-1) ')<<' num2str(sigmat(k, 2)-1) ')'];
+                    % str = ['(' vv '&(' num2str(2^sigmat(k, 4)-1) '<<' num2str(sigmat(k, 2)-1) '))>>' num2str(sigmat(k, 2)-1) ')'];
+                end
+            else
+                str = ['((' vv '&(' num2str(2^sigmat(k, 4)-1) '<<' num2str(sigmat(k, 5)) '))>>' num2str(sigmat(k, 5)) ')'];
+            end
+            
+            SGpackraw{sigmat(k, 1),1} = str;
+        end
+        
+        % str = [bb '[' num2str(sigmat(k, 1)-1) '] = (uint8_T)'];
     end
+end
+
+% =========================================================================
+% SGpackmerge
+% =========================================================================
+function mergedmat = SGpackmerge(rawmat)
+    mergedmat = cell(64,1);
+    signum = size(rawmat,2);
+    if signum > 1
+        tmpmat = strcat(rawmat,'+');
+        for i=1:64
+            tmpvec = strcat(tmpmat{i,:});
+            tmp = regexp(tmpvec, '^\+*(\(.*\))\+*$', 'tokens');
+            if ~isempty(tmp)
+                % mergedmat{i,1} = tmp{:}{:};
+                tmp = regexprep(tmp{:}, '\+{2,}', '\+');
+                mergedmat{i,1} = regexprep(tmp{:}, '\+{2,}', '\+');
+                % mergedmat{i,1} = strcat('"',mergedmat{i,1},'"');
+            else
+                mergedmat{i,1} = '';
+            end
+        end
+    elseif signum == 1
+        mergedmat = rawmat;
+        % mergedmat = strcat('"',mergedmat,'"');
+    else
+        
+    end
+    % mergedmat{9,1} = signum;
+    idx_empty = cellfun(@isempty,mergedmat);
+    mergedmat(idx_empty) = {'0'};
 end

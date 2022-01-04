@@ -1,6 +1,7 @@
 function [msg_unpack_s, def_s, dcl_s] = write_unpack_code
     % parse dbc
-    DBC_O = dbc_unpack_to_c('APSPA.DBC');
+    % DBC_O = dbc_unpack_to_c('APSPA.DBC');
+    DBC_O = dbc_unpack_to_c('APSPACAN_debug.dbc');
 
     % read config: canid, signal_name
 %     config = upack_config;
