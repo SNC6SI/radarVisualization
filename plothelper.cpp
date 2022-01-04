@@ -146,7 +146,7 @@ void update_img(void) {
 static void plot_version(void) {
 	char label[256] = { 0 };
 	sprintf(label, "version: %s by SNC6SI", version);
-	putText(canvas, label, Point(XCOL - 180, YROW - 20), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
+	putText(canvas, label, Point(XCOL - 220, YROW - 20), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
 }
 
 static void plot_help(void) {
@@ -252,7 +252,7 @@ static void plot_objs(void) {
 			line(canvas, Point(objx[2 * i], objy[2 * i]), Point(objx[2 * i + 1], objy[2 * i + 1]), mHeight_blue[objH[i]], 2);
 
 			sprintf(label, "%d", i + 1);
-			putText(canvas, label, Point(objx[2 * i], objy[2 * i]), FONT_HERSHEY_SIMPLEX, 0.4, BLUE, 1, LINE_8, false);
+			putText(canvas, label, Point(objx[2 * i], objy[2 * i]), FONT_HERSHEY_SIMPLEX, 0.4, mHeight_blue[objH[i]], 1, LINE_8, false);
 		}
 	}
 		
