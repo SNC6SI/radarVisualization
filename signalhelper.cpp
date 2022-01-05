@@ -15,6 +15,7 @@ extern unsigned int msgEdlFlag;
 static float calcPointDis(float x0, float y0, float x1, float y1);
 static void lengthScaling(float* l, float* lo, int iter);
 static void deFilter(float* de, unsigned char* de_cnt, unsigned char limit, int iter);
+static void point4pose_c(float X_, float Y_, float T_, float* xi, float* yi, float* ti, float* xo, float* yo, float* to, int iter);
 
 // debug purpose
 float APS_Debug_PathOriginHeading = 0.0F;
@@ -1884,6 +1885,15 @@ float X0 = XCOL / 2;
 float Y0 = YROW / 2 + YOFFSET;
 const float C0 = cos(M_PI_2);
 const float S0 = sin(M_PI_2);
+
+
+static void point4pose_c(float X_, float Y_, float T_, float* xi, float* yi, float* ti, float* xo, float* yo, float* to, int iter) {
+    for (int i = 0; i < iter; i++) {
+        *(xo + i) = (*(xi + i)) * cos(T_) + (*(yi + i)) * sin(T_) + X_;
+        *(yo + i) = (*(yi + i)) * cos(T_) - (*(xi + i)) * sin(T_) + Y_;
+        *(to + i) = *(ti + i) + T_;
+    }
+}
 
 
 void point4pose(float* x, float* y, float* xo, float *yo, int iter) {
