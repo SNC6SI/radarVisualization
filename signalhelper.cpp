@@ -8,6 +8,7 @@
 #include "systimehelper.h"
 
 #define DEG2RAD(x) (x/180.0*M_PI)
+#define RAD2DEG(x) (x/M_PI*180.0)
 
 extern unsigned int msgEdlFlag;
 
