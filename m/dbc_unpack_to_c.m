@@ -256,7 +256,7 @@ function [SGupack,Gain,Offset,SGpackraw] = SGalgo(SGbit, SG2phy, SGname)
         % add parentheses to make it a group and easier to be replaced
         vv = ['(' vv ')'];
         % offset and gain
-        vv = ['((uint32_T)(((real32_T)' vv '-(' str_offset '))/(' str_gain ')))'];
+        vv = ['((uint32)(((float32)' vv '-(' str_offset '))/(' str_gain ')))'];
         for k =1:loopnum
             if sigmat(k, 5)==0
                 if sigmat(k, 2)==1
