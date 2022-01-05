@@ -69,4 +69,6 @@ extern float gScale;
 
 #define DE_LIM 20
 
+#define DR_INT 5
+
 #endif
