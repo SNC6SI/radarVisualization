@@ -502,6 +502,10 @@ static void plot_info(void) {
 	putText(canvas, label, Point(20, 515), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 	sprintf(label, "APA_PSLSts: %s", mAPA_PSLSts[APA_PSLSts].c_str());
 	putText(canvas, label, Point(20, 530), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+
+	// 0xB8
+	sprintf(label, "SteerWheelAngle: %3.2f", SAS_SteerWheelAngle);
+	putText(canvas, label, Point(20, 565), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 }
 
 

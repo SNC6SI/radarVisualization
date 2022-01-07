@@ -527,6 +527,8 @@ unsigned char GW_VBU_GearLeverPos = 0.0F;
 unsigned char ParkslotI_Selected = 0U;
 unsigned char APS_Workingsts = 0U;
 
+float SAS_SteerWheelAngle = 0.0F;
+
 unsigned int gcanid = 0;
 unsigned char ptr[64];
 unsigned __int64 ts;
@@ -2044,6 +2046,10 @@ void update_sig(void) {
             ts_anchor_0x171 = ts / 1000000;
             timeout_0x171 = 0;
         }
+    }
+
+    if (gcanid == 0xB8 && msgEdlFlag == 1) {
+        SAS_SteerWheelAngle = ((((ptr[1]) << 8) + (ptr[2])) * (0.0238) + (-780));
     }
 
     if (gcanid == 0x121) {

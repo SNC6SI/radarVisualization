@@ -69,6 +69,8 @@ extern unsigned char PASFailureReason;
 extern unsigned char UPC_SDW_WorkMode;
 extern unsigned char APA_PSLSts;
 
+extern float SAS_SteerWheelAngle;
+
 extern float X0;
 extern float Y0;
 
