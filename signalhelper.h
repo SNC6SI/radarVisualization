@@ -106,6 +106,8 @@ extern float APS_Debug_DRX_anchor_c;
 extern std::vector<float> Debug_DRX_c;
 extern std::vector<float> Debug_DRY_c;
 
+extern float tmpY[10];
+
 void init_sig(void);
 void update_sig(void);
 

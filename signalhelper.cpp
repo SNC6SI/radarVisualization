@@ -169,6 +169,7 @@ float Debug_PathSegKPA_c[10];
 
 float Debug_PathSegStartA_c[10];
 float Debug_PathSegEndA_c[10];
+float tmpY[10];
 
 unsigned char Debug_PathSegDir[10];
 unsigned char Debug_PathSegType[10];
@@ -798,8 +799,10 @@ static void update_pas_sdw_internal(void) {
 
 void update_debug_pp_internal(void) {
     static uint32_t dr_cnt = 0;
-    static float tempA;
-    static float tempB[10];
+    static float deltaX[10];
+    static float deltaY[10];
+    
+    static float PoseSegH[10];
     static int dtcntlocal;
     if (APS_Debug_PathVld) {
 
@@ -828,17 +831,27 @@ void update_debug_pp_internal(void) {
         for (int j = 0; j < 10; j++) {
             if (j == 0) {
                 Debug_PathSegStartA_c[j] = RAD2DEG(atan2f(APS_Debug_DRY_anchor_c - Debug_PathSegCCY_c[j], APS_Debug_DRX_anchor_c - Debug_PathSegCCX_c[j]));
-                tempB[j] = RAD2DEG(atan2f(APS_Debug_DRY_anchor_c - Debug_PathSegKPY_c[j], APS_Debug_DRX_anchor_c - Debug_PathSegKPX_c[j]));
+                PoseSegH[j] = -(atan2f(Debug_PathSegKPY_c[j] - APS_Debug_DRY_anchor_c, Debug_PathSegKPX_c[j] - APS_Debug_DRX_anchor_c));
+                deltaX[j] = Debug_PathSegCCX_c[j] - APS_Debug_DRX_anchor_c;
+                deltaY[j] = Debug_PathSegCCY_c[j] - APS_Debug_DRY_anchor_c;
             }
             else {
                 Debug_PathSegStartA_c[j] = RAD2DEG(atan2f(Debug_PathSegKPY_c[j - 1] - Debug_PathSegCCY_c[j], Debug_PathSegKPX_c[j - 1] - Debug_PathSegCCX_c[j]));
-                tempB[j] = RAD2DEG(atan2f(Debug_PathSegKPY_c[j - 1] - Debug_PathSegKPY_c[j], Debug_PathSegKPX_c[j - 1] - Debug_PathSegKPX_c[j]));
+                PoseSegH[j] = -(atan2f(Debug_PathSegKPY_c[j] - Debug_PathSegKPY_c[j - 1], Debug_PathSegKPX_c[j] - Debug_PathSegKPX_c[j - 1]));
+                deltaX[j] = Debug_PathSegCCX_c[j] - Debug_PathSegKPX_c[j - 1];
+                deltaY[j] = Debug_PathSegCCY_c[j] - Debug_PathSegKPY_c[j - 1];
             }
+
             Debug_PathSegEndA_c[j] = RAD2DEG(atan2f(Debug_PathSegKPY_c[j] - Debug_PathSegCCY_c[j], Debug_PathSegKPX_c[j] - Debug_PathSegCCX_c[j]));
 
-            if (Debug_PathSegStartA_c[j] < Debug_PathSegEndA_c[j]) {
-                Debug_PathSegStartA_c[j] += 360;
+            tmpY[j] = deltaY[j] * cos(PoseSegH[j]) + deltaX[j] * sin(PoseSegH[j]);
+
+            if(tmpY[j]<=0){
+                if (Debug_PathSegStartA_c[j] < Debug_PathSegEndA_c[j]) {
+                    Debug_PathSegStartA_c[j] += 360;
+                }
             }
+            
         }
 
         lengthScaling(&Debug_PathSegR_rx[0], &Debug_PathSegR[0], sizeof(Debug_PathSegR_rx) / sizeof(Debug_PathSegR_rx[0]));
