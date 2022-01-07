@@ -153,7 +153,7 @@ void update_img(void) {
 static void plot_version(void) {
 	char label[256] = { 0 };
 	sprintf(label, "version: %s by SNC6SI", version);
-	putText(canvas, label, Point(XCOL - 220, YROW - 20), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
+	putText(canvas, label, Point(XCOL - 200, YROW - 20), FONT_HERSHEY_SIMPLEX, 0.4, RED, 1, LINE_8, false);
 }
 
 static void plot_help(void) {

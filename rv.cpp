@@ -19,7 +19,7 @@
 using namespace std;
 using namespace cv;
 
-char version[] = "0.2.1 pre1";
+char version[] = "0.2.1";
 
 char record_folder[512];
 int record_folder_len;
