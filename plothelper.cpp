@@ -30,6 +30,8 @@ static void plot_pas_sdw(void);
 static void plot_help(void);
 static void plot_version(void);
 
+static void plot_path(void);
+
 static void linspace_step(float x1, float x2, int step, float* xo, int* num);
 static void DrawDashedLine(Mat& img, Point pt1, Point pt2, Scalar color, int thickness, string style, int gap);
 
@@ -139,10 +141,15 @@ void update_img(void) {
 	}
 	plot_anno();
 	plot_measure();
+	if (APS_Debug_PathVld) {
+		plot_path();
+	}
 	if (plotHelpStatus) {
 		plot_help();
 	}
 }
+
+
 static void plot_version(void) {
 	char label[256] = { 0 };
 	sprintf(label, "version: %s by SNC6SI", version);
@@ -194,6 +201,60 @@ static void plot_axis(void) {
 	}
 	//arrowedLine(canvas, Point(X0, Y0), Point(X0, 0), GRAY, 4, LINE_8, 0, 0.8);
 	//arrowedLine(canvas, Point(X0, Y0), Point(0, Y0), GRAY, 4, LINE_8, 0, 0.8);
+}
+
+/*
+	Debug_PathSegType:
+		0: line
+		1: circle
+*/
+static void plot_path(void) {
+	int i, j;
+	char label[256] = { 0 };
+
+	// origin
+	circle(canvas, Point(APS_Debug_PathOriginX_c, APS_Debug_PathOriginY_c), 5, RED, FILLED, 10);
+
+	// keypoint and path
+	for (i = 0; i < APS_Debug_PathSegNum; i++) {
+		if (Debug_PathSegType[i] == 0) {
+			if (i == 0) {
+				line(canvas, Point(APS_Debug_DRX_anchor_c, APS_Debug_DRY_anchor_c), Point(Debug_PathSegKPX_c[i], Debug_PathSegKPY_c[i]), BLACK, 2);
+				circle(canvas, Point(APS_Debug_DRX_anchor_c, APS_Debug_DRY_anchor_c), 5, ORANGE, FILLED, 10);
+				circle(canvas, Point(Debug_PathSegKPX_c[i], Debug_PathSegKPY_c[i]), 5, ORANGE, FILLED, 10);
+			}
+			else {
+				line(canvas, Point(Debug_PathSegKPX_c[i - 1], Debug_PathSegKPY_c[i - 1]), Point(Debug_PathSegKPX_c[i], Debug_PathSegKPY_c[i]), BLACK, 2);
+				circle(canvas, Point(Debug_PathSegKPX_c[i - 1], Debug_PathSegKPY_c[i - 1]), 5, ORANGE, FILLED, 10);
+				circle(canvas, Point(Debug_PathSegKPX_c[i], Debug_PathSegKPY_c[i]), 5, ORANGE, FILLED, 10);
+			}
+		}
+		else if (Debug_PathSegType[i] == 1) {
+			Point center(Debug_PathSegCCX_c[i], Debug_PathSegCCY_c[i]);
+			Size sz(Debug_PathSegR[i], Debug_PathSegR[i]);
+			ellipse(canvas, center, sz, 0, Debug_PathSegStartA_c[i], Debug_PathSegEndA_c[i], BLACK, 2);
+			if (i == 0) {
+				circle(canvas, Point(APS_Debug_DRX_anchor_c, APS_Debug_DRY_anchor_c), 5, ORANGE, FILLED, 10);
+				circle(canvas, Point(Debug_PathSegKPX_c[i], Debug_PathSegKPY_c[i]), 5, ORANGE, FILLED, 10);
+			}
+			else {
+				circle(canvas, Point(Debug_PathSegKPX_c[i - 1], Debug_PathSegKPY_c[i - 1]), 5, ORANGE, FILLED, 10);
+				circle(canvas, Point(Debug_PathSegKPX_c[i], Debug_PathSegKPY_c[i]), 5, ORANGE, FILLED, 10);
+			}
+		}
+	}
+#if 0
+	sprintf(label, "%3.1f: %3.1f, %3.1f", tmpY[0], Debug_PathSegStartA_c[0], Debug_PathSegEndA_c[0]);
+	putText(canvas, label, Point(XCOL / 2 + 300, YROW - 300), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+	sprintf(label, "%3.1f: %3.1f, %3.1f", tmpY[1], Debug_PathSegStartA_c[1], Debug_PathSegEndA_c[1]);
+	putText(canvas, label, Point(XCOL / 2 + 300, YROW - 280), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+	sprintf(label, "%3.1f: %3.1f, %3.1f", tmpY[2], Debug_PathSegStartA_c[2], Debug_PathSegEndA_c[2]);
+	putText(canvas, label, Point(XCOL / 2 + 300, YROW - 260), FONT_HERSHEY_SIMPLEX, 0.4, BLACK, 1, LINE_8, false);
+#endif
+	// DR
+	for (j = 0; j < fminf(Debug_DRX_c.size(), Debug_DRY_c.size()); j++) {
+		circle(canvas, Point(Debug_DRX_c[j], Debug_DRY_c[j]), 2, SeaGreen, FILLED, 2);
+	}
 }
 
 
@@ -441,6 +502,10 @@ static void plot_info(void) {
 	putText(canvas, label, Point(20, 515), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 	sprintf(label, "APA_PSLSts: %s", mAPA_PSLSts[APA_PSLSts].c_str());
 	putText(canvas, label, Point(20, 530), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
+
+	// 0xB8
+	sprintf(label, "SteerWheelAngle: %3.2f", SAS_SteerWheelAngle);
+	putText(canvas, label, Point(20, 565), FONT_HERSHEY_SIMPLEX, 0.35, RED, 1, LINE_8, false);
 }
 
 

@@ -8,12 +8,173 @@
 #include "systimehelper.h"
 
 #define DEG2RAD(x) (x/180.0*M_PI)
+#define RAD2DEG(x) (x/M_PI*180.0)
 
 extern unsigned int msgEdlFlag;
 
 static float calcPointDis(float x0, float y0, float x1, float y1);
 static void lengthScaling(float* l, float* lo, int iter);
 static void deFilter(float* de, unsigned char* de_cnt, unsigned char limit, int iter);
+static void point4pose_c(float X_, float Y_, float T_, float* xi, float* yi, float* ti, float* xo, float* yo, float* to, int iter);
+static void init_pas_sdw_internal(void);
+
+// debug purpose
+float APS_Debug_PathOriginHeading_rx = 0.0F;
+float APS_Debug_PathOriginY_rx = 0.0F;
+float APS_Debug_PathOriginX_rx = 0.0F;
+float APS_Debug_PathOriginHeading = 0.0F;
+float APS_Debug_PathOriginY = 0.0F;
+float APS_Debug_PathOriginX = 0.0F;
+float APS_Debug_PathOriginHeading_c = 0.0F;
+float APS_Debug_PathOriginY_c = 0.0F;
+float APS_Debug_PathOriginX_c = 0.0F;
+
+float APS_Debug_DRHeading_rx_ = 0.0F;
+float APS_Debug_DRY_rx_ = 0.0F;
+float APS_Debug_DRX_rx_ = 0.0F;
+float APS_Debug_DRHeading_rx = 0.0F;
+float APS_Debug_DRY_rx = 0.0F;
+float APS_Debug_DRX_rx = 0.0F;
+float APS_Debug_DRHeading = 0.0F;
+float APS_Debug_DRY = 0.0F;
+float APS_Debug_DRX = 0.0F;
+float APS_Debug_DRHeading_c = 0.0F;
+float APS_Debug_DRY_c = 0.0F;
+float APS_Debug_DRX_c = 0.0F;
+
+float APS_Debug_DRHeading_anchor_ = 0.0F;
+float APS_Debug_DRY_anchor_ = 0.0F;
+float APS_Debug_DRX_anchor_ = 0.0F;
+float APS_Debug_DRHeading_anchor = 0.0F;
+float APS_Debug_DRY_anchor = 0.0F;
+float APS_Debug_DRX_anchor = 0.0F;
+float APS_Debug_DRHeading_anchor_c = 0.0F;
+float APS_Debug_DRY_anchor_c = 0.0F;
+float APS_Debug_DRX_anchor_c = 0.0F;
+
+std::vector<float> Debug_DRX;
+std::vector<float> Debug_DRY;
+std::vector<float> Debug_DRA;
+std::vector<float> Debug_DRX_;
+std::vector<float> Debug_DRY_;
+std::vector<float> Debug_DRA_;
+std::vector<float> Debug_DRX_c;
+std::vector<float> Debug_DRY_c;
+std::vector<float> Debug_DRA_c;
+
+unsigned char APS_Debug_DRVld = 0U;
+unsigned char APS_Debug_PathVld = 0U;
+unsigned char APS_Debug_PathVld_UD = 0U;
+unsigned char APS_Debug_PathSegNum = 0U;
+
+float APS_Debug_PathSeg10KPHeading = 0.0F;
+float APS_Debug_PathSeg9KPHeading = 0.0F;
+float APS_Debug_PathSeg8KPHeading = 0.0F;
+float APS_Debug_PathSeg7KPHeading = 0.0F;
+float APS_Debug_PathSeg6KPHeading = 0.0F;
+float APS_Debug_PathSeg5KPHeading = 0.0F;
+float APS_Debug_PathSeg4KPHeading = 0.0F;
+float APS_Debug_PathSeg3KPHeading = 0.0F;
+float APS_Debug_PathSeg2KPHeading = 0.0F;
+float APS_Debug_PathSeg1KPHeading = 0.0F;
+
+float APS_Debug_PathSeg10KPY = 0.0F;
+float APS_Debug_PathSeg9KPY = 0.0F;
+float APS_Debug_PathSeg8KPY = 0.0F;
+float APS_Debug_PathSeg7KPY = 0.0F;
+float APS_Debug_PathSeg6KPY = 0.0F;
+float APS_Debug_PathSeg5KPY = 0.0F;
+float APS_Debug_PathSeg4KPY = 0.0F;
+float APS_Debug_PathSeg3KPY = 0.0F;
+float APS_Debug_PathSeg2KPY = 0.0F;
+float APS_Debug_PathSeg1KPY = 0.0F;
+
+float APS_Debug_PathSeg10KPX = 0.0F;
+float APS_Debug_PathSeg9KPX = 0.0F;
+float APS_Debug_PathSeg8KPX = 0.0F;
+float APS_Debug_PathSeg7KPX = 0.0F;
+float APS_Debug_PathSeg6KPX = 0.0F;
+float APS_Debug_PathSeg5KPX = 0.0F;
+float APS_Debug_PathSeg4KPX = 0.0F;
+float APS_Debug_PathSeg3KPX = 0.0F;
+float APS_Debug_PathSeg2KPX = 0.0F;
+float APS_Debug_PathSeg1KPX = 0.0F;
+
+float APS_Debug_PathSeg10CCY = 0.0F;
+float APS_Debug_PathSeg9CCY = 0.0F;
+float APS_Debug_PathSeg8CCY = 0.0F;
+float APS_Debug_PathSeg7CCY = 0.0F;
+float APS_Debug_PathSeg6CCY = 0.0F;
+float APS_Debug_PathSeg5CCY = 0.0F;
+float APS_Debug_PathSeg4CCY = 0.0F;
+float APS_Debug_PathSeg3CCY = 0.0F;
+float APS_Debug_PathSeg2CCY = 0.0F;
+float APS_Debug_PathSeg1CCY = 0.0F;
+
+float APS_Debug_PathSeg10CCX = 0.0F;
+float APS_Debug_PathSeg9CCX = 0.0F;
+float APS_Debug_PathSeg8CCX = 0.0F;
+float APS_Debug_PathSeg7CCX = 0.0F;
+float APS_Debug_PathSeg6CCX = 0.0F;
+float APS_Debug_PathSeg5CCX = 0.0F;
+float APS_Debug_PathSeg4CCX = 0.0F;
+float APS_Debug_PathSeg3CCX = 0.0F;
+float APS_Debug_PathSeg2CCX = 0.0F;
+float APS_Debug_PathSeg1CCX = 0.0F;
+
+unsigned char APS_Debug_PathSeg10Dir = 0U;
+unsigned char APS_Debug_PathSeg9Dir = 0U;
+unsigned char APS_Debug_PathSeg8Dir = 0U;
+unsigned char APS_Debug_PathSeg7Dir = 0U;
+unsigned char APS_Debug_PathSeg6Dir = 0U;
+unsigned char APS_Debug_PathSeg5Dir = 0U;
+unsigned char APS_Debug_PathSeg4Dir = 0U;
+unsigned char APS_Debug_PathSeg3Dir = 0U;
+unsigned char APS_Debug_PathSeg2Dir = 0U;
+unsigned char APS_Debug_PathSeg1Dir = 0U;
+
+unsigned char APS_Debug_PathSeg10Type = 0U;
+unsigned char APS_Debug_PathSeg9Type = 0U;
+unsigned char APS_Debug_PathSeg8Type = 0U;
+unsigned char APS_Debug_PathSeg7Type = 0U;
+unsigned char APS_Debug_PathSeg6Type = 0U;
+unsigned char APS_Debug_PathSeg5Type = 0U;
+unsigned char APS_Debug_PathSeg4Type = 0U;
+unsigned char APS_Debug_PathSeg3Type = 0U;
+unsigned char APS_Debug_PathSeg2Type = 0U;
+unsigned char APS_Debug_PathSeg1Type = 0U;
+
+float Debug_PathSegCCX_rx[10];
+float Debug_PathSegCCY_rx[10];
+float Debug_PathSegCCA_rx_dummy[10];
+float Debug_PathSegKPX_rx[10];
+float Debug_PathSegKPY_rx[10];
+float Debug_PathSegKPA_rx[10];
+float Debug_PathSegR_rx[10];
+
+float Debug_PathSegCCX[10];
+float Debug_PathSegCCY[10];
+float Debug_PathSegCCA_dummy[10];
+float Debug_PathSegKPX[10];
+float Debug_PathSegKPY[10];
+float Debug_PathSegKPA[10];
+float Debug_PathSegR[10];
+
+float Debug_PathSegCCX_c[10];
+float Debug_PathSegCCY_c[10];
+float Debug_PathSegCCA_c_dummy[10];
+float Debug_PathSegKPX_c[10];
+float Debug_PathSegKPY_c[10];
+float Debug_PathSegKPA_c[10];
+
+float Debug_PathSegStartA_c[10];
+float Debug_PathSegEndA_c[10];
+float tmpY[10];
+
+unsigned char Debug_PathSegDir[10];
+unsigned char Debug_PathSegType[10];
+
+// end debug purpose
 
 float MapObj01P1X=0.0F;
 float MapObj01P1Y=0.0F;
@@ -366,6 +527,8 @@ unsigned char GW_VBU_GearLeverPos = 0.0F;
 unsigned char ParkslotI_Selected = 0U;
 unsigned char APS_Workingsts = 0U;
 
+float SAS_SteerWheelAngle = 0.0F;
+
 unsigned int gcanid = 0;
 unsigned char ptr[64];
 unsigned __int64 ts;
@@ -497,6 +660,8 @@ void init_sig(void) {
     memset((void*)de_2_cnt, 0, sizeof(de_2_cnt));
     memset((void*)de_3_cnt, 0, sizeof(de_3_cnt));
     de_lim = 1;
+
+    init_pas_sdw_internal();
 }
 
 
@@ -542,8 +707,7 @@ static void update_de_internal(void) {
     lengthScaling(&de_3_rx[0], &de_3[0], sizeof(de_3_rx) / sizeof(de_3_rx[0]));
 }
 
-
-static void update_pas_sdw_internal(void) {
+static void init_pas_sdw_internal(void) {
     ps_x_raw[0] = FO_ - GAP_ / 2;
     ps_x_raw[1] = FO_ - (FO_ + RO_) / 4.0 + GAP_ / 2;
     ps_x_raw[2] = FO_ - (FO_ + RO_) / 4.0 - GAP_ / 2;
@@ -625,9 +789,106 @@ static void update_pas_sdw_internal(void) {
     ps_angle_end[2] = 90 - AG_;
     ps_angle_end[3] = 90 - AG_;
 
-    point4pose(&ps_x_raw[0], &ps_y_raw[0], &ps_x[0], &ps_y[0], 28);
     ps_r_raw = (HW_ + GAP_);
+}
+
+
+static void update_pas_sdw_internal(void) {
+    point4pose(&ps_x_raw[0], &ps_y_raw[0], &ps_x[0], &ps_y[0], 28);
     lengthScaling(&ps_r_raw, &ps_r, 1);
+}
+
+
+void update_debug_pp_internal(void) {
+    static uint32_t dr_cnt = 0;
+    static float deltaX[10];
+    static float deltaY[10];
+    
+    static float PoseSegH[10];
+    static int dtcntlocal;
+    if (APS_Debug_PathVld) {
+
+        point4pose(&APS_Debug_PathOriginX_rx, &APS_Debug_PathOriginY_rx, &APS_Debug_PathOriginX_c, &APS_Debug_PathOriginY_c, 1);
+
+        point4pose_c(APS_Debug_PathOriginX_rx, APS_Debug_PathOriginY_rx, APS_Debug_PathOriginHeading_rx,
+            &Debug_PathSegCCX_rx[0], &Debug_PathSegCCY_rx[0], &Debug_PathSegCCA_rx_dummy[0],
+            &Debug_PathSegCCX[0], &Debug_PathSegCCY[0], &Debug_PathSegCCA_dummy[0], 10);
+
+        point4pose_c(APS_Debug_PathOriginX_rx, APS_Debug_PathOriginY_rx, APS_Debug_PathOriginHeading_rx,
+            &Debug_PathSegKPX_rx[0], &Debug_PathSegKPY_rx[0], &Debug_PathSegKPA_rx[0],
+            &Debug_PathSegKPX[0], &Debug_PathSegKPY[0], &Debug_PathSegKPA[0], 10);
+
+        point4pose_c(APS_Debug_PathOriginX_rx, APS_Debug_PathOriginY_rx, APS_Debug_PathOriginHeading_rx,
+            &APS_Debug_DRX_anchor, &APS_Debug_DRY_anchor, &APS_Debug_DRHeading_anchor,
+            &APS_Debug_DRX_anchor_, &APS_Debug_DRY_anchor_, &APS_Debug_DRHeading_anchor_, 1);
+        
+        point4pose(&Debug_PathSegCCX[0], &Debug_PathSegCCY[0], &Debug_PathSegCCX_c[0], &Debug_PathSegCCY_c[0], 10);
+        point4pose(&Debug_PathSegKPX[0], &Debug_PathSegKPY[0], &Debug_PathSegKPX_c[0], &Debug_PathSegKPY_c[0], 10);
+        point4pose(&APS_Debug_DRX_anchor_, &APS_Debug_DRY_anchor_, &APS_Debug_DRX_anchor_c, &APS_Debug_DRY_anchor_c, 1);
+
+        for (int i = 0; i < 10; i++) {
+            Debug_PathSegKPA_c[i] = Debug_PathSegKPA[i] + APS_Debug_PathOriginHeading_rx;
+        }
+
+        for (int j = 0; j < 10; j++) {
+            if (j == 0) {
+                Debug_PathSegStartA_c[j] = RAD2DEG(atan2f(APS_Debug_DRY_anchor_c - Debug_PathSegCCY_c[j], APS_Debug_DRX_anchor_c - Debug_PathSegCCX_c[j]));
+                PoseSegH[j] = -(atan2f(Debug_PathSegKPY_c[j] - APS_Debug_DRY_anchor_c, Debug_PathSegKPX_c[j] - APS_Debug_DRX_anchor_c));
+                deltaX[j] = Debug_PathSegCCX_c[j] - APS_Debug_DRX_anchor_c;
+                deltaY[j] = Debug_PathSegCCY_c[j] - APS_Debug_DRY_anchor_c;
+            }
+            else {
+                Debug_PathSegStartA_c[j] = RAD2DEG(atan2f(Debug_PathSegKPY_c[j - 1] - Debug_PathSegCCY_c[j], Debug_PathSegKPX_c[j - 1] - Debug_PathSegCCX_c[j]));
+                PoseSegH[j] = -(atan2f(Debug_PathSegKPY_c[j] - Debug_PathSegKPY_c[j - 1], Debug_PathSegKPX_c[j] - Debug_PathSegKPX_c[j - 1]));
+                deltaX[j] = Debug_PathSegCCX_c[j] - Debug_PathSegKPX_c[j - 1];
+                deltaY[j] = Debug_PathSegCCY_c[j] - Debug_PathSegKPY_c[j - 1];
+            }
+
+            Debug_PathSegEndA_c[j] = RAD2DEG(atan2f(Debug_PathSegKPY_c[j] - Debug_PathSegCCY_c[j], Debug_PathSegKPX_c[j] - Debug_PathSegCCX_c[j]));
+
+            tmpY[j] = deltaY[j] * cos(PoseSegH[j]) + deltaX[j] * sin(PoseSegH[j]);
+
+            if(tmpY[j]<=0){
+                if (Debug_PathSegStartA_c[j] < Debug_PathSegEndA_c[j]) {
+                    Debug_PathSegStartA_c[j] += 360;
+                }
+            }
+            
+        }
+
+        lengthScaling(&Debug_PathSegR_rx[0], &Debug_PathSegR[0], sizeof(Debug_PathSegR_rx) / sizeof(Debug_PathSegR_rx[0]));
+
+        if (gcanid == 0x184 && msgEdlFlag == 1) {
+            if (!(dr_cnt % DR_INT)) {
+                Debug_DRX.push_back(APS_Debug_DRX_rx);
+                Debug_DRY.push_back(APS_Debug_DRY_rx);
+                Debug_DRA.push_back(APS_Debug_DRHeading_rx);
+                Debug_DRX_.push_back(APS_Debug_DRX_rx);
+                Debug_DRY_.push_back(APS_Debug_DRY_rx);
+                Debug_DRA_.push_back(0);
+                Debug_DRX_c.push_back(APS_Debug_DRX_rx);
+                Debug_DRY_c.push_back(APS_Debug_DRY_rx);
+                Debug_DRA_c.push_back(0);
+
+                dtcntlocal = min(Debug_DRX.size(), Debug_DRY.size());
+
+                point4pose_c(APS_Debug_PathOriginX_rx, APS_Debug_PathOriginY_rx, APS_Debug_PathOriginHeading_rx,
+                    &Debug_DRX.data()[0], &Debug_DRY.data()[0], &Debug_DRA.data()[0],
+                    &Debug_DRX_.data()[0], &Debug_DRY_.data()[0], &Debug_DRA_.data()[0], dtcntlocal);
+                point4pose(&Debug_DRX_.data()[0], &Debug_DRY_.data()[0], &Debug_DRX_c.data()[0], &Debug_DRY_c.data()[0], dtcntlocal);
+            }
+            dr_cnt++;
+        }
+    }
+    else {
+        dr_cnt = 0;
+        Debug_DRX.clear();
+        Debug_DRY.clear();
+        Debug_DRX_.clear();
+        Debug_DRY_.clear();
+        Debug_DRX_c.clear();
+        Debug_DRY_c.clear();
+    }
 }
 
 
@@ -1559,6 +1820,198 @@ void update_sig(void) {
         APA_PSLSts = ((((ptr[11]) & (7 << 5)) >> 5) * (1) + (0));
     }
 
+
+    if (gcanid == 0x184 && msgEdlFlag == 1) {
+        APS_Debug_PathSeg2KPHeading = (((((ptr[30]) & 15) << 8) + (ptr[31])) * (0.00154) + (-3.153));
+        APS_Debug_PathSeg1KPHeading = (((((ptr[22]) & 15) << 8) + (ptr[23])) * (0.00154) + (-3.153));
+        APS_Debug_PathSeg2KPY = ((((ptr[29]) << 4) + (((ptr[30]) & (15 << 4)) >> 4)) * (1) + (-2047));
+        APS_Debug_PathSeg1KPY = ((((ptr[21]) << 4) + (((ptr[22]) & (15 << 4)) >> 4)) * (1) + (-2047));
+        APS_Debug_PathSeg2KPX = (((((ptr[27]) & 15) << 8) + (ptr[28])) * (1) + (-2047));
+        APS_Debug_PathSeg1KPX = (((((ptr[19]) & 15) << 8) + (ptr[20])) * (1) + (-2047));
+        APS_Debug_PathSeg2CCY = ((((ptr[26]) << 4) + (((ptr[27]) & (15 << 4)) >> 4)) * (1) + (-2047));
+        APS_Debug_PathSeg1CCY = ((((ptr[18]) << 4) + (((ptr[19]) & (15 << 4)) >> 4)) * (1) + (-2047));
+        APS_Debug_PathSeg2CCX = (((((ptr[24]) & 15) << 8) + (ptr[25])) * (1) + (-2047));
+        APS_Debug_PathSeg1CCX = (((((ptr[16]) & 15) << 8) + (ptr[17])) * (1) + (-2047));
+        APS_Debug_PathSeg2Dir = ((((ptr[24]) & (3 << 4)) >> 4) * (1) + (0));
+        APS_Debug_PathSeg1Dir = ((((ptr[16]) & (3 << 4)) >> 4) * (1) + (0));
+        APS_Debug_PathSeg2Type = ((((ptr[24]) & (3 << 6)) >> 6) * (1) + (0));
+        APS_Debug_PathSeg1Type = ((((ptr[16]) & (3 << 6)) >> 6) * (1) + (0));
+        APS_Debug_PathOriginHeading = ((((ptr[12]) << 4) + (((ptr[13]) & (15 << 4)) >> 4)) * (0.00154) + (-3.153));
+        APS_Debug_PathOriginY = (((((ptr[10]) & 15) << 8) + (ptr[11])) * (1) + (-2047));
+        APS_Debug_PathOriginX = ((((ptr[9]) << 4) + (((ptr[10]) & (15 << 4)) >> 4)) * (1) + (-2047));
+        APS_Debug_PathSegNum = (((ptr[8]) & 15) * (1) + (0));
+        APS_Debug_DRHeading = ((((ptr[4]) << 4) + (((ptr[5]) & (15 << 4)) >> 4)) * (0.00154) + (-3.153));
+        APS_Debug_DRY = (((((ptr[2]) & 15) << 8) + (ptr[3])) * (1) + (-2047));
+        APS_Debug_DRX = ((((ptr[1]) << 4) + (((ptr[2]) & (15 << 4)) >> 4)) * (1) + (-2047));
+        APS_Debug_DRVld = ((((ptr[0]) & (1 << 7)) >> 7) * (1) + (0));
+        APS_Debug_PathVld = ((((ptr[8]) & (1 << 7)) >> 7) * (1) + (0));
+
+        Debug_PathSegCCX_rx[0] = APS_Debug_PathSeg1CCX;
+        Debug_PathSegCCX_rx[1] = APS_Debug_PathSeg2CCX;
+        Debug_PathSegCCY_rx[0] = APS_Debug_PathSeg1CCY;
+        Debug_PathSegCCY_rx[1] = APS_Debug_PathSeg2CCY;
+        Debug_PathSegKPX_rx[0] = APS_Debug_PathSeg1KPX;
+        Debug_PathSegKPX_rx[1] = APS_Debug_PathSeg2KPX;
+        Debug_PathSegKPY_rx[0] = APS_Debug_PathSeg1KPY;
+        Debug_PathSegKPY_rx[1] = APS_Debug_PathSeg2KPY;
+        Debug_PathSegKPA_rx[0] = APS_Debug_PathSeg1KPHeading;
+        Debug_PathSegKPA_rx[1] = APS_Debug_PathSeg2KPHeading;
+        Debug_PathSegDir[0] = APS_Debug_PathSeg1Dir;
+        Debug_PathSegDir[1] = APS_Debug_PathSeg2Dir;
+        Debug_PathSegType[0] = APS_Debug_PathSeg1Type;
+        Debug_PathSegType[1] = APS_Debug_PathSeg2Type;
+
+        APS_Debug_DRHeading_rx = APS_Debug_DRHeading;
+        APS_Debug_DRY_rx = APS_Debug_DRY;
+        APS_Debug_DRX_rx = APS_Debug_DRX;
+
+        Debug_PathSegR_rx[0] = calcPointDis(Debug_PathSegCCX_rx[0], Debug_PathSegCCY_rx[0], Debug_PathSegKPX_rx[0], Debug_PathSegKPY_rx[0]);
+        Debug_PathSegR_rx[1] = calcPointDis(Debug_PathSegCCX_rx[1], Debug_PathSegCCY_rx[1], Debug_PathSegKPX_rx[1], Debug_PathSegKPY_rx[1]);
+
+        APS_Debug_PathOriginHeading_rx = -APS_Debug_PathOriginHeading;
+        APS_Debug_PathOriginY_rx = APS_Debug_PathOriginY;
+        APS_Debug_PathOriginX_rx = APS_Debug_PathOriginX;
+
+        if (APS_Debug_PathVld_UD == 0 && APS_Debug_PathVld == 1) {
+            APS_Debug_DRHeading_anchor = APS_Debug_DRHeading;
+            APS_Debug_DRY_anchor = APS_Debug_DRY;
+            APS_Debug_DRX_anchor = APS_Debug_DRX;
+        }
+        APS_Debug_PathVld_UD = APS_Debug_PathVld;
+    }
+
+
+    if (gcanid == 0x185 && msgEdlFlag == 1) {
+        APS_Debug_PathSeg6KPHeading = (((((ptr[30]) & 15) << 8) + (ptr[31])) * (0.00154) + (-3.153));
+        APS_Debug_PathSeg5KPHeading = (((((ptr[22]) & 15) << 8) + (ptr[23])) * (0.00154) + (-3.153));
+        APS_Debug_PathSeg4KPHeading = (((((ptr[14]) & 15) << 8) + (ptr[15])) * (0.00154) + (-3.153));
+        APS_Debug_PathSeg3KPHeading = (((((ptr[6]) & 15) << 8) + (ptr[7])) * (0.00154) + (-3.153));
+        APS_Debug_PathSeg6KPY = ((((ptr[29]) << 4) + (((ptr[30]) & (15 << 4)) >> 4)) * (1) + (-2047));
+        APS_Debug_PathSeg5KPY = ((((ptr[21]) << 4) + (((ptr[22]) & (15 << 4)) >> 4)) * (1) + (-2047));
+        APS_Debug_PathSeg4KPY = ((((ptr[13]) << 4) + (((ptr[14]) & (15 << 4)) >> 4)) * (1) + (-2047));
+        APS_Debug_PathSeg3KPY = ((((ptr[5]) << 4) + (((ptr[6]) & (15 << 4)) >> 4)) * (1) + (-2047));
+        APS_Debug_PathSeg6KPX = (((((ptr[27]) & 15) << 8) + (ptr[28])) * (1) + (-2047));
+        APS_Debug_PathSeg5KPX = (((((ptr[19]) & 15) << 8) + (ptr[20])) * (1) + (-2047));
+        APS_Debug_PathSeg4KPX = (((((ptr[11]) & 15) << 8) + (ptr[12])) * (1) + (-2047));
+        APS_Debug_PathSeg3KPX = (((((ptr[3]) & 15) << 8) + (ptr[4])) * (1) + (-2047));
+        APS_Debug_PathSeg6CCY = ((((ptr[26]) << 4) + (((ptr[27]) & (15 << 4)) >> 4)) * (1) + (-2047));
+        APS_Debug_PathSeg5CCY = ((((ptr[18]) << 4) + (((ptr[19]) & (15 << 4)) >> 4)) * (1) + (-2047));
+        APS_Debug_PathSeg4CCY = ((((ptr[10]) << 4) + (((ptr[11]) & (15 << 4)) >> 4)) * (1) + (-2047));
+        APS_Debug_PathSeg3CCY = ((((ptr[2]) << 4) + (((ptr[3]) & (15 << 4)) >> 4)) * (1) + (-2047));
+        APS_Debug_PathSeg6CCX = (((((ptr[24]) & 15) << 8) + (ptr[25])) * (1) + (-2047));
+        APS_Debug_PathSeg5CCX = (((((ptr[16]) & 15) << 8) + (ptr[17])) * (1) + (-2047));
+        APS_Debug_PathSeg3CCX = (((((ptr[0]) & 15) << 8) + (ptr[1])) * (1) + (-2047));
+        APS_Debug_PathSeg4CCX = (((((ptr[8]) & 15) << 8) + (ptr[9])) * (1) + (-2047));
+        APS_Debug_PathSeg6Dir = ((((ptr[24]) & (3 << 4)) >> 4) * (1) + (0));
+        APS_Debug_PathSeg5Dir = ((((ptr[16]) & (3 << 4)) >> 4) * (1) + (0));
+        APS_Debug_PathSeg4Dir = ((((ptr[8]) & (3 << 4)) >> 4) * (1) + (0));
+        APS_Debug_PathSeg3Dir = ((((ptr[0]) & (3 << 4)) >> 4) * (1) + (0));
+        APS_Debug_PathSeg6Type = ((((ptr[24]) & (3 << 6)) >> 6) * (1) + (0));
+        APS_Debug_PathSeg5Type = ((((ptr[16]) & (3 << 6)) >> 6) * (1) + (0));
+        APS_Debug_PathSeg4Type = ((((ptr[8]) & (3 << 6)) >> 6) * (1) + (0));
+        APS_Debug_PathSeg3Type = ((((ptr[0]) & (3 << 6)) >> 6) * (1) + (0));
+
+        Debug_PathSegCCX_rx[2] = APS_Debug_PathSeg3CCX;
+        Debug_PathSegCCX_rx[3] = APS_Debug_PathSeg4CCX;
+        Debug_PathSegCCX_rx[4] = APS_Debug_PathSeg5CCX;
+        Debug_PathSegCCX_rx[5] = APS_Debug_PathSeg6CCX;
+        Debug_PathSegCCY_rx[2] = APS_Debug_PathSeg3CCY;
+        Debug_PathSegCCY_rx[3] = APS_Debug_PathSeg4CCY;
+        Debug_PathSegCCY_rx[4] = APS_Debug_PathSeg5CCY;
+        Debug_PathSegCCY_rx[5] = APS_Debug_PathSeg6CCY;
+        Debug_PathSegKPX_rx[2] = APS_Debug_PathSeg3KPX;
+        Debug_PathSegKPX_rx[3] = APS_Debug_PathSeg4KPX;
+        Debug_PathSegKPX_rx[4] = APS_Debug_PathSeg5KPX;
+        Debug_PathSegKPX_rx[5] = APS_Debug_PathSeg6KPX;
+        Debug_PathSegKPY_rx[2] = APS_Debug_PathSeg3KPY;
+        Debug_PathSegKPY_rx[3] = APS_Debug_PathSeg4KPY;
+        Debug_PathSegKPY_rx[4] = APS_Debug_PathSeg5KPY;
+        Debug_PathSegKPY_rx[5] = APS_Debug_PathSeg6KPY;
+        Debug_PathSegKPA_rx[2] = APS_Debug_PathSeg3KPHeading;
+        Debug_PathSegKPA_rx[3] = APS_Debug_PathSeg4KPHeading;
+        Debug_PathSegKPA_rx[4] = APS_Debug_PathSeg5KPHeading;
+        Debug_PathSegKPA_rx[5] = APS_Debug_PathSeg6KPHeading;
+        Debug_PathSegDir[2] = APS_Debug_PathSeg3Dir;
+        Debug_PathSegDir[3] = APS_Debug_PathSeg4Dir;
+        Debug_PathSegDir[4] = APS_Debug_PathSeg5Dir;
+        Debug_PathSegDir[5] = APS_Debug_PathSeg6Dir;
+        Debug_PathSegType[2] = APS_Debug_PathSeg3Type;
+        Debug_PathSegType[3] = APS_Debug_PathSeg4Type;
+        Debug_PathSegType[4] = APS_Debug_PathSeg5Type;
+        Debug_PathSegType[5] = APS_Debug_PathSeg6Type;
+
+        Debug_PathSegR_rx[2] = calcPointDis(Debug_PathSegCCX_rx[2], Debug_PathSegCCY_rx[2], Debug_PathSegKPX_rx[2], Debug_PathSegKPY_rx[2]);
+        Debug_PathSegR_rx[3] = calcPointDis(Debug_PathSegCCX_rx[3], Debug_PathSegCCY_rx[3], Debug_PathSegKPX_rx[3], Debug_PathSegKPY_rx[3]);
+        Debug_PathSegR_rx[4] = calcPointDis(Debug_PathSegCCX_rx[4], Debug_PathSegCCY_rx[4], Debug_PathSegKPX_rx[4], Debug_PathSegKPY_rx[4]);
+        Debug_PathSegR_rx[5] = calcPointDis(Debug_PathSegCCX_rx[5], Debug_PathSegCCY_rx[5], Debug_PathSegKPX_rx[5], Debug_PathSegKPY_rx[5]);
+    }
+
+
+    if (gcanid == 0x2B1 && msgEdlFlag == 1) {
+        APS_Debug_PathSeg10KPHeading = (((((ptr[30]) & 15) << 8) + (ptr[31])) * (0.00154) + (-3.153));
+        APS_Debug_PathSeg9KPHeading = (((((ptr[22]) & 15) << 8) + (ptr[23])) * (0.00154) + (-3.153));
+        APS_Debug_PathSeg8KPHeading = (((((ptr[14]) & 15) << 8) + (ptr[15])) * (0.00154) + (-3.153));
+        APS_Debug_PathSeg7KPHeading = (((((ptr[6]) & 15) << 8) + (ptr[7])) * (0.00154) + (-3.153));
+        APS_Debug_PathSeg10KPY = ((((ptr[29]) << 4) + (((ptr[30]) & (15 << 4)) >> 4)) * (1) + (-2047));
+        APS_Debug_PathSeg9KPY = ((((ptr[21]) << 4) + (((ptr[22]) & (15 << 4)) >> 4)) * (1) + (-2047));
+        APS_Debug_PathSeg8KPY = ((((ptr[13]) << 4) + (((ptr[14]) & (15 << 4)) >> 4)) * (1) + (-2047));
+        APS_Debug_PathSeg7KPY = ((((ptr[5]) << 4) + (((ptr[6]) & (15 << 4)) >> 4)) * (1) + (-2047));
+        APS_Debug_PathSeg10KPX = (((((ptr[27]) & 15) << 8) + (ptr[28])) * (1) + (-2047));
+        APS_Debug_PathSeg9KPX = (((((ptr[19]) & 15) << 8) + (ptr[20])) * (1) + (-2047));
+        APS_Debug_PathSeg8KPX = (((((ptr[11]) & 15) << 8) + (ptr[12])) * (1) + (-2047));
+        APS_Debug_PathSeg7KPX = (((((ptr[3]) & 15) << 8) + (ptr[4])) * (1) + (-2047));
+        APS_Debug_PathSeg10CCY = ((((ptr[26]) << 4) + (((ptr[27]) & (15 << 4)) >> 4)) * (1) + (-2047));
+        APS_Debug_PathSeg9CCY = ((((ptr[18]) << 4) + (((ptr[19]) & (15 << 4)) >> 4)) * (1) + (-2047));
+        APS_Debug_PathSeg8CCY = ((((ptr[10]) << 4) + (((ptr[11]) & (15 << 4)) >> 4)) * (1) + (-2047));
+        APS_Debug_PathSeg7CCY = ((((ptr[2]) << 4) + (((ptr[3]) & (15 << 4)) >> 4)) * (1) + (-2047));
+        APS_Debug_PathSeg10CCX = (((((ptr[24]) & 15) << 8) + (ptr[25])) * (1) + (-2047));
+        APS_Debug_PathSeg9CCX = (((((ptr[16]) & 15) << 8) + (ptr[17])) * (1) + (-2047));
+        APS_Debug_PathSeg8CCX = (((((ptr[8]) & 15) << 8) + (ptr[9])) * (1) + (-2047));
+        APS_Debug_PathSeg7CCX = (((((ptr[0]) & 15) << 8) + (ptr[1])) * (1) + (-2047));
+        APS_Debug_PathSeg10Dir = ((((ptr[24]) & (3 << 4)) >> 4) * (1) + (0));
+        APS_Debug_PathSeg9Dir = ((((ptr[16]) & (3 << 4)) >> 4) * (1) + (0));
+        APS_Debug_PathSeg8Dir = ((((ptr[8]) & (3 << 4)) >> 4) * (1) + (0));
+        APS_Debug_PathSeg7Dir = ((((ptr[0]) & (3 << 4)) >> 4) * (1) + (0));
+        APS_Debug_PathSeg10Type = ((((ptr[24]) & (3 << 6)) >> 6) * (1) + (0));
+        APS_Debug_PathSeg9Type = ((((ptr[16]) & (3 << 6)) >> 6) * (1) + (0));
+        APS_Debug_PathSeg8Type = ((((ptr[8]) & (3 << 6)) >> 6) * (1) + (0));
+        APS_Debug_PathSeg7Type = ((((ptr[0]) & (3 << 6)) >> 6) * (1) + (0));
+
+        Debug_PathSegCCX_rx[6] = APS_Debug_PathSeg7CCX;
+        Debug_PathSegCCX_rx[7] = APS_Debug_PathSeg8CCX;
+        Debug_PathSegCCX_rx[8] = APS_Debug_PathSeg9CCX;
+        Debug_PathSegCCX_rx[9] = APS_Debug_PathSeg10CCX;
+        Debug_PathSegCCY_rx[6] = APS_Debug_PathSeg7CCY;
+        Debug_PathSegCCY_rx[7] = APS_Debug_PathSeg8CCY;
+        Debug_PathSegCCY_rx[8] = APS_Debug_PathSeg9CCY;
+        Debug_PathSegCCY_rx[9] = APS_Debug_PathSeg10CCY;
+        Debug_PathSegKPX_rx[6] = APS_Debug_PathSeg7KPX;
+        Debug_PathSegKPX_rx[7] = APS_Debug_PathSeg8KPX;
+        Debug_PathSegKPX_rx[8] = APS_Debug_PathSeg9KPX;
+        Debug_PathSegKPX_rx[9] = APS_Debug_PathSeg10KPX;
+        Debug_PathSegKPY_rx[6] = APS_Debug_PathSeg7KPY;
+        Debug_PathSegKPY_rx[7] = APS_Debug_PathSeg8KPY;
+        Debug_PathSegKPY_rx[8] = APS_Debug_PathSeg9KPY;
+        Debug_PathSegKPY_rx[9] = APS_Debug_PathSeg10KPY;
+        Debug_PathSegKPA_rx[6] = APS_Debug_PathSeg7KPHeading;
+        Debug_PathSegKPA_rx[7] = APS_Debug_PathSeg8KPHeading;
+        Debug_PathSegKPA_rx[8] = APS_Debug_PathSeg9KPHeading;
+        Debug_PathSegKPA_rx[9] = APS_Debug_PathSeg10KPHeading;
+        Debug_PathSegDir[6] = APS_Debug_PathSeg7Dir;
+        Debug_PathSegDir[7] = APS_Debug_PathSeg8Dir;
+        Debug_PathSegDir[8] = APS_Debug_PathSeg9Dir;
+        Debug_PathSegDir[9] = APS_Debug_PathSeg10Dir;
+        Debug_PathSegType[6] = APS_Debug_PathSeg7Type;
+        Debug_PathSegType[7] = APS_Debug_PathSeg8Type;
+        Debug_PathSegType[8] = APS_Debug_PathSeg9Type;
+        Debug_PathSegType[9] = APS_Debug_PathSeg10Type;
+
+        Debug_PathSegR_rx[6] = calcPointDis(Debug_PathSegCCX_rx[6], Debug_PathSegCCY_rx[6], Debug_PathSegKPX_rx[6], Debug_PathSegKPY_rx[6]);
+        Debug_PathSegR_rx[7] = calcPointDis(Debug_PathSegCCX_rx[7], Debug_PathSegCCY_rx[7], Debug_PathSegKPX_rx[7], Debug_PathSegKPY_rx[7]);
+        Debug_PathSegR_rx[8] = calcPointDis(Debug_PathSegCCX_rx[8], Debug_PathSegCCY_rx[8], Debug_PathSegKPX_rx[8], Debug_PathSegKPY_rx[8]);
+        Debug_PathSegR_rx[9] = calcPointDis(Debug_PathSegCCX_rx[9], Debug_PathSegCCY_rx[9], Debug_PathSegKPX_rx[9], Debug_PathSegKPY_rx[9]);
+    }
+
     if (gcanid == 0x150 && msgEdlFlag == 1) {
         ESP_VehicleSpeed = (((((ptr[1]) & 15) << 8) + (ptr[2])) * (0.05625) + (0));
         if (selected_mode == 1) {
@@ -1595,6 +2048,10 @@ void update_sig(void) {
         }
     }
 
+    if (gcanid == 0xB8 && msgEdlFlag == 1) {
+        SAS_SteerWheelAngle = ((((ptr[1]) << 8) + (ptr[2])) * (0.0238) + (-780));
+    }
+
     if (gcanid == 0x121) {
         if (selected_mode == 1) {
             GetLocalTime(&local_time);
@@ -1608,9 +2065,11 @@ void update_sig(void) {
         }
     }
 
+
     update_sig_internal();
     update_de_internal();
     update_pas_sdw_internal();
+    update_debug_pp_internal();
 }
 
 
@@ -1618,6 +2077,15 @@ float X0 = XCOL / 2;
 float Y0 = YROW / 2 + YOFFSET;
 const float C0 = cos(M_PI_2);
 const float S0 = sin(M_PI_2);
+
+
+static void point4pose_c(float X_, float Y_, float T_, float* xi, float* yi, float* ti, float* xo, float* yo, float* to, int iter) {
+    for (int i = 0; i < iter; i++) {
+        *(xo + i) = (*(xi + i)) * cos(T_) + (*(yi + i)) * sin(T_) + X_;
+        *(yo + i) = (*(yi + i)) * cos(T_) - (*(xi + i)) * sin(T_) + Y_;
+        *(to + i) = *(ti + i) + T_;
+    }
+}
 
 
 void point4pose(float* x, float* y, float* xo, float *yo, int iter) {

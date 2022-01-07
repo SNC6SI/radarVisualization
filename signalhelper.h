@@ -69,6 +69,8 @@ extern unsigned char PASFailureReason;
 extern unsigned char UPC_SDW_WorkMode;
 extern unsigned char APA_PSLSts;
 
+extern float SAS_SteerWheelAngle;
+
 extern float X0;
 extern float Y0;
 
@@ -79,6 +81,34 @@ extern unsigned int timeout_0x121; // ADASCAN
 extern unsigned int timeout_0x171; // PACAN APS MCU 3_0
 extern unsigned int timeout_0x150; // PACAN APS MCU 1_0
 extern unsigned int timeout_0x172; // PACAN PA
+
+extern unsigned char APS_Debug_PathSegNum;
+extern unsigned char APS_Debug_PathVld;
+
+extern float APS_Debug_PathOriginX_c;
+extern float APS_Debug_PathOriginY_c;
+
+extern float Debug_PathSegCCX_c[10];
+extern float Debug_PathSegCCY_c[10];
+extern float Debug_PathSegKPX_c[10];
+extern float Debug_PathSegKPY_c[10];
+extern float Debug_PathSegKPA_c[10];
+
+extern float Debug_PathSegStartA_c[10];
+extern float Debug_PathSegEndA_c[10];
+extern float Debug_PathSegR[10];
+
+extern unsigned char Debug_PathSegDir[10];
+extern unsigned char Debug_PathSegType[10];
+
+extern float APS_Debug_DRY_anchor_c;
+extern float APS_Debug_DRX_anchor_c;
+
+#include <vector>
+extern std::vector<float> Debug_DRX_c;
+extern std::vector<float> Debug_DRY_c;
+
+extern float tmpY[10];
 
 void init_sig(void);
 void update_sig(void);
