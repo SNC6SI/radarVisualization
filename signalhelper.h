@@ -83,6 +83,9 @@ extern unsigned int timeout_0x172; // PACAN PA
 extern unsigned char APS_Debug_PathSegNum;
 extern unsigned char APS_Debug_PathVld;
 
+extern float APS_Debug_PathOriginX_c;
+extern float APS_Debug_PathOriginY_c;
+
 extern float Debug_PathSegCCX_c[10];
 extern float Debug_PathSegCCY_c[10];
 extern float Debug_PathSegKPX_c[10];

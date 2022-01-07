@@ -211,27 +211,41 @@ static void plot_axis(void) {
 static void plot_path(void) {
 	int i, j;
 	char label[256] = { 0 };
+
+	circle(canvas, Point(APS_Debug_PathOriginX_c, APS_Debug_PathOriginY_c), 2, RED, FILLED, 10);
 	for (i = 0; i < APS_Debug_PathSegNum; i++) {
 		// key point
-		circle(canvas, Point(Debug_PathSegKPX_c[i], Debug_PathSegKPX_c[i]), 2, BLACK, FILLED, 10);
+		//circle(canvas, Point(Debug_PathSegKPX_c[i], Debug_PathSegKPX_c[i]), 2, BLACK, FILLED, 10);
 		// pathseg
 		if (Debug_PathSegType[i] == 0) {
 			if (i == 0) {
-				line(canvas, Point(APS_Debug_DRX_anchor_c, APS_Debug_DRY_anchor_c), Point(Debug_PathSegKPX_c[i], Debug_PathSegKPY_c[i]), BLACK, 8);
+				line(canvas, Point(APS_Debug_DRX_anchor_c, APS_Debug_DRY_anchor_c), Point(Debug_PathSegKPX_c[i], Debug_PathSegKPY_c[i]), BLACK, 2);
+				circle(canvas, Point(APS_Debug_DRX_anchor_c, APS_Debug_DRY_anchor_c), 2, ORANGE, FILLED, 10);
+				circle(canvas, Point(Debug_PathSegKPX_c[i], Debug_PathSegKPY_c[i]), 2, ORANGE, FILLED, 10);
 			}
 			else {
-				line(canvas, Point(Debug_PathSegKPX_c[i - 1], Debug_PathSegKPY_c[i - 1]), Point(Debug_PathSegKPX_c[i], Debug_PathSegKPY_c[i]), BLACK, 8);
+				line(canvas, Point(Debug_PathSegKPX_c[i - 1], Debug_PathSegKPY_c[i - 1]), Point(Debug_PathSegKPX_c[i], Debug_PathSegKPY_c[i]), BLACK, 2);
+				circle(canvas, Point(Debug_PathSegKPX_c[i - 1], Debug_PathSegKPY_c[i - 1]), 2, ORANGE, FILLED, 10);
+				circle(canvas, Point(Debug_PathSegKPX_c[i], Debug_PathSegKPY_c[i]), 2, ORANGE, FILLED, 10);
 			}
 		}
 		else if (Debug_PathSegType[i] == 1) {
 			Point center(Debug_PathSegCCX_c[i], Debug_PathSegCCY_c[i]);
 			Size sz(Debug_PathSegR[i], Debug_PathSegR[i]);
 			ellipse(canvas, center, sz, 0, Debug_PathSegStartA_c[i], Debug_PathSegEndA_c[i], BLACK, 2);
+			if (i == 0) {
+				circle(canvas, Point(APS_Debug_DRX_anchor_c, APS_Debug_DRY_anchor_c), 2, ORANGE, FILLED, 10);
+				circle(canvas, Point(Debug_PathSegKPX_c[i], Debug_PathSegKPY_c[i]), 2, ORANGE, FILLED, 10);
+			}
+			else {
+				circle(canvas, Point(Debug_PathSegKPX_c[i - 1], Debug_PathSegKPY_c[i - 1]), 2, ORANGE, FILLED, 10);
+				circle(canvas, Point(Debug_PathSegKPX_c[i], Debug_PathSegKPY_c[i]), 2, ORANGE, FILLED, 10);
+			}
 		}
 	}
 
-	for (j = 0; j < Debug_DRX_c.size(); j++) {
-		circle(canvas, Point(Debug_DRX_c[j], Debug_DRY_c[j]), 2, BLACK, FILLED, 10);
+	for (j = 0; j < fminf(Debug_DRX_c.size(), Debug_DRY_c.size()); j++) {
+		circle(canvas, Point(Debug_DRX_c[j], Debug_DRY_c[j]), 2, DIMGREY, FILLED, 2);
 	}
 }
 
