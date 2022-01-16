@@ -799,7 +799,7 @@ static void update_pas_sdw_internal(void) {
 }
 
 
-void update_debug_pp_internal(void) {
+static void update_debug_pp_internal(void) {
     static uint32_t dr_cnt = 0;
     static float deltaX[10];
     static float deltaY[10];
