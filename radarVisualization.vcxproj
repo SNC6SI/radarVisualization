@@ -352,7 +352,7 @@
       <Culture>0x0407</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>vxlapi64.lib;binlog.lib;opencv_world3416.lib;shlwapi.lib;propsys.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>vxlapi64.lib;PCANBasic.lib;binlog.lib;opencv_world3416.lib;shlwapi.lib;propsys.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <SubSystem>Console</SubSystem>
@@ -373,6 +373,8 @@
     <ClInclude Include="dialoghelper.h" />
     <ClInclude Include="menuhelper.h" />
     <ClInclude Include="mousehelper.h" />
+    <ClInclude Include="PCANBasic.h" />
+    <ClInclude Include="peakhelper.h" />
     <ClInclude Include="replayhelper.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="rv_common.h" />
@@ -390,6 +392,7 @@
     <ClCompile Include="dialoghelper.cpp" />
     <ClCompile Include="menuhelper.cpp" />
     <ClCompile Include="mousehelper.cpp" />
+    <ClCompile Include="peakhelper.cpp" />
     <ClCompile Include="replayhelper.cpp" />
     <ClCompile Include="rv.cpp" />
     <ClCompile Include="plothelper.cpp" />
