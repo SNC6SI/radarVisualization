@@ -8,6 +8,7 @@
 #include "vectorhelper.h"
 #include "dialoghelper.h"
 #include "systimehelper.h"
+#include "peakhelper.h"
 
 extern char binlog_filename_write[512];
 extern char binlog_filename_read[512];
@@ -78,6 +79,32 @@ void update_binlog_write() {
         BLWriteObject(hbinlogFile, &message2.mHeader.mBase);
     }
     
+}
+
+
+void peak_update_binlog_write() {
+        memset(&messageFD, 0, sizeof(VBLCANFDMessage64));
+
+        messageFD.mHeader.mBase.mSignature = BL_OBJ_SIGNATURE;
+        messageFD.mHeader.mBase.mHeaderSize = sizeof(messageFD.mHeader);
+        messageFD.mHeader.mBase.mHeaderVersion = 1;
+        messageFD.mHeader.mBase.mObjectSize = sizeof(VBLCANFDMessage64);
+        messageFD.mHeader.mBase.mObjectType = BL_OBJ_TYPE_CAN_FD_MESSAGE_64;
+        messageFD.mHeader.mObjectFlags = BL_OBJ_FLAG_TIME_ONE_NANS;
+        messageFD.mHeader.mObjectTimeStamp = peakCANTimeStamp * 1000 - peakCANTimeStampAnchor;
+        messageFD.mChannel = 1;
+        messageFD.mFlags = (BYTE)(0x01) << 12;
+        messageFD.mDLC = peakCANMsg.DLC;
+        if (messageFD.mDLC >= 0 && messageFD.mDLC < 17) {
+            messageFD.mValidDataBytes = dlcMapping[messageFD.mDLC];
+        }
+        else {
+            messageFD.mValidDataBytes = 32;
+        }
+        messageFD.mID = peakCANMsg.ID;
+        memcpy(messageFD.mData, &peakCANMsg.DATA[0], 64);
+
+        BLWriteObject(hbinlogFile, &messageFD.mHeader.mBase);
 }
 
 

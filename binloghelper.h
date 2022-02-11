@@ -11,6 +11,7 @@ extern VBLFileStatisticsEx blstatistics;
 
 extern int init_binlog_write(void);
 extern void update_binlog_write();
+extern void peak_update_binlog_write(void);
 
 extern int init_binlog_read(void);
 extern int update_binlog_read(void);
