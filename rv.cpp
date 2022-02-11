@@ -20,7 +20,7 @@
 using namespace std;
 using namespace cv;
 
-char version[] = "0.2.1";
+char version[] = "0.2.2";
 
 char record_folder[512];
 int record_folder_len;
