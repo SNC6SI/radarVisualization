@@ -4,6 +4,7 @@
 #include "dialoghelper.h"
 #include "capturehelper.h"
 #include "vectorhelper.h"
+#include "peakhelper.h"
 #include "binloghelper.h"
 #include "replayhelper.h"
 #include "videohelper.h"
@@ -55,23 +56,34 @@ int main(int argc, char* argv[]) {
 
 static void online_mode(void) {
     XLstatus      xlStatus;
+    TPCANStatus   tpcanStatus;
+    short         peakStatus;
     int           activated = 0;
     rv_status     rvStatus;
     BasicFolderOpenSingle();
     gen_name_with_rectime();
     xlStatus = rvInitDriver();
-    if (XL_SUCCESS == xlStatus) {
-        select_can_channel();
+    peakStatus = peakInitDriver();
+    //system("pause");
+    if (XL_SUCCESS == xlStatus || 0 == peakStatus) {
+        show_can_channel();
     }
-    xlStatus = rvOpenDriver();
-    if(XL_SUCCESS == xlStatus) {
-        xlStatus = rvCreateRxThread();
-    }
-    if(XL_SUCCESS == xlStatus) {
-        xlStatus = xlActivateChannel(g_xlPortHandle, g_xlChannelMask, XL_BUS_TYPE_CAN, XL_ACTIVATE_RESET_CLOCK);
-        if(xlStatus == XL_SUCCESS) {
-            activated = 1;
+    select_can_vendor();
+    if (selected_can_vendor == 1) {
+        xlStatus = rvOpenDriver();
+        if (XL_SUCCESS == xlStatus) {
+            xlStatus = rvCreateRxThread();
         }
+        if (XL_SUCCESS == xlStatus) {
+            xlStatus = xlActivateChannel(g_xlPortHandle, g_xlChannelMask, XL_BUS_TYPE_CAN, XL_ACTIVATE_RESET_CLOCK);
+            if (xlStatus == XL_SUCCESS) {
+                activated = 1;
+            }
+        }
+    }
+    else if(selected_can_vendor == 2){
+        tpcanStatus = peakOpenDriver();
+        peakCreateRxThread();
     }
     init_sig();
     init_axis();
