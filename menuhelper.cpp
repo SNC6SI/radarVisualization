@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <conio.h>
 #include "vectorhelper.h"
+#include "peakhelper.h"
 #include "capturehelper.h"
 
 
 int selected_mode;
+int selected_can_vendor;
 int selected_offline_mode;
 int selected_offline_display_mode;
 
@@ -101,17 +103,18 @@ void select_offline_display_mode(void) {
 
 static char can_menu[] = {
     " ========================="
-    "\n Available Vector Can     "
+    "\n Available Can Devices    "
     "\n ========================="
     "\n"
 };
 
-void select_can_channel(void) {
+void show_can_channel(void) {
     unsigned int i;
     int ch;
     int xlChannelMaskPre;
     system("cls");
     printf("%s", can_menu);
+    printf("%s\n", "VECTOR");
     g_xlChannelMask = 0;
     for (i = 0; i < g_xlDrvConfig.channelCount; i++) {
         printf("%3d. %s\n", i + 1, g_xlDrvConfig.channel[i].name);
@@ -119,6 +122,12 @@ void select_can_channel(void) {
             g_xlChannelMask |= g_xlDrvConfig.channel[i].channelMask;
         }
     }
+    printf("\n");
+    printf("%s\n", "PEAK");
+    for (i = 0 ; i < g_peakDrvConfig.channelCount; i++) {
+        printf("%3d. %s\n", i + 1, g_peakDrvConfig.channel[i].name);
+    }
+    printf("\n");
 #if 0
     xlChannelMaskPre = 0U;
     printf("\nPlease select one:\n\n");
@@ -136,6 +145,36 @@ void select_can_channel(void) {
     printf("%s is selected.\n", g_xlDrvConfig.channel[xlChannelMaskPre].name);
     g_xlChannelMask = g_xlDrvConfig.channel[xlChannelMaskPre].channelMask;
 #endif
+}
+
+
+static char can_vendor_menu[] = {
+    " ========================="
+    "\n Available Can Vendors    "
+    "\n ========================="
+    "\n"
+};
+
+
+void select_can_vendor(void) {
+    int ch;
+    printf("%s", can_vendor_menu);
+    if (g_xlDrvConfig.channelCount > 0 && g_peakDrvConfig.channelCount > 0) {
+        printf("%3d. %s\n", 1, "VECTOR");
+        printf("%3d. %s\n", 2, "PEAK");
+        selected_can_vendor = 0;
+        while (!selected_can_vendor) {
+            fflush(stdin);
+            ch = getch();
+            printf("  %c\n", ch);
+            selected_can_vendor = ch - '0';
+            if ((selected_can_vendor != 1) && (selected_can_vendor != 2)) {
+                selected_can_vendor = 0U;
+                printf(" Invalid selection %c, Try again.\n", ch);
+            }
+        }
+    }
+    
 }
 
 
